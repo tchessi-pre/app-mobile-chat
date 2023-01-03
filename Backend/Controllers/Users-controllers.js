@@ -46,17 +46,17 @@ exports.login = (req, res, next) => {
             if (!valid) {
             return res.status(401).json({ error: "mdp incorrecte" });
             }
-            //************************ tokenSecret here****************************
+            const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
+                expiresIn: "24h",
+            });
             res.status(200).json({
             userId: user._id,
-            token: jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
-                expiresIn: "24h",
-            }),
+            token: token,
             });
         })
         .catch((error) => res.status(500).json({ error }));
     })
-    .catch((error) => res.status((500).json(error)));
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getOneUser = (req, res, next) => {

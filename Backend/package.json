@@ -1,7 +1,7 @@
 {
   "name": "api-nodejs",
   "version": "1.0.0",
-  "description": "Api-Node js la plateforme_ Multi Mongo&Mysql",
+  "description": "Api-Node js la plateforme_ Multi Mongo",
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js"

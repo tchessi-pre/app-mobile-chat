@@ -1,15 +1,16 @@
 const express = require("express");
-const router = express.Router();
 const multer = require("../Middlewares/multer-config");
 const auth = require("../Middlewares/auth");
+const router = express.Router();
 
+// Controllers Require
 const MessagesCtrl = require("../Controllers/Messages-controllers");
 
 //POST METHODS
 router.post("/Messages-create", multer, MessagesCtrl.createMessages);
 
 //GET METHODS
-router.get("/Messages", MessagesCtrl.getAllMessages);
+router.get("/Messages", auth, MessagesCtrl.getAllMessages);
 router.get("/Messages/:id", MessagesCtrl.getOneMessages);
 
 //PUT METHODS

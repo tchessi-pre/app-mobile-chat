@@ -13,7 +13,7 @@ router.post('/login', userCtrl.login);
 //GET ROUTE
 router.get('/users/:id', userCtrl.getOneUser);
 
-router.get('/', auth, userCtrl.getAllUser);
+router.get('/', userCtrl.getAllUser);
 
 //PUT ROUTE
 router.put('/users/:id', userCtrl.modifyUser);

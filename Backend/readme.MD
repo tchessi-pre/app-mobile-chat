@@ -1,1 +1,1 @@
-BACKEND API NODE JS La plateforme Mysql || MONGO DB 
+BACKEND API NODE JS La plateforme MONGO DB 
