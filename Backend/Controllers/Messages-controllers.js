@@ -1,27 +1,20 @@
 const messagesMongo = require("../models/Messages");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
 const fs = require("fs");
 
 exports.createMessages = (req, res, next) => {
-    let imageUrl = null;
-    if (req.file) {
-        imageUrl = `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-        }`;
-    }
+    const messagesObject = JSON.parse(req.body.messages);
+    delete messagesObject._id;
     const messages = new messagesMongo({
-        name: req.body.name,
-        content: req.body.content,
-        createdAt: req.body.createdAt,
-        updatedAt: req.body.updatedAt,
-        imageUrl: imageUrl,
+        ...messagesObject,
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+        }`,
     });
     messages
         .save()
         .then(() => {
         res.status(201).json({
-            message: "Message bien enregistrée !",
+            message: "messages bien enregistrée !",
         });
         })
         .catch((error) => {
