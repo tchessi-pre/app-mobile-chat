@@ -7,16 +7,16 @@ const router = express.Router();
 const MessagesCtrl = require("../Controllers/Messages-controllers");
 
 //POST METHODS
-router.post("/Messages-create", multer, MessagesCtrl.createMessages);
+router.post("/Messages-create", auth, multer, MessagesCtrl.createMessages);
 
 //GET METHODS
 router.get("/Messages", auth, MessagesCtrl.getAllMessages);
-router.get("/Messages/:id", MessagesCtrl.getOneMessages);
+router.get("/Messages/:id", auth, MessagesCtrl.getOneMessages);
 
 //PUT METHODS
-router.put("/Messages-modify", multer, MessagesCtrl.modifyMessages);
+router.put("/Messages-modify", auth, multer, MessagesCtrl.modifyMessages);
 
 //DELETE METHODS
-router.delete("/Messages-delete/:id", MessagesCtrl.deleteMessages);
+router.delete("/Messages-delete/:id", auth, multer, MessagesCtrl.deleteMessages);
 
 module.exports = router;

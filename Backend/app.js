@@ -1,5 +1,11 @@
 const express = require('express'); // import express
 const app = express();
+const path = require('path');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'images')));
 
 // Database
 require("./database.js");
