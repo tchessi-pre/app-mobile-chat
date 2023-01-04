@@ -1,2 +1,0 @@
-TOKEN_SECRET = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-MONGODB_CONNECT = 'mongodb+srv://mongo-api-node:wYvwrFSJuiiXp7HJ@cluster0.cmrendi.mongodb.net/?retryWrites=true&w=majority'
