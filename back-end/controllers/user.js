@@ -39,11 +39,10 @@ exports.editUser = (req, res, next) => {
   try {
     const userObject = req.file
       ? {
-          ...JSON.parse(req.body.user),
-          imageUrl: `${req.protocol}://${req.get('host')}/public/${
-            req.file.filename
+        ...JSON.parse(req.body.user),
+        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename
           }`,
-        }
+      }
       : { ...req.body };
 
     console.log(userObject);
@@ -61,7 +60,7 @@ exports.getOneUser = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   const options = {
-    where: Sequelize.where(
+    where: [Sequelize.where(
       Sequelize.fn(
         'concat',
         Sequelize.col('firstName'),
@@ -70,10 +69,15 @@ exports.getAllUsers = (req, res, next) => {
       ),
       {
         [Sequelize.Op.like]: `%${req.query.search}%`,
-      }
-    ),
+      },
+
+    ), { deleted: false }],
+
+
     limit: 10,
   };
+
+
 
   User.findAll(options)
     .then((users) => {
