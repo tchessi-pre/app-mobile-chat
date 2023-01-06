@@ -61,17 +61,21 @@ exports.getOneUser = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   const options = {
-    where: Sequelize.where(
+    where:[ Sequelize.where(
       Sequelize.fn(
         'concat',
         Sequelize.col('firstName'),
         ' ',
         Sequelize.col('lastName')
       ),
-      {
+      { 
         [Sequelize.Op.like]: `%${req.query.search}%`,
       }
     ),
+    {
+      deleted: false
+    }
+    ],
     limit: 10,
   };
 
