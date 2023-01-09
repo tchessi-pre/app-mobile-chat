@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Home from "./components/Home";
+import Profil from "./components/Profil";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Home />
+      {/* <Home /> */}
+      <Profil />
     </View>
   );
 }
