@@ -1,12 +1,7 @@
 {
   "expo": {
-<<<<<<< HEAD
-    "name": "TissApp",
-    "slug": "TissApp",
-=======
     "name": "front-end",
     "slug": "front-end",
->>>>>>> dev
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

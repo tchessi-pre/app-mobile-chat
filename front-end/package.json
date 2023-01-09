@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "tissapp",
-=======
   "name": "front-end",
->>>>>>> dev
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -13,11 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "expo": "~47.0.9",
-=======
     "expo": "~47.0.12",
->>>>>>> dev
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
     "react-native": "0.70.5"
