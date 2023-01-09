@@ -16,18 +16,19 @@ class Home extends Component {
 	
 				<View style={styles.connectBtn}>
 					<Text style={styles.textPrivacy} >Terms & Privacy Policy</Text>
-					<Button
-        title="Connexion"
-        color="#FF6B6B"
-        onPress={() => Alert.alert('Connectez-vous!')}
-      />
+					<TouchableHighlight
+						style={styles.submit}
+						onPress={() => Alert.alert('Inscrivez-vous!')}
+					>
+						<Text style={styles.submitText}>Connexion</Text>
+					</TouchableHighlight>
 				<Separator />
-				<Button
-				style={styles.btn}
-        title="Inscription"
-        color="#FF6B6B"
-        onPress={() => Alert.alert('Inscrivez-vous!')}
-      />
+				<TouchableHighlight
+						style={styles.submit}
+						onPress={() => Alert.alert('Inscrivez-vous!')}
+					>
+						<Text style={styles.submitText}>Insciption</Text>
+					</TouchableHighlight>
 				</View>
 			</View>
 		);
@@ -77,7 +78,17 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ffffff0',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-	
+	submit: {
+  paddingTop: 10,
+  paddingBottom: 10,
+  backgroundColor: '#FF6B6B',
+  borderRadius: 25,
+},
+submitText: {
+  color: '#fff',
+  textAlign: 'center',
+	textTransform: 'uppercase',
+}
 })
 
 export default Home;
