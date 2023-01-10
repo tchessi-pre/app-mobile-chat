@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import Home from "./components/Home";
 import Login from "./components/Login";
 
