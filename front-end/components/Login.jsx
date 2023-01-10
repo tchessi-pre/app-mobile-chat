@@ -10,34 +10,34 @@ const Login = () => {
     // Faire appel à l'API de login ici
   };
 
-  const CustomButton = ({ style, onPress, title }) => (
-    <TouchableOpacity style={style} onPress={onPress}> 
-    <Text style={style}>{title}</Text>
+  const CustomButton = ({ onPress }) => (
+    <TouchableOpacity style={styles.button} onPress={onPress}> 
+    <Text style={styles.buttonText}>Se connecter</Text>
     </TouchableOpacity>
   );
 
   const BackButton = ({ onPress }) => (
     <TouchableHighlight style={styles.backButton} onPress={onPress}>
-      <FontAwesome name="arrow-left" size={25} color="#000" />
+      <FontAwesome name="arrow-left" size={25} color="#FFF"/>
     </TouchableHighlight>
   );
   
-
-
   return (
-    <View>
+    <View style>
+      {/* Back Button */}
         <BackButton
           style={styles.backButton}
-          onPress={() => console.log('Button pressed!')}
+          onPress={() => console.log('Button Back pressed!')}
           />
 
-        <Text style={styles.connectText}>TissApp</Text>
+        <Text style={styles.textLoginViews}>TissApp</Text>
         <Image style={styles.logo} source={require('../assets/Logo-TissApp.png')}/>
-        <Text style={styles.connectText}>Connexion</Text>
+        <Text style={styles.textLoginViews}>Connexion</Text>
         
-      
+      {/* Email */}
       <TextInput
         placeholder='Email'
+        placeholderTextColor= 'white'
         value={email}
         onChangeText={setEmail}
         style={styles.input}
@@ -46,15 +46,14 @@ const Login = () => {
       {/* Mot de passe */}
       <TextInput
         placeholder='Password'
+        placeholderTextColor= 'white'
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
       />
-
+      {/* Login Button */}
       <CustomButton
-        title="Se connecter"
-        style={styles.button}
         onPress={() => console.log('Button login pressed!')}
       />
 
@@ -66,22 +65,22 @@ const styles = StyleSheet.create({
   backButton: {
     width: '100%',
     height: 35,
-    backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 25,
-    backgroundColor: 'red',
-    
+    position: 'absolute',
   },
-  connectText: {
+  textLoginViews: {
     textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
   },
   button: {
     backgroundColor: '#FF6B6B',
     padding: 8,
-    borderRadius: 5,
+    borderRadius: 30,
   },
   buttonText: {
     color: 'white',
-    fontSize: 10,
+    fontSize: 15,
     textAlign: 'center',
   },
     logo: {
@@ -93,7 +92,8 @@ const styles = StyleSheet.create({
     borderColor: 'none',
     padding: 10,
     margin: 10,
-    backgroundColor: '#152033'
+    backgroundColor: '#152033',
+    color: 'white',
   },
 });
 
