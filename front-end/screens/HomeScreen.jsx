@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
 		marginLeft: 60,
 		marginBottom: 0,
 		fontWeight: 'bold',
+		marginBottom: 20,
 	},
 	connectBtn: {
 		marginBottom: 40,

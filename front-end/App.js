@@ -16,15 +16,15 @@ export default function App() {
           component={HomeScreen}
           options={{ title: 'Welcome' }}
         />
+          < Stack.Screen
+            name="Inscription"
+            component={InscriptionScreen}
+            options={{ title: 'Accueil' }}
+          />
         <Stack.Screen 
           name="Connexion" 
           component={ConnexionScreen} 
-          options={{ title: 'Accueil' }}
-        />
-        < Stack.Screen
-          name="Inscription"
-          component={InscriptionScreen}
-          options={{ title: 'Accueil' }}
+          options={{ title: 'S\'inscrire' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

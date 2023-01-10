@@ -36,6 +36,7 @@ const InscriptionScreen = () => {
 				placeholder="Mot de passe"
 				placeholderTextColor="#ffff"
 				keyboardType="password"
+				autoComplete="password-new"
 			/>
 			<TextInput
 				style={styles.input}
@@ -47,9 +48,9 @@ const InscriptionScreen = () => {
 				<TouchableHighlight
 					style={styles.submit}
 					onPress={() =>
-						navigation.navigate('Connexion', { name: 'Connexion' })}
+						navigation.navigate('Inscription', { name: 'Inscription' })}
 				>
-					<Text style={styles.submitText}>Inscription</Text>
+					<Text style={styles.submitText}>S'inscrire</Text>
 				</TouchableHighlight>
 			</View>
 		</SafeAreaView>
@@ -74,7 +75,8 @@ const styles = StyleSheet.create({
 		borderColor: "#152033",
 		backgroundColor: "#152033",
 		borderRadius: 4,
-		color: "#ffff"
+		color: "#ffff", 
+		paddingLeft: 10,
 	},
 	submit: {
 		marginLeft: 20,
