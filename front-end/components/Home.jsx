@@ -55,9 +55,6 @@ const styles = StyleSheet.create({
 		height: 280,
 		objectFit: 'cover',
 	},
-	connectBtn: {
-		padding: 1
-	},
 	connectText: {
 		textAlign: 'center',
 		width: 280,
