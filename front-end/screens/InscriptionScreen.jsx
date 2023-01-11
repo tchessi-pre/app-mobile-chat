@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 
-const InscriptionScreen = () => {
+const InscriptionScreen = ({navigation}) => {
 	// const [text, onChangeText] = React.useState("Useless Text");
 	// // const [number, onChangeNumber] = React.useState(null);
 
@@ -47,7 +47,7 @@ const InscriptionScreen = () => {
 				<TouchableHighlight
 					style={styles.submit}
 					onPress={() =>
-						navigation.navigate('Connexion', { name: 'Connexion' })}
+						navigation.navigate('Home')}
 				>
 					<Text style={styles.submitText}>Inscription</Text>
 				</TouchableHighlight>
