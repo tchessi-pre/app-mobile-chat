@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+import React, { Component } from 'react';
+import {View, StyleSheet, Text} from 'react-native';
+
+class ConnexionScreen extends Component {
+	render() {
+		return (
+			<View style={styles.container}>
+				<Text></Text>
+			</View>
+		);
+	}
+}
+
+const styles = StyleSheet.create({})
+=======
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
@@ -46,5 +62,6 @@ const styles = StyleSheet.create({
 	},
 	
 })
+>>>>>>> tch-front
 
 export default ConnexionScreen;

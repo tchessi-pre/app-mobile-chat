@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+import React, { Component } from 'react';
+import {View, StyleSheet} from 'react-native';
+
+class InscriptionScreen extends Component {
+	render() {
+		return (
+			<View>
+				
+			</View>
+		);
+	}
+}
+
+const styles = StyleSheet.create({})
+=======
 import React from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
@@ -77,5 +93,6 @@ const styles = StyleSheet.create({
 	},
 	
 })
+>>>>>>> tch-front
 
 export default InscriptionScreen;
