@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight   } from 'react-native';
 import { FontAwesome  } from '@expo/vector-icons';
 
-const ConnexionScreen = (navigation) => {
+const ConnexionScreen = ({navigation}) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
