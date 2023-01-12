@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Image, Button, TouchableHighlight, StyleSheet, Text, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
 const Separator = () => (
 	<View style={styles.separator} />
 );

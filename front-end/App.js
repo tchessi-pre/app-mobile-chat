@@ -1,13 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Home from "./components/Home";
 import Profil from "./components/Profil";
-import { NavigationContainer } from '@react-navigation/native';
+import Chat from "./components/Chat";
+
+// import Login from "./components/Login";
+
+// import { createStackNavigator } from '@react-navigation/stack';
+
+import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Tab = createMaterialTopTabNavigator();
+// const Stack = createStackNavigator();
+
 
 export default function App() {
   return (
@@ -18,13 +26,13 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
-              // iconName = focused
-              // ? 'ios-information-circle'
-              // : 'ios-information-circle-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list' : 'ios-list-outline';
-            }
+            // if (route.name === 'Home') {
+            // iconName = focused
+            // ? 'ios-information-circle'
+            // : 'ios-information-circle-outline';
+            // } else if (route.name === 'Settings') {
+            // iconName = focused ? 'ios-list' : 'ios-list-outline';
+            // }
 
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -41,7 +49,20 @@ export default function App() {
         })}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Profil" component={Profil} />
+        <Tab.Screen name="Chat" component={Chat} />
       </Tab.Navigator>
+
+      {/* <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ title: 'Login' }}
+        />
+
+
+
+
+      </Stack.Navigator> */}
 
     </NavigationContainer >
   );
