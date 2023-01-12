@@ -1,11 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Home from "./components/Home";
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from "./screens/HomeScreen";
+import ConnexionScreen from "./screens/ConnexionScreen";
+import InscriptionScreen from "./screens/InscriptionScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Home />
-    </View>
+    <NavigationContainer style={styles.container}>
+      <Stack.Navigator>
+        < Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Welcome' }}
+        />
+          < Stack.Screen
+            name="Inscription"
+            component={InscriptionScreen}
+            options={{ title: 'Accueil' }}
+          />
+        <Stack.Screen 
+          name="Connexion" 
+          component={ConnexionScreen} 
+          options={{ title: 'S\'inscrire' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

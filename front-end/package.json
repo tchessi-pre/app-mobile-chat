@@ -9,8 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
+=======
+    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/native-stack": "^6.9.8",
+>>>>>>> tch-front
     "expo": "~47.0.12",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
