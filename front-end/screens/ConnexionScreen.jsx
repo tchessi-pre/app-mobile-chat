@@ -1,21 +1,22 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableHighlight } from 'react-native';
+import Styles from '../css/Styles'
 
 const ConnexionScreen = () => {
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.logoArea}>
-				<Text style={styles.companyName} >TissApp</Text>
-				<Image style={styles.logo} source={require('../assets/minilogo.png')} />
+			<View style={Styles.logoArea}>
+				<Text style={Styles.companyName} >TissApp</Text>
+				<Image style={Styles.logo} source={require('../assets/minilogo.png')} />
 			</View>
 			<TextInput
-				style={styles.input}
+				style={Styles.input}
 				placeholder="Email"
 				placeholderTextColor="#ffff"
 				keyboardType="email-address"
 			/>
 			<TextInput
-				style={styles.input}
+				style={Styles.input}
 				placeholder="Mot de passe"
 				placeholderTextColor="#ffff"
 				keyboardType="password"
@@ -23,11 +24,11 @@ const ConnexionScreen = () => {
 			
 			<View>
 				<TouchableHighlight
-					style={styles.submit}
+					style={Styles.submit}
 					onPress={() =>
 						navigation.navigate('Connexion', { name: 'Connexion' })}
 				>
-					<Text style={styles.submitText}>Se connecter</Text>
+					<Text style={Styles.submitText}>Se connecter</Text>
 				</TouchableHighlight>
 			</View>
 		</SafeAreaView>
@@ -42,49 +43,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#0F1828',
 		paddingLeft: 10,
 		paddingRight: 10,
-		paddingTop: 20,
-		paddingBottom: 20,
-	},
-	logoArea: {
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	companyName: {
-		color: '#ffffff',
-		fontSize: 24,
-		fontWeight: 'bold',
-		fontStyle: 'italic',
-		textAlign: 'center',
-	},
-	logo: {
-		width: 200,
-		height: 200,
-		objectFit: 'cover',
-	},
-	input: {
-		height: 40,
-		margin: 10,
-		borderWidth: 1,
-		borderColor: "#152033",
-		backgroundColor: "#152033",
-		borderRadius: 4,
-		color: "#ffff",
-		paddingLeft: 10,
-	},
-	submit: {
-		marginLeft: 20,
-		marginRight: 20,
-		paddingTop: 12,
-		paddingBottom: 12,
-		backgroundColor: '#FF6B6B',
-		borderRadius: 30,
-		marginTop: 20,
-	},
-	submitText: {
-		color: '#fff',
-		textAlign: 'center',
-		textTransform: 'uppercase',
 	},
 	
 })

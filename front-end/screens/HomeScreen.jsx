@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableHighlight, StyleSheet, Text } from 'react-native';
-
-const Separator = () => (
-	<View style={styles.separator} />
-);
+import Styles from '../css/Styles'
 
 
 const HomeScreen = ({ navigation }) => {
@@ -16,19 +13,18 @@ const HomeScreen = ({ navigation }) => {
 			<View style={styles.connectBtn}>
 				<Text style={styles.textPrivacy} >Terms & Privacy Policy</Text>
 				<TouchableHighlight
-					style={styles.submit}
+					style={Styles.submit}
 					onPress={() =>
 						navigation.navigate('Connexion', { name: 'Connexion' })}
 				>
-					<Text style={styles.submitText}>Connexion</Text>
+					<Text style={Styles.submitText}>Connexion</Text>
 				</TouchableHighlight>
-				<Separator />
 				<TouchableHighlight
-					style={styles.submit}
+					style={Styles.submit}
 					onPress={() =>
 						navigation.navigate('Inscription', { name: 'Inscription' })}
 				>
-					<Text style={styles.submitText}>Insciption</Text>
+					<Text style={Styles.submitText}>Insciption</Text>
 				</TouchableHighlight>
 			</View>
 		</View>
@@ -72,26 +68,7 @@ const styles = StyleSheet.create({
 	textPrivacy: {
 		textAlign: 'center',
 		color: '#ffffff',
-		paddingBottom: 17
 	},
-	separator: {
-		marginVertical: 8,
-		borderBottomColor: '0F1828',
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	submit: {
-		marginLeft: 20,
-		marginRight: 20,
-		paddingTop: 12,
-		paddingBottom: 12,
-		backgroundColor: '#FF6B6B',
-		borderRadius: 30,
-	},
-	submitText: {
-		color: '#fff',
-		textAlign: 'center',
-		textTransform: 'uppercase',
-	}
 })
 
 export default HomeScreen;
