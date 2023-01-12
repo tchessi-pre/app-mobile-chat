@@ -2,21 +2,51 @@ import { StyleSheet } from 'react-native';
 
 
 export default StyleSheet.create({
-
-		submit: {
-			marginLeft: 20,
-			marginRight: 20,
-			paddingTop: 12,
-			paddingBottom: 12,
-			backgroundColor: '#FF6B6B',
-			borderRadius: 30,
-			marginTop: 20,
-		},
-		submitText: {
-			color: '#ffffff',
-			textAlign: 'center',
-			textTransform: 'uppercase',
-		},
+	companyName: {
+		color: '#ffffff',
+		fontSize: 24,
+		fontWeight: 'bold',
+		fontStyle: 'italic',
+		textAlign: 'center',
+	},
+	logo: {
+		width: 250,
+		height: 250,
+		marginLeft: 30,
+	},
+	minilogo: {
+		width: 200,
+		height: 200,
+	},
+	connectText: {
+		textAlign: 'center',
+		width: 200,
+		color: '#ffffff',
+		fontSize: 16,
+		marginLeft: 60,
+		marginBottom: 0,
+		fontWeight: 'bold',
+		marginBottom: 20,
+	},
+	textPrivacy: {
+		textAlign: 'center',
+		color: '#ffffff',
+		marginBottom: 10,
+	},
+	submit: {
+		marginLeft: 20,
+		marginRight: 20,
+		paddingTop: 12,
+		paddingBottom: 12,
+		backgroundColor: '#FF6B6B',
+		borderRadius: 30,
+		marginBottom: 10,
+	},
+	submitText: {
+		color: '#ffffff',
+		textAlign: 'center',
+		textTransform: 'uppercase',
+	},
 	input: {
 		height: 40,
 		margin: 10,
@@ -32,16 +62,5 @@ export default StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
-	companyName: {
-		color: '#ffffff',
-		fontSize: 24,
-		fontWeight: 'bold',
-		fontStyle: 'italic',
-		textAlign: 'center',
-	},
-
-	logo: {
-		width: 200,
-		height: 200,
-	},
+	
 })

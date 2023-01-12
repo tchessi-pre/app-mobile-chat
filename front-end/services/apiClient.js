@@ -18,41 +18,45 @@ class ApiClient {
 		};
 	}
 
-	get(path) {
-		return fetch(this.baseUrl + path, {
-			headers: this.headers(),
-		})
-			.then((response) => {
-				if (response.status === 401) {
-					localStorage.clear();
-					router.push({ name: 'Login' });
-				}
-				return response.json();
-			})
-			.catch(() => alert("Impossible de récupérer les données de l'API"));
+	async get(path) {
+		try {
+			const response = await fetch(this.baseUrl + path, {
+				headers: this.headers(),
+			});
+			if (response.status === 401) {
+				localStorage.clear();
+				router.push({ name: 'Login' });
+			}
+			return await response.json();
+		} catch {
+			return alert("Impossible de récupérer les données de l'API");
+		}
 	}
 
-	post(path, body, options = {}) {
-		return fetch(this.baseUrl + path, {
+	async post(path, body, options = {}) {
+		const response = await fetch(this.baseUrl + path, {
 			method: 'POST',
 			body: options.isFormData ? body : JSON.stringify(body),
 			headers: this.headers(options),
-		}).then((response) => this.handleResponse(response));
+		});
+		return await this.handleResponse(response);
 	}
 
-	delete(path) {
-		return fetch(this.baseUrl + path, {
+	async delete(path) {
+		const response = await fetch(this.baseUrl + path, {
 			method: 'DELETE',
 			headers: this.headers(),
-		}).then((response) => this.handleResponse(response));
+		});
+		return await this.handleResponse(response);
 	}
 
-	put(path, body, options = {}) {
-		return fetch(this.baseUrl + path, {
+	async put(path, body, options = {}) {
+		const response = await fetch(this.baseUrl + path, {
 			method: 'PUT',
 			body: options.isFormData ? body : JSON.stringify(body),
 			headers: this.headers(options),
-		}).then((response) => this.handleResponse(response));
+		});
+		return await this.handleResponse(response);
 	}
 
 	async handleResponse(response) {

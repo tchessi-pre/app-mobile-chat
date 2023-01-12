@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-import React, { Component } from 'react';
-import {View, StyleSheet} from 'react-native';
-
-class InscriptionScreen extends Component {
-	render() {
-		return (
-			<View>
-				
-			</View>
-		);
-	}
-}
-
-const styles = StyleSheet.create({})
-=======
 import React from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
@@ -23,9 +7,9 @@ const InscriptionScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.logoArea}>
+			<View style={Styles.logoArea}>
 				<Text style={Styles.companyName} >TissApp</Text>
-				<Image style={Styles.logo} source={require('../assets/minilogo.png')} />
+				<Image style={Styles.minilogo} source={require('../assets/minilogo.png')} />
 			</View>
 			<TextInput
 				style={Styles.input}
@@ -62,7 +46,7 @@ const InscriptionScreen = () => {
 			/>
 			<View>
 				<TouchableHighlight
-					style={Styles.submit}
+					style={styles.submit}
 					onPress={() =>
 						navigation.navigate('Inscription', { name: 'Inscription' })}
 				>
@@ -75,24 +59,22 @@ const InscriptionScreen = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
 		justifyContent: 'center',
 		alignContent: 'center',
 		backgroundColor: '#0F1828',
 		paddingLeft: 10,
 		paddingRight: 10,
-		paddingTop: 40,
-		paddingBottom: 20,
 	},
-	
-	logoArea: {
-		flex: 2,
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
+	submit: {
+		marginLeft: 20,
+		marginRight: 20,
+		paddingTop: 12,
+		paddingBottom: 12,
+		backgroundColor: '#FF6B6B',
+		borderRadius: 30,
+		marginBottom: 40,
 	},
 	
 })
->>>>>>> tch-front
 
 export default InscriptionScreen;
