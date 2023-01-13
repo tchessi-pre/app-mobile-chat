@@ -1,69 +1,83 @@
 import { StyleSheet, Text, View } from 'react-native';
-import Home from "./components/Home";
-import Profil from "./components/Profil";
-import Chat from "./components/Chat";
+import Home from "./screens/Home";
+import Profil from "./screens/Profil";
+import Chat from "./screens/Chat";
+import Login from "./screens/Login";
+import Register from './screens/Register';
 
-// import Login from "./components/Login";
 
-// import { createStackNavigator } from '@react-navigation/stack';
-
-import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Tab = createMaterialTopTabNavigator();
-// const Stack = createStackNavigator();
+const TabNavigate = () => {
+  return (
+    <Tab.Navigator
+
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'ios-home' : 'ios-home';
+          } else if (route.name === 'Profil') {
+            iconName = focused ? 'ios-person' : 'ios-person';
+          } else if (route.name === 'Chat') {
+            iconName = focused ? 'ios-chatbubbles' : 'ios-chatbubbles';
+          }
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#FF6B6B',
+        tabBarInactiveTintColor: '#fff',
+        // tabBarLabelStyle: {fontSize: 12 },
+        // tabBarItemStyle: {width: 100 },
+        tabBarStyle: { backgroundColor: '#0F1828' },
+        tabBarIndicatorStyle: { backgroundColor: 'white' },
+        // tabBarLabelStyle: {fontSize: 12, fontWeight: 'bold', color: 'white' },
+
+
+      })}>
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Profil" component={Profil} />
+      <Tab.Screen name="Chat" component={Chat} />
+    </Tab.Navigator>
+  );
+}
+
+const Stack = createStackNavigator();
+const StackNavigate = () => {
+  return (
+    <Stack.Navigator initialRouteName='HomeTab'>
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ title: 'Login' }}
+      />
+
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{ title: 'Register' }}
+      />
+      <Stack.Screen name="HomeTab" component={TabNavigate} options={{ title: 'Home' }} />
+    </Stack.Navigator>
+  );
+
+}
+
 
 
 export default function App() {
   return (
+
     <NavigationContainer>
-      <Tab.Navigator
-
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            // if (route.name === 'Home') {
-            // iconName = focused
-            // ? 'ios-information-circle'
-            // : 'ios-information-circle-outline';
-            // } else if (route.name === 'Settings') {
-            // iconName = focused ? 'ios-list' : 'ios-list-outline';
-            // }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#FF6B6B',
-          tabBarInactiveTintColor: '#fff',
-          // tabBarLabelStyle: {fontSize: 12 },
-          // tabBarItemStyle: {width: 100 },
-          tabBarStyle: { backgroundColor: '#0F1828' },
-          tabBarIndicatorStyle: { backgroundColor: 'white' },
-          // tabBarLabelStyle: {fontSize: 12, fontWeight: 'bold', color: 'white' },
-
-
-        })}>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Profil" component={Profil} />
-        <Tab.Screen name="Chat" component={Chat} />
-      </Tab.Navigator>
-
-      {/* <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ title: 'Login' }}
-        />
-
-
-
-
-      </Stack.Navigator> */}
-
+      {/* <TabNavigate /> */}
+      <StackNavigate />
     </NavigationContainer >
   );
 }
