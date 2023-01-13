@@ -1,9 +1,26 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from "./screens/HomeScreen";
 import ConnexionScreen from "./screens/ConnexionScreen";
 import InscriptionScreen from "./screens/InscriptionScreen";
+
+const forFade = ({ current, next }) => {
+  const opacity = Animated.add(
+    current.progress,
+    next ? next.progress : 0
+  ).interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: [0, 1, 0],
+  });
+
+  return {
+    leftButtonStyle: { opacity },
+    rightButtonStyle: { opacity },
+    titleStyle: { opacity },
+    backgroundStyle: { opacity },
+  };
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -14,17 +31,31 @@ export default function App() {
         < Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Welcome' }}
+          options={{
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
+            title: 'Welcome'
+          }}
         />
           < Stack.Screen
             name="Inscription"
             component={InscriptionScreen}
-            options={{ title: 'Accueil' }}
+            options={{ 
+            headerStyleInterpolator: forFade,
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
+            title: 'Accueil'
+          }}
           />
         <Stack.Screen 
           name="Connexion" 
           component={ConnexionScreen} 
-          options={{ title: 'S\'inscrire' }}
+          options={{ 
+            headerStyleInterpolator: forFade,
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
+            title: 'Accueil',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

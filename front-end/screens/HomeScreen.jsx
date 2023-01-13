@@ -15,14 +15,14 @@ const HomeScreen = ({ navigation }) => {
 				<TouchableHighlight
 					style={Styles.submit}
 					onPress={() =>
-						navigation.navigate('Connexion', { name: 'Connexion' })}
+						navigation.navigate('Connexion')}
 				>
 					<Text style={Styles.submitText}>Connexion</Text>
 				</TouchableHighlight>
 				<TouchableHighlight
 					style={Styles.submit}
 					onPress={() =>
-						navigation.navigate('Inscription', { name: 'Inscription' })}
+						navigation.navigate('Inscription')}
 				>
 					<Text style={Styles.submitText}>Insciption</Text>
 				</TouchableHighlight>
