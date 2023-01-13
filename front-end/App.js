@@ -52,22 +52,32 @@ const TabNavigate = () => {
 const Stack = createStackNavigator();
 const StackNavigate = () => {
   return (
-    <Stack.Navigator initialRouteName='HomeTab'>
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ title: 'Login' }}
-      />
+<Stack.Navigator
+  initialRouteName='HomeTab'
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: '#0F1828',
+    },
+    cardStyle: {
+      backgroundColor: '#0F1828',
+    },
+    headerTintColor: '#fff',
+  }}
+>
+  <Stack.Screen
+    name="Login"
+    component={Login}
+    options={{ title: 'Login' }}
+  />
 
-      <Stack.Screen
-        name="Register"
-        component={Register}
-        options={{ title: 'Register' }}
-      />
-      <Stack.Screen name="HomeTab" component={TabNavigate} options={{ title: 'Home' }} />
-    </Stack.Navigator>
+  <Stack.Screen
+    name="Register"
+    component={Register}
+    options={{ title: 'Register' }}
+  />
+  <Stack.Screen name="HomeTab" component={TabNavigate} options={{ title: 'Home' }} />
+</Stack.Navigator>
   );
-
 }
 
 

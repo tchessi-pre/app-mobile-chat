@@ -1,156 +1,143 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 
-const Register = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [pseudo, setPseudo] = useState('');
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+const InscriptionScreen = ({navigation}) => {
+  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
+  const nameRegex = /^[a-zA-Z]+$/;
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
 
-    const handleRegister = () => {
-        // Faire appel à l'API de Register ici
-    };
+  const handleSubmit = () => {
+    if (!nameRegex.test(name)) {
+      alert('Le nom n\'est pas valide');
+    } else if (!nameRegex.test(firstName)) {
+      alert('Le prénom n\'est pas valide');
+    } else if (!emailRegex.test(email)) {
+      alert('L\'email n\'est pas valide');
+    } else if (!passwordRegex.test(password)) {
+      alert('Le mot de passe n\'est pas valide');
+    } else if (password !== confirmPassword) {
+    	alert('Les mots de passe ne correspondent pas');
+    } else {
+      // Envoyer les données à l'API ici
+    }
+}
 
-    const CustomButton = ({ }) => (
-        <TouchableOpacity style={styles.button}
-            onPress={() =>
-                navigation.navigate('Home')}>
-            <Text style={styles.buttonText}>S'inscrire</Text>
-        </TouchableOpacity >
+return (
+    <SafeAreaView style={styles.container}>
+    <View style={styles.logoArea}>
+        <Text style={styles.companyName} >Inscription</Text>
+        <Image style={styles.logo} source={require('../assets/minilogo.png')} />
+    </View>
+    <TextInput
+        style={styles.input}
+        placeholder="Prénom"
+        placeholderTextColor="#ffff"
+        keyboardType="name"
+        value={firstName}
+        onChangeText={text => setFirstName(text)}
+    />
+    <TextInput
+        style={styles.input}
+        placeholder="Nom"
+        placeholderTextColor="#ffff"
+        keyboardType="name-family"
+        value={name}
+        onChangeText={text => setName(text)}
+    />
 
+	<TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#ffff"
+        keyboardType="name"
+        value={email}
+        onChangeText={text => setEmail(text)}
+    />
+	<TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#ffff"
+        keyboardType="password"
+        value={password}
+        onChangeText={text => setPassword(text)}
+    />
+	<TextInput
+        style={styles.input}
+        placeholder="ConfirmPassword"
+        placeholderTextColor="#ffff"
+        keyboardType="password"
+        value={setConfirmPassword}
+        onChangeText={text => setConfirmPassword(text)}
+    />
 
-    );
-
-    // const BackButton = ({ onPress }) => (
-    //     <TouchableHighlight style={styles.backButton} onPress={onPress}>
-    //         <FontAwesome name="arrow-left" size={25} color="#FFF" />
-    //     </TouchableHighlight>
-    // );
-
-    return (
-        <View style={styles.container}>
-            {/* <BackButton onPress={() => navigation.goBack()} /> */}
-
-            <Text style={styles.companyName}>TissApp</Text>
-            <Image style={styles.logo} source={require('../assets/tiss.png')} />
-            {/* <Text style={styles.companyName}>Inscription</Text> */}
-
-            {/* Firstname */}
-            <TextInput
-                placeholder='Prénom'
-                placeholderTextColor='white'
-                value={firstname}
-                onChangeText={setFirstname}
-                style={styles.input}
-            />
-
-            {/* Lastname */}
-            <TextInput
-                placeholder='Nom'
-                placeholderTextColor='white'
-                value={lastname}
-                onChangeText={setLastname}
-                style={styles.input}
-            />
-
-            {/* Pseudo */}
-            <TextInput
-                placeholder='Pseudo'
-                placeholderTextColor='white'
-                value={pseudo}
-                onChangeText={setPseudo}
-                style={styles.input}
-            />
-
-            {/* Email */}
-            <TextInput
-                placeholder='Email'
-                placeholderTextColor='white'
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-            />
-
-            {/* Mot de passe */}
-            <TextInput
-                placeholder='Mot de passe'
-                placeholderTextColor='white'
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-            />
-
-            {/* Mot de passe confirm */}
-            <TextInput
-                placeholder='Confirmer mot de passe'
-                placeholderTextColor='white'
-                value={passwordConfirm}
-                onChangeText={setPasswordConfirm}
-                secureTextEntry
-                style={styles.input}
-            />
-
-
-            {/* Register Button */}
-            <CustomButton
-                onPress={() => console.log('Button Register pressed!')}
-            />
-
-        </View>
-    );
-};
+	<View>
+			<TouchableHighlight
+				style={styles.submit}
+				onPress={() =>
+					navigation.navigate('Home')}>
+				<Text style={styles.submitText}>Inscription</Text>
+			</TouchableHighlight>
+		</View>
+	</SafeAreaView>
+	);
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#0F1828',
-    },
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignContent: 'center',
+		backgroundColor: '#0F1828',
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingBottom: 70,
+	},
+	input: {
+		height: 40,
+		margin: 10,
+		borderWidth: 1,
+		borderColor: "#152033",
+		backgroundColor: "#152033",
+		borderRadius: 4,
+		color: "#ffff"
+	},
+	submit: {
+		marginLeft: 20,
+		marginRight: 20,
+		paddingTop: 12,
+		paddingBottom: 12,
+		backgroundColor: '#FF6B6B',
+		borderRadius: 30,
+		marginTop: 20,
+	},
+	submitText: {
+		color: '#fff',
+		textAlign: 'center',
+		textTransform: 'uppercase',
+	},
+	logoArea: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	companyName: {
+		color: '#ffffff',
+		fontSize: 24,
+		fontWeight: 'bold',
+		fontStyle: 'italic',
+		textAlign: 'center',
+	},
+	logo: {
+		width: 200,
+		height: 200,
+		objectFit: 'cover',
+	},
+})
 
-    logo: {
-        alignSelf: 'center',
-        // marginBottom: 20,
-        width: 200,
-        height: 100,
-    },
-
-    companyName: {
-        color: '#ffffff',
-        fontSize: 24,
-        fontWeight: 'bold',
-        fontStyle: 'italic',
-        textAlign: 'center'
-
-    },
-
-
-    input: {
-        width: 300,
-        borderColor: 'none',
-        padding: 10,
-        margin: 10,
-        backgroundColor: '#152033',
-        color: 'white',
-    },
-
-    button: {
-        backgroundColor: '#FF6B6B',
-        padding: 10,
-        margin: 10,
-        width: 300,
-        borderRadius: 30,
-        alignItems: 'center',
-    },
-
-    buttonText: {
-        color: 'white',
-    }
-});
-
-export default Register;
+export default InscriptionScreen;
