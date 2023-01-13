@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
 
 const InscriptionScreen = () => {
 	
-
+	const [firstname, setFirstname] = useState('');
+	const [lastname, setLastname] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.logoArea}>
@@ -15,34 +19,33 @@ const InscriptionScreen = () => {
 				style={Styles.input}
 				placeholder="Nom"
 				placeholderTextColor="#ffff"
-				keyboardType="name-family
-"
+				keyboardType="name-family" value={firstname} onChangeText={setFirstname}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
 				placeholderTextColor="#ffff"
-				keyboardType="name"
+				keyboardType="name" value={lastname} onChangeText={setLastname}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Email"
 				placeholderTextColor="#ffff"
 				keyboardType="email-address"
-				blurOnSubmit={true}
+				blurOnSubmit={true} value={email} onChangeText={setEmail}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Mot de passe"
 				placeholderTextColor="#ffff"
 				keyboardType="password"
-				autoComplete="password-new"
+				autoComplete="password-new" value={password} onChangeText={setPassword}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Confirmez votre mot de passe"
 				placeholderTextColor="#ffff"
-				keyboardType="password"
+				keyboardType="password" value={confirmPassword} onChangeText={setConfirmPassword}
 			/>
 			<View>
 				<TouchableHighlight
