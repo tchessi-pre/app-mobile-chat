@@ -1,12 +1,15 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 
+
+
 const InscriptionScreen = ({navigation}) => {
-  const [name, setName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
   const nameRegex = /^[a-zA-Z]+$/;
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -24,8 +27,23 @@ const InscriptionScreen = ({navigation}) => {
     } else if (password !== confirmPassword) {
     	alert('Les mots de passe ne correspondent pas');
     } else {
-      // Envoyer les données à l'API ici
-    }
+       // requête axios here localhost3000/signup
+       axios.post('http://localhost:3000/api/auth/signup', {
+    name: name,
+    firstName: firstName,
+    email: email,
+    password: password
+  })
+  .then(function (response) {
+    console.log(response);
+    navigation.navigate('home')
+  })
+  .catch(function (error) {
+    console.log(error);
+
+  });
+
+        }
 }
 
 return (
@@ -72,7 +90,7 @@ return (
         placeholder="ConfirmPassword"
         placeholderTextColor="#ffff"
         keyboardType="password"
-        value={setConfirmPassword}
+        value={confirmPassword}
         onChangeText={text => setConfirmPassword(text)}
     />
 
@@ -80,7 +98,8 @@ return (
 			<TouchableHighlight
 				style={styles.submit}
 				onPress={() =>
-					navigation.navigate('Home')}>
+                    handleSubmit()
+                }>
 				<Text style={styles.submitText}>Inscription</Text>
 			</TouchableHighlight>
 		</View>

@@ -9,6 +9,7 @@ export const user_signup = async data => {
             },
             data: data
         });
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);
