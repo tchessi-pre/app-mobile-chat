@@ -11,14 +11,17 @@ const newToken = (user) => {
 };
 
 exports.signup = (req, res, next) => {
+  console.log(req.body);
   User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
+
   })
     .then((user) => res.status(201).json(newToken(user)))
-    .catch((error) => res.status(401).json({ error: error }));
+    .catch((error) => 
+    res.status(400).json({ error: error }));
 };
 
 exports.login = async (req, res, next) => {

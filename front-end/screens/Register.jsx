@@ -5,8 +5,9 @@ import axios from 'axios';
 
 
 const InscriptionScreen = ({navigation}) => {
-    const [name, setName] = useState('');
+
     const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -16,7 +17,8 @@ const InscriptionScreen = ({navigation}) => {
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
 
   const handleSubmit = () => {
-    if (!nameRegex.test(name)) {
+    console.log(firstName, lastName, email, password, confirmPassword);
+    if (!nameRegex.test(lastName)) {
       alert('Le nom n\'est pas valide');
     } else if (!nameRegex.test(firstName)) {
       alert('Le prénom n\'est pas valide');
@@ -28,23 +30,24 @@ const InscriptionScreen = ({navigation}) => {
     	alert('Les mots de passe ne correspondent pas');
     } else {
        // requête axios here localhost3000/signup
-       axios.post('http://localhost:3000/api/auth/signup', {
-    name: name,
-    firstName: firstName,
-    email: email,
-    password: password
-  })
-  .then(function (response) {
-    console.log(response);
-    navigation.navigate('home')
-  })
-  .catch(function (error) {
-    console.log(error);
-
-  });
-
+         axios.post('http://10.10.31.17:3000/api/auth/signup', {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+            
+        })
+        .then(function (response) {
+            console.log(response);
         }
+        )
+        .catch(function (error) {
+            console.log(error.response);
+        }
+        );
+   }
 }
+
 
 return (
     <SafeAreaView style={styles.container}>
@@ -62,11 +65,11 @@ return (
     />
     <TextInput
         style={styles.input}
-        placeholder="Nom"
+        placeholder="Lastname"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
-        value={name}
-        onChangeText={text => setName(text)}
+        value={lastName}
+        onChangeText={text => setLastName(text)}
     />
 
 	<TextInput
