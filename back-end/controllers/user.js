@@ -91,9 +91,18 @@ exports.getAllUsers = (req, res, next) => {
     limit: 10,
   };
 
-
-
   User.findAll(options)
+    .then((users) => {
+      res.status(200).json({ users });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error });
+    });
+};
+
+exports.FindAllUsers = (req, res, next) => {
+  User.findAll({ where: { deleted: false } })
     .then((users) => {
       res.status(200).json({ users });
     })

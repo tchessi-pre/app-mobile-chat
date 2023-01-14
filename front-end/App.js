@@ -4,6 +4,7 @@ import Profil from "./screens/Profil";
 import Chat from "./screens/Chat";
 import Login from "./screens/Login";
 import Register from './screens/Register';
+import Contact from './screens/Contact';
 
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -29,6 +30,9 @@ const TabNavigate = () => {
           } else if (route.name === 'Chat') {
             iconName = focused ? 'ios-chatbubbles' : 'ios-chatbubbles';
           }
+          else if (route.name === 'Contact') {
+            iconName = focused ? 'ios-people-outline' : 'ios-people-outline';
+          }
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -45,6 +49,7 @@ const TabNavigate = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profil" component={Profil} />
       <Tab.Screen name="Chat" component={Chat} />
+      <Tab.Screen name="Contact" component={Contact} />
     </Tab.Navigator>
   );
 }

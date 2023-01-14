@@ -19,8 +19,6 @@ class Chat extends Component {
             <View style={styles.container}>
                 <Text style={styles.companyName} >TissApp</Text>
                 <Image style={styles.logo} source={require('../assets/logoapp.png')} />
-
-
             </View>
         );
     }
@@ -32,20 +30,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#0F1828',
-
-
     },
-
     companyName: {
         color: '#ffffff',
         fontSize: 24,
         fontWeight: 'bold',
         fontStyle: 'italic',
         textAlign: 'center'
-
     },
-
-
     logo: {
         width: 280,
         height: 280,
@@ -53,8 +45,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
-
 })
 
 export default Chat;

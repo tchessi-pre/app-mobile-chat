@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity} from 'react-native';
 import axios from 'axios';
-
 
 const InscriptionScreen = ({navigation}) => {
 
@@ -55,6 +54,15 @@ const InscriptionScreen = ({navigation}) => {
     }
     }
   }
+
+  const CustomButton = () => (
+    <TouchableOpacity style={styles.button}
+        onPress={() =>
+                handleSubmit()
+                }>
+        <Text style={styles.buttonText}>Inscription</Text>
+    </TouchableOpacity >
+);
 
 return (
     <SafeAreaView style={styles.container}>
@@ -112,13 +120,7 @@ return (
     />
 	<View>
     {/* Button Register */}
-			<TouchableHighlight
-				style={styles.submit}
-				onPress={() =>
-                  handleSubmit()
-                }>
-				<Text style={styles.submitText}>Inscription</Text>
-			</TouchableHighlight>
+    <CustomButton />
 		</View>
 	</SafeAreaView>
 	);
@@ -143,20 +145,17 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		color: "#ffff"
 	},
-	submit: {
-		marginLeft: 20,
-		marginRight: 20,
-		paddingTop: 12,
-		paddingBottom: 12,
-		backgroundColor: '#FF6B6B',
-		borderRadius: 30,
-		marginTop: 20,
-	},
-	submitText: {
-		color: '#fff',
-		textAlign: 'center',
-		textTransform: 'uppercase',
-	},
+  button: {
+    backgroundColor: '#FF6B6B',
+    padding: 10,
+    margin: 10,
+    width: 300,
+    borderRadius: 30,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+  },
 	logoArea: {
 		flexDirection: "column",
 		justifyContent: "center",

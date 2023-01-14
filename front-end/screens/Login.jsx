@@ -3,8 +3,6 @@ import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHi
 // import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
-
-
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,11 +26,11 @@ const Login = ({ navigation }) => {
                 password: password,
             });
             if (response.status === 201) {
-                   // Stocker le token
+                // Stocker le token
                 // await SecureStore.setItemAsync('token', response.data.token);
                 console.log("status: 201, request successful");
                 alert('Connexion réussie', 'Vous pouvez maintenant vous connecter.', 'success');
-                navigation.navigate('Home');
+                navigation.navigate('Chat');
             } else {
                 console.log("status: " + response.status + ", request unsuccessful");
                 alert('Connexion refusée, vérifié vos identifants', 'error');
@@ -89,24 +87,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#0F1828',
     },
-
     logo: {
         alignSelf: 'center',
-        // marginBottom: 20,
         width: 200,
         height: 200,
     },
-
     companyName: {
         color: '#ffffff',
         fontSize: 24,
         fontWeight: 'bold',
         fontStyle: 'italic',
         textAlign: 'center'
-
     },
-
-
     input: {
         width: 300,
         borderColor: 'none',
@@ -115,7 +107,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#152033',
         color: 'white',
     },
-
     button: {
         backgroundColor: '#FF6B6B',
         padding: 10,
@@ -124,7 +115,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignItems: 'center',
     },
-
     buttonText: {
         color: 'white',
     }
