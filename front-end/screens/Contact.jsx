@@ -4,30 +4,24 @@ import axios from 'axios';
 
 const Contact = () => {
 const [search, setSearch] = useState('');
-const [users, setUsers] = useState([]);
+const [usersSearch, setSearchUsers] = useState([]);
+const [Users, setUsers] = useState([]);
 
 const handleSearch = async() => {
     try {
-        const response = await axios.get('http://localhost:3000/api/users', {
+        const response = await axios.get('http://192.168.1.13:3000/api/users/', {
             params: { search: search }
         });
-        setUsers(response.data);
-    } catch (error) {
+        if (response.status === 200) {
+        setSearchUsers(response.data);
+        // console.log(response.data);
+        }
+        } catch (error) {
         console.log(error);
+        console.log(error.response);
+        console.log(error.response.data);
     }
 }
-
-const listUsers = async() => {
-    try {
-        const response = await axios.get('http://localhost:3000/api/', {
-            params: { search: search }
-        });
-        setUsers(response.data);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 useEffect(() => {
     handleSearch();
 }, []);
@@ -41,22 +35,24 @@ return (
                 onChangeText={text => setSearch(text)}
                 value={search}
             />
-            <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <TouchableOpacity style={styles.searchButton} onPress={() => handleSearch()}>
                 <Text style={styles.searchButtonText}>Rechercher</Text>
             </TouchableOpacity>
         </View>
+        
         <FlatList
-            data={users}
-            keyExtractor={item => item._id.toString()}
+            data={usersSearch.users}
+            keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
-                <TouchableOpacity style={styles.userContainer}>
-                    <Text style={styles.userName}>{item.name}</Text>
-                    <Text style={styles.userEmail}>{item.email}</Text>
-                </TouchableOpacity>
+            <TouchableOpacity style={styles.userContainer}>
+            <Text style={styles.userName}>{item.firstName}</Text>
+            <Text style={styles.userName}>{item.lastName}</Text>
+            </TouchableOpacity>
             )}
         />
     </View>
-); }
+); 
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -126,10 +122,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     marginRight: 10,
-    },
-    listItemName: {
-    fontWeight: 'bold',
-    fontSize: 16,
     },
 });
 

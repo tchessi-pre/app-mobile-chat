@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import client from '../api/client';
 // import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 

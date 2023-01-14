@@ -30,6 +30,7 @@ exports.signup = async (req, res, next) => {
         console.log("Email déjà utilisé")
       }else{
         res.status(400).json({ error });
+        console.log(error)
       }
     }
   }
