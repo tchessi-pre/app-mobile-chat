@@ -1,7 +1,8 @@
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+let timeoutId = null;
 const Contact = () => {
 const [search, setSearch] = useState('');
 const [usersSearch, setSearchUsers] = useState([]);
@@ -26,25 +27,31 @@ useEffect(() => {
     handleSearch();
 }, []);
 
+const onSearchChange = (text) => {
+    setSearch(text);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+    handleSearch(text);
+    }, 200);
+};
+
 return (
     <View style={styles.container}>
         <View style={styles.searchContainer}>
-            <TextInput 
-                style={styles.searchInput} 
-                placeholder="Rechercher un utilisateur" 
-                onChangeText={text => setSearch(text)}
-                value={search}
-            />
-            <TouchableOpacity style={styles.searchButton} onPress={() => handleSearch()}>
-                <Text style={styles.searchButtonText}>Rechercher</Text>
-            </TouchableOpacity>
-        </View>
-        
+        <TextInput 
+            style={styles.searchInput} 
+            placeholder="Rechercher un utilisateur" 
+            onChangeText={onSearchChange}
+            value={search}
+        />
+    </View>
         <FlatList
+            style={styles.listContainer}
             data={usersSearch.users}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
             <TouchableOpacity style={styles.userContainer}>
+            <Image style={styles.listItemAvatar} source={require('../assets/tiss.png')} />
             <Text style={styles.userName}>{item.firstName}</Text>
             <Text style={styles.userName}>{item.lastName}</Text>
             </TouchableOpacity>
@@ -82,26 +89,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
     },
-    searchButtonText: {
-    color: 'white',
-    borderWidth: 1,
-    borderColor: 'white',
-    padding: 10,
-    borderRadius: 5,
-    },
     searchButton: {
     backgroundColor: '#0F1828',
     padding: 7,
     borderRadius: 5,
     },
     searchInput: {
-    width: '75%',
+    width: '95%',
     height: 40,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
+    boxShadow: '0 0 5px black',
     padding: 8,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
+    margin: 10,
     },
     searchContainer: {
     flexDirection: 'row',
@@ -113,16 +115,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
+    padding: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    margin: 5,
+    borderRadius: 20,
     },
     listItemAvatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 10,
+    
+    },
+    userName: {
+    color: 'white',
+    fontSize: 15,
+    paddingBottom: 5,
+    paddingTop: 5,
+    margin: 5,
     },
 });
+
 
 export default Contact;

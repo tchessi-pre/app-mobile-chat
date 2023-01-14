@@ -10,8 +10,7 @@ const Home = ({ navigation }) => {
 	return (
 		// <SafeAreaView>
 		<View style={styles.container}>
-			<Text style={styles.companyName} >TissApp</Text>
-			<Image style={styles.logo} source={require('../assets/logoapp.png')} />
+			<Image style={styles.logo} source={require('../assets/LogoS-Tissapp.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
 
 			<View style={styles.connectBtn}>
@@ -42,17 +41,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
-
-
 	},
-	companyName: {
-		color: '#ffffff',
-		fontSize: 24,
-		fontWeight: 'bold',
-		fontStyle: 'italic',
-		textAlign: 'center'
 
-	},
 	logo: {
 		width: 280,
 		height: 180,
@@ -71,14 +61,10 @@ const styles = StyleSheet.create({
 		paddingLeft: 30,
 		paddingRight: 30,
 		paddingBottom: 40,
-
 	},
-
 	buttonText: {
 		color: 'white',
 	},
-
-
 	button: {
 		backgroundColor: '#FF6B6B',
 		padding: 10,
@@ -87,7 +73,6 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		alignItems: 'center',
 	},
-
 	textPrivacy: {
 		textAlign: 'center',
 		color: '#ffffff',
@@ -98,7 +83,6 @@ const styles = StyleSheet.create({
 		borderBottomColor: '#ffffff0',
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-
 })
 
 export default Home;
