@@ -10,18 +10,29 @@ const newToken = (user) => {
   return { user, token };
 };
 
-exports.signup = (req, res, next) => {
-  console.log(req.body);
-  User.create({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-
-  })
-    .then((user) => res.status(201).json(newToken(user)))
-    .catch((error) => 
-    res.status(400).json({ error: error }));
+exports.signup = async (req, res, next) => {
+  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password) {
+    res.status(400).json({ error: 'Vous devez fournir tous les champs' });
+  } else {
+    try {
+      // Créer un nouvel utilisateur
+      const user = await User.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+      })
+      res.status(201).json(newToken(user))
+    } catch (error) {
+      // Vérification de l'email unique d'un utilisateur
+      if(error.name === 'SequelizeValidationError' && error.errors[0].path === 'email'){
+        res.status(409).json({ error: 'Email déjà utilisé' });
+        console.log("Email déjà utilisé")
+      }else{
+        res.status(400).json({ error });
+      }
+    }
+  }
 };
 
 exports.login = async (req, res, next) => {

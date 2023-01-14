@@ -1,39 +1,64 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+// import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
+
+
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // Faire appel à l'API de login ici
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
+    // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
+
+    const handleLogin = async()  => {
+        console.log( email, password );
+        if (!emailRegex.test(email)) {
+        alert('L\'email n\'est pas valide', 'alertType');
+        } else if (!passwordRegex.test(password)) {
+        alert('Le mot de passe n\'est pas valide', 'alertType');
+        }else {
+           // requête axios here localhost3000/login
+        try {
+            const response = await axios.post('http://192.168.1.13:3000/api/auth/login', {
+                email: email,
+                password: password,
+            });
+            if (response.status === 201) {
+                   // Stocker le token
+                // await SecureStore.setItemAsync('token', response.data.token);
+                console.log("status: 201, request successful");
+                alert('Connexion réussie', 'Vous pouvez maintenant vous connecter.', 'success');
+                navigation.navigate('Home');
+            } else {
+                console.log("status: " + response.status + ", request unsuccessful");
+                alert('Connexion refusée, vérifié vos identifants', 'error');
+            }
+        }catch (error) {
+            console.log(error);
+            console.log(error.response);
+            alert('Erreur requête lors de la Connexion impossible.', 'error');
+        }
+        }
     };
 
-    const CustomButton = ({ }) => (
+    const CustomButton = () => (
         <TouchableOpacity style={styles.button}
             onPress={() =>
-                navigation.navigate('Home')}>
+                    handleLogin()
+                    }>
             <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity >
-
-
     );
-
-    // const BackButton = ({ onPress }) => (
-    //     <TouchableHighlight style={styles.backButton} onPress={onPress}>
-    //         <FontAwesome name="arrow-left" size={25} color="#FFF" />
-    //     </TouchableHighlight>
-    // );
 
     return (
         <View style={styles.container}>
-            {/* <BackButton onPress={() => navigation.goBack()} /> */}
-
-            <Text style={styles.companyName}>TissApp</Text>
+            {/* Logo */}
+            <Text style={styles.companyName}>Connection</Text>
             <Image style={styles.logo} source={require('../assets/tiss.png')} />
-            {/* <Text style={styles.companyName}>Connexion</Text> */}
-
             {/* Email */}
             <TextInput
                 placeholder='Email'
@@ -42,7 +67,6 @@ const Login = ({ navigation }) => {
                 onChangeText={setEmail}
                 style={styles.input}
             />
-
             {/* Mot de passe */}
             <TextInput
                 placeholder='Password'
@@ -53,10 +77,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
             />
             {/* Login Button */}
-            <CustomButton
-                onPress={() => console.log('Button login pressed!')}
-            />
-
+            <CustomButton/>
         </View>
     );
 };

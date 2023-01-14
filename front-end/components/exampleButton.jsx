@@ -8,8 +8,14 @@ const BackButton = ({ onPress }) => (
   );
 
 const exampleButton = () => {
+      // const BackButton = ({ onPress }) => (
+    //     <TouchableHighlight style={styles.backButton} onPress={onPress}>
+    //         <FontAwesome name="arrow-left" size={25} color="#FFF" />
+    //     </TouchableHighlight>
+    // );
   return (
     <View>
+                  {/* <BackButton onPress={() => navigation.goBack()} /> */}
         <Text>exampleButton</Text>
             <BackButton
             style={styles.backButton}

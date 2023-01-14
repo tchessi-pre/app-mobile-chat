@@ -3,7 +3,6 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Im
 import axios from 'axios';
 
 
-
 const InscriptionScreen = ({navigation}) => {
 
     const [firstName, setFirstName] = useState('');
@@ -13,95 +12,110 @@ const InscriptionScreen = ({navigation}) => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
   const nameRegex = /^[a-zA-Z]+$/;
+  //Le nom et le prénom doivent contenir uniquement des lettres.
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
+  // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
-  const handleSubmit = () => {
+  const handleSubmit = async()  => {
     console.log(firstName, lastName, email, password, confirmPassword);
     if (!nameRegex.test(lastName)) {
-      alert('Le nom n\'est pas valide');
+      alert('Le nom n\'est pas valide', 'alertType');
     } else if (!nameRegex.test(firstName)) {
-      alert('Le prénom n\'est pas valide');
+      alert('Le prénom n\'est pas valide', 'alertType');
     } else if (!emailRegex.test(email)) {
-      alert('L\'email n\'est pas valide');
+      alert('L\'email n\'est pas valide', 'alertType');
     } else if (!passwordRegex.test(password)) {
-      alert('Le mot de passe n\'est pas valide');
+      alert('Le mot de passe n\'est pas valide', 'alertType');
     } else if (password !== confirmPassword) {
-    	alert('Les mots de passe ne correspondent pas');
+      alert('Les mots de passe ne correspondent pas', 'alertType');
     } else {
        // requête axios here localhost3000/signup
-         axios.post('http://10.10.31.17:3000/api/auth/signup', {
+      try {
+        const response = await axios.post('http://192.168.1.13:3000/api/auth/signup', {
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password,
-            
-        })
-        .then(function (response) {
-            console.log(response);
+        });
+        if (response.status === 201) {
+          console.log("status: 201, request successful");
+          alert('Inscription réussie', 'Votre compte à bien été crée.', 'success');
+          navigation.navigate('Chat');
         }
-        )
-        .catch(function (error) {
+        }catch (error) {
+        if(error.response.status === 409){
+          alert('Email déjà utilisé', 'Veuillez utiliser une autre adresse email.', 'error');
+        } else {
+            console.log(error);
             console.log(error.response);
+            alert('Erreur lors de l\'inscription.', 'error');
         }
-        );
-   }
-}
-
+    }
+    }
+  }
 
 return (
     <SafeAreaView style={styles.container}>
+    {/* Logo */}
     <View style={styles.logoArea}>
         <Text style={styles.companyName} >Inscription</Text>
         <Image style={styles.logo} source={require('../assets/minilogo.png')} />
     </View>
+    {/* Firstname */}
     <TextInput
         style={styles.input}
-        placeholder="Prénom"
+        placeholder=" Prénom"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={firstName}
         onChangeText={text => setFirstName(text)}
     />
+    {/* Lastname */}
     <TextInput
         style={styles.input}
-        placeholder="Lastname"
+        placeholder=" Lastname"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
         onChangeText={text => setLastName(text)}
     />
-
-	<TextInput
+    {/* Email */}
+    <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder=" Email"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={email}
         onChangeText={text => setEmail(text)}
     />
-	<TextInput
+    {/* Password */}
+    <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder=" Password"
         placeholderTextColor="#ffff"
         keyboardType="password"
+        secureTextEntry={true}
         value={password}
         onChangeText={text => setPassword(text)}
     />
-	<TextInput
+    {/* C-Password */}
+    <TextInput
         style={styles.input}
-        placeholder="ConfirmPassword"
+        placeholder=" ConfirmPassword"
         placeholderTextColor="#ffff"
         keyboardType="password"
+        secureTextEntry={true}
         value={confirmPassword}
         onChangeText={text => setConfirmPassword(text)}
     />
-
 	<View>
+    {/* Button Register */}
 			<TouchableHighlight
 				style={styles.submit}
 				onPress={() =>
-                    handleSubmit()
+                  handleSubmit()
                 }>
 				<Text style={styles.submitText}>Inscription</Text>
 			</TouchableHighlight>
