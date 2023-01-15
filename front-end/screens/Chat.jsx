@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 
 const Chat = () => {
@@ -13,21 +14,27 @@ fetchMessages();
 }, []);
 
 const fetchMessages = async () => {
-try {
-const response = await axios.get('http://192.168.1.13:3000/api/posts');
-if(response.status === 200){
-setMessages(response.data);
-console.log(response.data);
-}
-else{
-console.log('error');
-console.log(response.data);
-console.log(response.status);
-}
-} catch (error) {
-console.error(error);
-console.log(error.response);
-}
+    try {
+        // Get the token from storage
+        const token = await AsyncStorage.getItem('token');
+        // Use the token to make a request to the API
+        const response = await axios.get('http://192.168.1.13:3000/api/posts', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (response.status === 200) {
+            setMessages(response.data);
+            console.log(response.data);
+        } else {
+            console.log('error');
+            console.log(response.data);
+            console.log(response.status);
+        }
+    } catch (error) {
+        console.error(error);
+        console.log(error.response);
+    }
 };
 
 const handleSendMessage = async () => {
@@ -35,7 +42,12 @@ const handleSendMessage = async () => {
     const data = {};
     if(newMessage) data.content = newMessage;
     if(newImageUrl) data.imageUrl = newImageUrl;
-        await axios.post('http://192.168.1.13:3000/api/posts', data);
+    const token = await AsyncStorage.getItem('token');
+        await axios.post('http://192.168.1.13:3000/api/posts', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+        });
         if(response.status === 201) {
         fetchMessages();
         setNewMessage('');

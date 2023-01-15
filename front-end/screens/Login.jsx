@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-// import * as SecureStore from 'expo-secure-store';
+import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 
-
-
-
-
+// const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -31,8 +28,8 @@ const Login = ({ navigation }) => {
             });
             if (response.status === 201) {
                 // Stocker le token
-                // await SecureStore.setItemAsync('token', response.data.token);
-                
+                await AsyncStorage.setItem('token', response.data.token);
+                console.log('Voici le token de l\'utilisateur',response.data.token)
                 alert('Connexion reussi, vous êtes connecté');
                 console.log("status: 201, request login successful");
                 navigation.navigate('Chat');

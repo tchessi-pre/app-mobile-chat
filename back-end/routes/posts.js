@@ -10,7 +10,7 @@ const multer = require('../middleware/multer-config');
 
 router.post('/', multer, postsCtrl.createPost); // Test no authentication // nedded authentication
 router.get('/:id', auth, postsCtrl.getOnePost);
-router.get('/',  postsCtrl.getAllPosts); // Test no authentication // nedded authentication
+router.get('/', auth,  postsCtrl.getAllPosts); // Test no authentication // nedded authentication
 router.put('/:id', auth, multer, postsCtrl.modifyPost);
 router.delete('/:id', auth, postsCtrl.deletePost);
 
