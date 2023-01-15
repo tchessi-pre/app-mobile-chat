@@ -1,9 +1,16 @@
-import { StyleSheet, Animated } from 'react-native';
+import { StyleSheet, Animated, View, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "./screens/HomeScreen";
 import ConnexionScreen from "./screens/ConnexionScreen";
 import InscriptionScreen from "./screens/InscriptionScreen";
+import ChannelScreen from "./screens/ChannelScreen";
+import SettingsScreen from "./screens/ProfilScreen";
+import ChatScreen from "./screens/ChatScreen";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const Tab = createBottomTabNavigator();
 
 const forFade = ({ current, next }) => {
   const opacity = Animated.add(
@@ -27,14 +34,35 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer style={styles.container}>
-      <Stack.Navigator>
-        < Stack.Screen
-          name="Home"
-          component={HomeScreen}
+      <StatusBar backgroundColor="#0F1828" barStyle="light-content" />
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: '#FF6B6B',
+
+        }}
+      >
+        < Tab.Screen
+          name="Disc."
+          component={ChannelScreen}
           options={{
+            tabBarLabel: 'Disc...',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
-            title: 'Welcome'
+            headerShown: false,
+          }}
+        />
+        {/* <Stack.Screen
+          name="Connexion"
+          component={ConnexionScreen}
+          options={{
+            headerStyleInterpolator: forFade,
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '0F1828#' },
+            title: 'Accueil',
+            headerShown: false,
           }}
         />
           < Stack.Screen
@@ -45,19 +73,35 @@ export default function App() {
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
             title: 'Accueil'
+            headerShown: false,
           }}
-          />
-        <Stack.Screen 
-          name="Connexion" 
-          component={ConnexionScreen} 
-          options={{ 
-            headerStyleInterpolator: forFade,
+          /> */}
+        <Tab.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{
+            tabBarLabel: 'Chat',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="message" color={color} size={size} />
+            ),
+            tabBarBadge: 3,
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
-            title: 'Accueil',
           }}
         />
-      </Stack.Navigator>
+        <Tab.Screen
+          name="Mon profil"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: 'Profil',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="account" color={color} size={size} />
+            ),
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

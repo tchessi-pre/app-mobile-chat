@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, Text, Image, TextInput, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
 
-const ConnexionScreen = () => {
+const ConnexionScreen = ({ navigation }) => {
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 			<View style={Styles.logoArea}>
 				<Text style={Styles.companyName} >TissApp</Text>
 				<Image style={Styles.minilogo} source={require('../assets/minilogo.png')} />
@@ -26,12 +26,12 @@ const ConnexionScreen = () => {
 				<TouchableHighlight
 					style={Styles.submit}
 					onPress={() =>
-						navigation.navigate('Connexion', { name: 'Connexion' })}
+						navigation.navigate('Channel', { name: 'ChannelScreen' })}
 				>
 					<Text style={Styles.submitText}>Se connecter</Text>
 				</TouchableHighlight>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 }
 
