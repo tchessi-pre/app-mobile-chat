@@ -76,8 +76,10 @@ const handleSendMessage = async () => {
 return (
     <View style={styles.container}>
         <FlatList
+        style={styles.messageListContainer}
         scrollEnabled={true}
-        inverted
+        initialNumToRender={20}
+        inverted={true}
         data={messages}
         renderItem={({ item }) => 
             <View style={styles.messageContainer}>
@@ -117,6 +119,13 @@ flex: 1,
 backgroundColor: '#0F1828',
 },
 
+messageListContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#0F1828',
+    bottom: '15%',
+},
+
 messageContainer: {
     flex: 1,
     alignSelf: 'flex-end',
@@ -124,8 +133,6 @@ messageContainer: {
     marginRight: 10,
     maxWidth: '80%',
     marginTop: 10,
-    top: 70,
-    
 },
 messageContent: {
     flexDirection: 'row',
@@ -149,6 +156,7 @@ messageAvatar: {
 messageTextContainer: {
     maxWidth: '80%',
     margin: 10,
+    paddingRight: 10,
 },
 messageUsername: {
     fontWeight: 'bold',
