@@ -39,7 +39,7 @@ const InscriptionScreen = ({navigation}) => {
             password: password,
         });
         if (response.status === 201) {
-          console.log("status: 201, request successful");
+          console.log("status: 201, request signup successful");
           alert('Inscription réussie', 'Votre compte à bien été crée.', 'success');
           navigation.navigate('Chat');
         }

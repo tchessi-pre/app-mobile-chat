@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-import client from '../api/client';
 // import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+
+
+
+
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -16,7 +19,7 @@ const Login = ({ navigation }) => {
     const handleLogin = async()  => {
         console.log( email, password );
         if (!emailRegex.test(email)) {
-        alert('L\'email n\'est pas valide', 'alertType');
+        alert("L'email n'est pas valide", "error");
         } else if (!passwordRegex.test(password)) {
         alert('Le mot de passe n\'est pas valide', 'alertType');
         }else {
@@ -29,8 +32,9 @@ const Login = ({ navigation }) => {
             if (response.status === 201) {
                 // Stocker le token
                 // await SecureStore.setItemAsync('token', response.data.token);
-                console.log("status: 201, request successful");
-                alert('Connexion réussie', 'Vous pouvez maintenant vous connecter.', 'success');
+                
+                alert('Connexion reussi, vous êtes connecté');
+                console.log("status: 201, request login successful");
                 navigation.navigate('Chat');
             } else {
                 console.log("status: " + response.status + ", request unsuccessful");

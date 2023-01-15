@@ -10,7 +10,7 @@ const Home = ({ navigation }) => {
 	return (
 		// <SafeAreaView>
 		<View style={styles.container}>
-			<Image style={styles.logo} source={require('../assets/LogoS-Tissapp.png')} />
+			<Image style={styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
 
 			<View style={styles.connectBtn}>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 	},
 
 	logo: {
-		width: 280,
+		width: 400,
 		height: 180,
 		objectFit: 'cover',
 		justifyContent: 'center',
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		backgroundColor: '#FF6B6B',
+		opacity: 0.9,
 		padding: 10,
 		margin: 10,
 		width: 300,

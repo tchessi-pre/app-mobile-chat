@@ -1,12 +1,14 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 
 let timeoutId = null;
 const Contact = () => {
 const [search, setSearch] = useState('');
 const [usersSearch, setSearchUsers] = useState([]);
-const [Users, setUsers] = useState([]);
+const [status, setStatus] = useState('');
 
 const handleSearch = async() => {
     try {
@@ -15,12 +17,15 @@ const handleSearch = async() => {
         });
         if (response.status === 200) {
         setSearchUsers(response.data);
+        setStatus(response.data.status);
         // console.log(response.data);
+        console.log('requete get all users, 200 ok !');
         }
         } catch (error) {
-        console.log(error);
-        console.log(error.response);
-        console.log(error.response.data);
+        console.log('requete get all users, error !');
+        // console.log(error);
+        // console.log(error.response);
+        // console.log(error.response.data);
     }
 }
 useEffect(() => {
@@ -50,10 +55,13 @@ return (
             data={usersSearch.users}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
-            <TouchableOpacity style={styles.userContainer}>
-            <Image style={styles.listItemAvatar} source={require('../assets/tiss.png')} />
-            <Text style={styles.userName}>{item.firstName}</Text>
-            <Text style={styles.userName}>{item.lastName}</Text>
+            <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
+
+            <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/avatar.png')} />
+            <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
+            {/* mettre le status hors ligne ou en ligne */}
+            <Text style={styles.userStatus}>Status: {status === 'online' ? 'En ligne' : 'Hors ligne'}</Text> 
+            <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
             </TouchableOpacity>
             )}
         />
@@ -77,18 +85,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     },
-    listContainer: {
-    flex: 1,
-    width: '90%',
-    },
-    listItem: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
-    },
     searchButton: {
     backgroundColor: '#0F1828',
     padding: 7,
@@ -111,30 +107,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     },
+    listContainer: {
+        width: '100%',
+        },
     userContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 5,
-    borderWidth: 1,
-    borderColor: 'gray',
-    margin: 5,
-    borderRadius: 20,
+        width: '100%',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        borderBottomWidth: 1,
+        margin: 10,
+        padding: 10,
     },
     listItemAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    
+        position: 'relative',
+        width: 50,
+        height: 50,
+        borderRadius: 10,
+        marginRight: 10,
+        marginLeft: 10,
+        borderWidth: 1.5,
+        borderColor: '#7452B7',
     },
     userName: {
-    color: 'white',
-    fontSize: 15,
-    paddingBottom: 5,
-    paddingTop: 5,
-    margin: 5,
+        color: 'white',
+        marginRight: 10,
+        fontSize: 16,
+        flex: 1,
+        alignSelf: 'flex-start',
+        marginTop: 5,
+    },
+    userStatus: {
+        color: 'white',
+        marginRight: 10,
+        fontSize: 5,
+        alignSelf: 'flex-end',
+        marginTop: 5,
+        marginRight: 10,
+    },
+    userCreatedAt: {
+        color: 'white',
+        fontSize: 5,
+        alignSelf: 'flex-end',
+        marginRight: 10,
+        marginTop: 5,
     },
 });
-
 
 export default Contact;
