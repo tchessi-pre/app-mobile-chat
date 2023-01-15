@@ -6,13 +6,13 @@ import axios from 'axios';
 
 const Chat = () => {
 const [messages, setMessages] = useState([]);
+
 const [newMessage, setNewMessage] = useState('');
 const [newImageUrl, setNewImageUrl] = useState('');
 
 useEffect(() => {
-fetchMessages();
+    fetchMessages();
 }, []);
-
 const fetchMessages = async () => {
     try {
         // Get the token from storage
@@ -24,8 +24,8 @@ const fetchMessages = async () => {
             },
         });
         if (response.status === 200) {
-            setMessages(response.data);
-            console.log(response.data);
+            setMessages(response.data.posts);
+            // console.log(response.data);
         } else {
             console.log('error');
             console.log(response.data);
@@ -34,49 +34,57 @@ const fetchMessages = async () => {
     } catch (error) {
         console.error(error);
         console.log(error.response);
+        
     }
 };
 
 const handleSendMessage = async () => {
+    if(newMessage === '' ) {
+        alert('Le message ne peut pas être vide')
+    }else {
     try {
-    const data = {};
-    if(newMessage) data.content = newMessage;
-    if(newImageUrl) data.imageUrl = newImageUrl;
-    const token = await AsyncStorage.getItem('token');
-        await axios.post('http://192.168.1.13:3000/api/posts', data, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
+        const data = {};
+        if(newMessage) data.content = newMessage;
+        if(newImageUrl) data.imageUrl = newImageUrl;
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.post('http://192.168.1.13:3000/api/posts', data, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
         });
+    
         if(response.status === 201) {
-        fetchMessages();
-        setNewMessage('');
-        setNewImageUrl('');
-        console.log(response.data);
+            fetchMessages();
+            setNewMessage('');
+            setNewImageUrl('');
+            console.log(response.data);
         }
         else{
-        console.log('error');
-        console.log(response.data);
-        console.log(response.status);
+            console.log('error');
+            console.log(response.data);
+            console.log(response.status);
         }
-    } catch (error) {
+    }catch (error) {
         console.error(error);
         console.log(error.response);
         console.log(error.response.data);
         console.log('je tombe dans le catch');
     }
-    };
-    
+}
+};
+
 return (
-<View style={styles.container}>
-<FlatList
-data={messages.posts}
-renderItem={({ item }) => 
-<View style={styles.messageContainer}>
-    <View style={styles.messageContent}>
-        <Image style={styles.messageAvatar} source={item.imageUrl || require('../assets/avatar.png')}/>
-        <View style={styles.messageTextContainer}>
-            <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+    <View style={styles.container}>
+        <FlatList
+        scrollEnabled={true}
+        inverted
+        data={messages}
+        renderItem={({ item }) => 
+            <View style={styles.messageContainer}>
+            <View style={styles.messageContent}>
+            <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/avatar.png')}/>
+            <View style={styles.messageTextContainer}>
+                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
             <Text style={styles.messageText}>{item.content}</Text>
         </View>
     </View>
@@ -116,6 +124,8 @@ messageContainer: {
     marginRight: 10,
     maxWidth: '80%',
     marginTop: 10,
+    top: 70,
+    
 },
 messageContent: {
     flexDirection: 'row',
@@ -124,6 +134,7 @@ messageContent: {
     borderRadius: 20,
     padding: 10,
     alignItems: 'center',
+    
 },
 messageAvatar: {
     width: 50,

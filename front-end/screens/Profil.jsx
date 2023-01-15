@@ -22,16 +22,20 @@ const handleEdit = async()  => {
     else {
        // requête axios here localhost3000/edit
     try {
-        const response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
+        const token = await AsyncStorage.getItem('token');
+        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
             firstName: firstName,
             lastName: lastName,
         });
-        if (response.status === 201) {
-            console.log("status: 201, request edit successful");
+        if (response.status === 200) {
+            console.log("status: 200, request edit successful");
             alert('Modification réussie', 'Votre compte à bien été édité.', 'success');
             navigation.navigate('Chat');
         }
-        }catch (error) {
+    }catch (error) {
         if(error.response.status === 409){
             alert('Email déjà utilisé', 'Veuillez utiliser une autre adresse email.', 'error');
         } else {

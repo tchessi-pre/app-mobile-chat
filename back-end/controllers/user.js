@@ -64,6 +64,8 @@ exports.editUser = (req, res, next) => {
     req.user.update(userObject).then((user) => res.status(200).json({ user }));
   } catch (error) {
     res.status(400).json({ error });
+    console.log(error);
+    console.log(response.error);
   }
 };
 
@@ -87,8 +89,6 @@ exports.getAllUsers = (req, res, next) => {
       },
 
     ), { deleted: false }],
-
-
     limit: 10,
   };
 
