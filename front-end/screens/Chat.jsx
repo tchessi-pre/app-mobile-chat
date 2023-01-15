@@ -6,26 +6,21 @@ import axios from 'axios';
 
 const Chat = () => {
 const [messages, setMessages] = useState([]);
-
 const [newMessage, setNewMessage] = useState('');
 const [newImageUrl, setNewImageUrl] = useState('');
 
-useEffect(() => {
-    fetchMessages();
-}, []);
+
+
 const fetchMessages = async () => {
     try {
-        // Get the token from storage
         const token = await AsyncStorage.getItem('token');
-        // Use the token to make a request to the API
-        const response = await axios.get('http://192.168.1.13:3000/api/posts', {
+        const response = await axios.get(`http://192.168.1.13:3000/api/posts`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
         if (response.status === 200) {
             setMessages(response.data.posts);
-            // console.log(response.data);
         } else {
             console.log('error');
             console.log(response.data);
@@ -34,9 +29,12 @@ const fetchMessages = async () => {
     } catch (error) {
         console.error(error);
         console.log(error.response);
-        
     }
 };
+
+useEffect(() => {
+    fetchMessages();
+}, []);
 
 const handleSendMessage = async () => {
     if(newMessage === '' ) {
@@ -74,14 +72,16 @@ const handleSendMessage = async () => {
 };
 
 return (
+    // Message view
     <View style={styles.container}>
         <FlatList
-        style={styles.messageListContainer}
-        scrollEnabled={true}
-        initialNumToRender={20}
-        inverted={true}
-        data={messages}
-        renderItem={({ item }) => 
+            style={styles.messageListContainer}
+            inverted={true}
+            onEndReached={fetchMessages}
+            onEndReachedThreshold={0.5}
+            data={messages}
+            keyExtractor={item => `${item.id}-${item.createdAt}`}
+            renderItem={({ item }) =>  
             <View style={styles.messageContainer}>
             <View style={styles.messageContent}>
             <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/avatar.png')}/>
@@ -93,8 +93,9 @@ return (
     </View>
 </View>
 }
-keyExtractor={item => item.id}
 />
+
+{/* Input & Button views */}
 <View style={styles.inputContainer}>
     <TextInput
         value={newMessage}
@@ -132,7 +133,7 @@ messageContainer: {
     alignSelf: 'flex-end',
     marginBottom: 10,
     marginRight: 10,
-    maxWidth: '80%',
+    maxWidth: '95%',
     marginTop: 10,
 },
 messageContent: {

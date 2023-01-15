@@ -57,6 +57,7 @@ return (
         <FlatList
             style={styles.listContainer}
             data={usersSearch.users}
+            onEndReachedThreshold={0.5}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
             <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
