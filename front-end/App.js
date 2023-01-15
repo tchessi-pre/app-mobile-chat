@@ -41,48 +41,63 @@ export default function App() {
 
         }}
       >
-        < Tab.Screen
-          name="Disc."
-          component={ChannelScreen}
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
           options={{
-            tabBarLabel: 'Disc...',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
+            headerStyleInterpolator: forFade,
             headerTintColor: 'white',
-            headerStyle: { backgroundColor: '#0F1828' },
+            headerStyle: { backgroundColor: '0F1828#' },
+            title: 'Home',
             headerShown: false,
+            tabBarStyle: { display: "none" },
           }}
         />
-        {/* <Stack.Screen
+        <Tab.Screen
           name="Connexion"
           component={ConnexionScreen}
           options={{
             headerStyleInterpolator: forFade,
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '0F1828#' },
-            title: 'Accueil',
+            title: 'Connexion',
+            tabBarStyle: { display: "none" },
+            headerStyle: { backgroundColor: '#0F1828' },
             headerShown: false,
           }}
         />
-          < Stack.Screen
-            name="Inscription"
-            component={InscriptionScreen}
-            options={{ 
+        < Tab.Screen
+          name="Inscription"
+          component={InscriptionScreen}
+          options={{
             headerStyleInterpolator: forFade,
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
-            title: 'Accueil'
+            title: 'Inscription',
+            headerShown: false,
+            tabBarStyle: { display: "none" },
+          }}
+        />
+        < Tab.Screen
+          name="Disc."
+          component={ChannelScreen}
+          options={{
+            tabBarLabel: 'Disc...',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="home" color={color} size={30} />
+            ),
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
             headerShown: false,
           }}
-          /> */}
+        />
         <Tab.Screen
           name="Chat"
           component={ChatScreen}
           options={{
             tabBarLabel: 'Chat',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="message" color={color} size={size} />
+              <MaterialCommunityIcons name="message" color={color} size={30} />
             ),
             tabBarBadge: 3,
             headerTintColor: 'white',
@@ -95,7 +110,7 @@ export default function App() {
           options={{
             tabBarLabel: 'Profil',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="account" color={color} size={size} />
+              <MaterialCommunityIcons name="account" color={color} size={30} />
             ),
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },

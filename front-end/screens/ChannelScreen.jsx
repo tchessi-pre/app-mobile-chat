@@ -5,7 +5,7 @@ import SearchBar from '../components/SearchBar';
 import Profil from '../components/Profil';
 
 
-const ChannelScreen = () => {
+const ChannelScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.top}>
@@ -34,7 +34,7 @@ const ChannelScreen = () => {
 				<View>
 					<Profil />
 					<Badge
-						size={30}
+						size={50}
 						status="error"
 						containerStyle={{ position: 'absolute', top: 1, left: 50 }}
 					/>

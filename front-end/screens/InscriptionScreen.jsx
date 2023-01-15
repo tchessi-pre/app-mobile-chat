@@ -48,7 +48,7 @@ const InscriptionScreen = () => {
 				<TouchableHighlight
 					style={styles.submit}
 					onPress={() =>
-						navigation.goBack() }
+					console.log('Inscription') }
 				>
 					<Text style={Styles.submitText}>S'inscrire</Text>
 				</TouchableHighlight>
