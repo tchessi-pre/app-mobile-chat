@@ -87,7 +87,8 @@ return (
             <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/avatar.png')}/>
             <View style={styles.messageTextContainer}>
                 <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
-            <Text style={styles.messageText}>{item.content}</Text>
+                <Text style={styles.messageText}>{item.content}</Text>
+                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
         </View>
     </View>
 </View>
@@ -166,6 +167,11 @@ messageUsername: {
 messageText: {
     fontSize: 14,
     color: '#333',
+},
+messageCreatedAt: {
+    fontSize: 8,
+    color: '#333',
+    alignSelf: 'flex-end',
 },
 
 // Input 
