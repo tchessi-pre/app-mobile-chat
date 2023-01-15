@@ -25,12 +25,13 @@ class Profil extends Component {
             <View style={styles.container}>
                 {/* <Text style={styles.companyName} >TissApp</Text> */}
                 {/* <Image style={styles.logo} source={require('../assets/avatar.png')} /> */}
+                
                 <FontAwesome name="user-plus"
-                    size={50}
+                    size={30}
                     color="white"
                     style={styles.logo}
                 />
-
+                <Text style={styles.companyName}>Profil</Text>
                 <TextInput
                     placeholder='Nom'
                     placeholderTextColor="#fff"
