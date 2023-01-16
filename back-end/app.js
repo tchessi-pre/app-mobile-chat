@@ -34,18 +34,11 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/auth', userRoutes);
 
 app.get('/api/users/:id', auth, userCtrl.getOneUser);
-app.get('/api/users', auth, userCtrl.getAllUsers);
+app.get('/api/users', auth, userCtrl.getAllUsers); // avec authentification et methode search // sans authentification TEST 
+app.get('/api/usersAll', userCtrl.FindAllUsers); // sans authentification // mettre authentification plus tard
 app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
 
-app.get(
-  '/api/notifications',
-  auth,
-  notificationsCtrl.getNotificationsOfOneUser
-);
-app.delete(
-  '/api/notifications/:id',
-  auth,
-  notificationsCtrl.deleteNotification
-);
+app.get('/api/notifications',auth,notificationsCtrl.getNotificationsOfOneUser);
+app.delete('/api/notifications/:id',auth,notificationsCtrl.deleteNotification);
 
 module.exports = app;
