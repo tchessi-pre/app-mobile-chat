@@ -5,9 +5,9 @@ import axios from 'axios';
 
 const Profil = ({navigation}) => {
     // Récupération state du Pseudo et du Prénom et l'email
-const [userfirstName, setUserfirstName] = useState([]);
-const [userlastName, setUserlastName] = useState([]);
-const [userEmail, setUserEmail] = useState([]);
+const [userfirstName, setUserfirstName] = useState('');
+const [userlastName, setUserlastName] = useState('');
+const [userEmail, setUserEmail] = useState('');
      // Modification state FirnstName et LastName
 const [firstName, setFirstName] = useState('');
 const [lastName, setLastName] = useState('');
@@ -19,7 +19,10 @@ const nameRegex = /^[a-zA-Z]+$/;
 const getUser = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.get('http://10.10.40.104:3000/api/users/${userId}', {
+        //Retrieve the userId
+        const userId = await AsyncStorage.getItem('userId');
+        console.log(userId)
+        let response = await axios.get(`http://10.10.40.104:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -45,35 +48,38 @@ useEffect(() => {
 const handleEdit = async()  => {
     if(firstName === "" || lastName === ""){
         alert('Les champs nom ou prénom ne peuvent pas être vide');
+
+    }else if(!nameRegex.test(firstName)){
+        alert('Le prénom n\'est pas valide');
     }else if(!nameRegex.test(lastName)){
         alert('Le nom n\'est pas valide');
-    }else if (!nameRegex.test(firstName)){
-        alert('Le prénom n\'est pas valide');
     }else {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
         let response = await axios.put('http://10.10.40.104:3000/api/auth/edit', {
+            firstName : firstName, lastName : lastName
+        }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
-            firstName: firstName,
-            lastName: lastName,
         });
-
         if(response.status === 200) {
             console.log('success');
             alert('success PUT REQUEST');
         }
         else{
             console.log('error');
-
+            alert('errorPUT REQUEST');
         }
     }catch (error) {
         console.log(error);
+        alert('catch PUT REQUEST');
+        console.log(error.data);
+        console.log(error.response);
+    }
     }
 }
-};
 
 // Edit Button
 const EditButton = () => (
@@ -137,7 +143,7 @@ return (
     {/* Lastname */}
     <TextInput
         style={styles.input}
-        placeholder=" Lastname"
+        placeholder=" Nom"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
