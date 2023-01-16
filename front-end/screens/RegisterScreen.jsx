@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
+import { apiClient } from '../services/apiClient';
 
-const InscriptionScreen = () => {
-	
-
+const RegisterScreen = () => {
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -73,9 +72,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 12,
 		backgroundColor: '#FF6B6B',
 		borderRadius: 30,
-		marginBottom: 40,
 	},
 	
 })
 
-export default InscriptionScreen;
+export default RegisterScreen ;

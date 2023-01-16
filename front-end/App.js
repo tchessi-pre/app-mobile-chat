@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "./screens/HomeScreen";
-import ConnexionScreen from "./screens/ConnexionScreen";
-import InscriptionScreen from "./screens/InscriptionScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import ChannelScreen from "./screens/ChannelScreen";
 import SettingsScreen from "./screens/ProfilScreen";
 import ChatScreen from "./screens/ChatScreen";
@@ -54,8 +54,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Connexion"
-          component={ConnexionScreen}
+          name="Login"
+          component={LoginScreen}
           options={{
             headerStyleInterpolator: forFade,
             headerTintColor: 'white',
@@ -67,8 +67,8 @@ export default function App() {
           }}
         />
         < Tab.Screen
-          name="Inscription"
-          component={InscriptionScreen}
+          name="Register"
+          component={RegisterScreen}
           options={{
             headerStyleInterpolator: forFade,
             headerTintColor: 'white',

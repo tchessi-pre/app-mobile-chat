@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles';
-import Channel from '../screens/ChannelScreen';
+import Channel from './ChannelScreen';
 const ConnexionScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
@@ -21,12 +21,12 @@ const ConnexionScreen = ({ navigation }) => {
 				placeholderTextColor="#ffff"
 				keyboardType="password"
 			/>
-			
+
 			<View>
 				<TouchableHighlight
 					style={Styles.submit}
 					onPress={() =>
-						navigation.navigate('Channel') }
+						navigation.navigate('Channel')}
 				>
 					<Text style={Styles.submitText}>Se connecter</Text>
 				</TouchableHighlight>
@@ -34,7 +34,7 @@ const ConnexionScreen = ({ navigation }) => {
 				<TouchableHighlight
 					style={Styles.inscriptionBack}
 					onPress={() =>
-						navigation.navigate('Inscription', { name: 'Inscription' }) }
+						navigation.navigate('Register', { name: 'RegisterScreen' })}
 				>
 					<Text style={Styles.submitText}>S'inscrire</Text>
 				</TouchableHighlight>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		paddingRight: 10,
 	},
-	
+
 })
 
 export default ConnexionScreen;
