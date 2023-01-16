@@ -23,7 +23,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
+        let response = await axios.put('http://10.10.40.104:3000/api/auth/edit', {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -83,7 +83,7 @@ return (
     <SafeAreaView style={styles.container}>
     {/* Logo */}
     <View style={styles.logoArea}>
-        <Text style={styles.companyName}>Modifier le profil</Text>
+        <Text style={styles.companyName}>USERNAME AND IMG</Text>
         <Image style={styles.logo} source={require('../assets/NewLogo.png')} />
     </View>
     {/* Firstname */}

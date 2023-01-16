@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
+import SweetAlert from 'react-native-sweet-alert';
+
+
 
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
@@ -16,13 +19,14 @@ const Login = ({ navigation }) => {
     const handleLogin = async()  => {
         console.log( email, password );
         if (!emailRegex.test(email)) {
+            SweetAlert.showAlert('Example Title', 'Example message', 'OK');
         alert("L'email n'est pas valide", "error");
         } else if (!passwordRegex.test(password)) {
         alert('Le mot de passe n\'est pas valide', 'alertType');
         }else {
            // requête axios here localhost3000/login
         try {
-            const response = await axios.post('http://192.168.1.13:3000/api/auth/login', {
+            const response = await axios.post('http://10.10.40.104:3000/api/auth/login', {
                 email: email,
                 password: password,
             });
