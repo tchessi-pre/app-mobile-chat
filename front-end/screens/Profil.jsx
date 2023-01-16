@@ -1,25 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity} from 'react-native';
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 
 const Profil = ({navigation}) => {
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-
+    // Récupération state du Pseudo et du Prénom et l'email
+const [userfirstName, setUserfirstName] = useState([]);
+const [userlastName, setUserlastName] = useState([]);
+const [userEmail, setUserEmail] = useState([]);
+     // Modification state FirnstName et LastName
+const [firstName, setFirstName] = useState('');
+const [lastName, setLastName] = useState('');
+    // Regex for user
 const nameRegex = /^[a-zA-Z]+$/;
-  //Le nom et le prénom doivent contenir uniquement des lettres.
+    //Le nom et le prénom doivent contenir uniquement des lettres.
 
-const handleEdit = async()  => {
-    console.log(firstName, lastName, email);
-    if (!nameRegex.test(lastName)) {
-        alert('Le nom n\'est pas valide', 'alertType');
-    } else if (!nameRegex.test(firstName)) {
-        alert('Le prénom n\'est pas valide', 'alertType');
+// Get user Request
+const getUser = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        let response = await axios.get('http://10.10.40.104:3000/api/users/${userId}', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if(response.status === 200) {
+            setUserfirstName(response.data.firstName);
+            setUserlastName(response.data.lastName);
+            setUserEmail(response.data.email);
+            console.log(response.data);
+            console.log(response.data.firstName + response.data.lastName + response.data.email);
+        }
+    } catch (error) {
+        console.error(error);
+        console.log(error.response);
     }
-    else {
+};
+
+useEffect(() => {
+    getUser();
+}, []);
+
+// Edit profil Request
+const handleEdit = async()  => {
+    if(firstName === "" || lastName === ""){
+        alert('Les champs nom ou prénom ne peuvent pas être vide');
+    }else if(!nameRegex.test(lastName)){
+        alert('Le nom n\'est pas valide');
+    }else if (!nameRegex.test(firstName)){
+        alert('Le prénom n\'est pas valide');
+    }else {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
@@ -30,22 +60,20 @@ const handleEdit = async()  => {
             firstName: firstName,
             lastName: lastName,
         });
-        if (response.status === 200) {
-            console.log("status: 200, request edit successful");
-            alert('Modification réussie', 'Votre compte à bien été édité.', 'success');
-            navigation.navigate('Chat');
+
+        if(response.status === 200) {
+            console.log('success');
+            alert('success PUT REQUEST');
+        }
+        else{
+            console.log('error');
+
         }
     }catch (error) {
-        if(error.response.status === 409){
-            alert('Email déjà utilisé', 'Veuillez utiliser une autre adresse email.', 'error');
-        } else {
-            console.log(error);
-            console.log(error.response);
-            alert('Erreur lors de la modification de profil.', 'error');
-        }
-    }
+        console.log(error);
     }
 }
+};
 
 // Edit Button
 const EditButton = () => (
@@ -65,6 +93,7 @@ const handleLogout = async () => {
       // Redirect the user to the Home screen
         navigation.navigate('Home');
         console.log('Déconnexion réussie, jetons supprimés !');
+        alert('Déconnexion réussie, jetons supprimés !');
     } catch (error) {
         console.log(error);
     }
@@ -82,9 +111,18 @@ const LogoutButton = () => (
 return (
     <SafeAreaView style={styles.container}>
     {/* Logo */}
-    <View style={styles.logoArea}>
-        <Text style={styles.companyName}>USERNAME AND IMG</Text>
-        <Image style={styles.logo} source={require('../assets/NewLogo.png')} />
+    <View>
+    <Text style={styles.nameUser}>Test{userfirstName} {userlastName}
+    {userEmail}</Text>
+    </View>
+    {/* ADD IMAGE USER */}
+    <View>
+        <TouchableOpacity style={styles.imageArea}>
+        <Image
+            source={require('../assets/avatar.png')}
+            style={styles.image}
+        />
+        </TouchableOpacity>
     </View>
     {/* Firstname */}
     <TextInput
@@ -93,6 +131,7 @@ return (
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={firstName}
+        onChange={text => setFirstName(text)}
         onChangeText={text => setFirstName(text)}
     />
     {/* Lastname */}
@@ -102,17 +141,9 @@ return (
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
+        onChange={text => setLastName(text)}
         onChangeText={text => setLastName(text)}
     />
-    {/* Email */}
-    {/* <TextInput
-        style={styles.input}
-        placeholder=" Email"
-        placeholderTextColor="#ffff"
-        keyboardType="name"
-        value={email}
-        onChangeText={text => setEmail(text)}
-    /> */}
 	<View>
     {/* Button Edit & logout */}
     <EditButton />
@@ -141,31 +172,31 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		color: "#ffff"
 	},
-  button: {
-    backgroundColor: '#FF6B6B',
-    padding: 10,
-    margin: 10,
-    width: 350,
-    borderRadius: 30,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-  },
-	logoArea: {
+    button: {
+        backgroundColor: '#FF6B6B',
+        padding: 10,
+        margin: 10,
+        width: 350,
+        borderRadius: 30,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+    },
+	imageArea: {
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
 	},
-	companyName: {
-		color: '#ffffff',
+	nameUser: {
+		color: 'white',
 		fontSize: 24,
 		fontWeight: 'bold',
 		fontStyle: 'italic',
 		textAlign: 'center',
 	},
-	logo: {
-		width: 200,
+	imahe: {
+		width: 300,
 		height: 200,
 		objectFit: 'cover',
 	},

@@ -14,7 +14,7 @@ const [newImageUrl, setNewImageUrl] = useState('');
 const fetchMessages = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`http://10.10.40.104:3000/api/posts`, {
+        const response = await axios.get(`http://10.10.40.104:3000/api/posts/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -23,8 +23,6 @@ const fetchMessages = async () => {
             setMessages(response.data.posts);
         } else {
             console.log('error');
-            console.log(response.data);
-            console.log(response.status);
         }
     } catch (error) {
         console.error(error);
@@ -55,18 +53,14 @@ const handleSendMessage = async () => {
             fetchMessages();
             setNewMessage('');
             setNewImageUrl('');
-            console.log(response.data);
         }
         else{
             console.log('error');
-            console.log(response.data);
             console.log(response.status);
         }
     }catch (error) {
         console.error(error);
         console.log(error.response);
-        console.log(error.response.data);
-        console.log('je tombe dans le catch');
     }
 }
 };

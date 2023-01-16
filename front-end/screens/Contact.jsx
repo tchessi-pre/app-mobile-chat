@@ -21,15 +21,11 @@ const handleSearch = async() => {
         });
         if (response.status === 200) {
         setSearchUsers(response.data);
-        setStatus(response.data.status);
-        // console.log(response.data);
-        // console.log('requete get all users, 200 ok !');
+        setStatus(response.data.status); 
         }
         } catch (error) {
         console.log('requete get all users, error !');
         // console.log(error);
-        // console.log(error.response);
-        // console.log(error.response.data);
     }
 }
 useEffect(() => {

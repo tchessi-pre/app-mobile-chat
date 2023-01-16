@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
-import SweetAlert from 'react-native-sweet-alert';
 
 
 
@@ -19,10 +18,9 @@ const Login = ({ navigation }) => {
     const handleLogin = async()  => {
         console.log( email, password );
         if (!emailRegex.test(email)) {
-            SweetAlert.showAlert('Example Title', 'Example message', 'OK');
-        alert("L'email n'est pas valide", "error");
+        alert("L'email n'est pas valide");
         } else if (!passwordRegex.test(password)) {
-        alert('Le mot de passe n\'est pas valide', 'alertType');
+        alert('Le mot de passe n\'est pas valide');
         }else {
            // requête axios here localhost3000/login
         try {
@@ -39,12 +37,12 @@ const Login = ({ navigation }) => {
                 navigation.navigate('Chat');
             } else {
                 console.log("status: " + response.status + ", request unsuccessful");
-                alert('Connexion refusée, vérifié vos identifants', 'error');
+                alert('Connexion refusée, vérifié vos identifants');
             }
         }catch (error) {
             console.log(error);
             console.log(error.response);
-            alert('Erreur requête lors de la Connexion impossible.', 'error');
+            alert('Erreur requête lors de la Connexion impossible.');
         }
         }
     };
