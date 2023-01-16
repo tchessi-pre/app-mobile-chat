@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
         }else {
            // requête axios here localhost3000/login
         try {
-            const response = await axios.post('http://10.10.40.104:3000/api/auth/login', {
+            const response = await axios.post('http://192.168.1.13:3000/api/auth/login', {
                 email: email,
                 password: password,
             });

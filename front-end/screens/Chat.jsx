@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const Chat = () => {
@@ -14,7 +14,7 @@ const [newImageUrl, setNewImageUrl] = useState('');
 const fetchMessages = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`http://10.10.40.104:3000/api/posts/`, {
+        const response = await axios.get(`http://192.168.1.13:3000/api/posts/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -43,7 +43,7 @@ const handleSendMessage = async () => {
         if(newMessage) data.content = newMessage;
         if(newImageUrl) data.imageUrl = newImageUrl;
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.post('http://10.10.40.104:3000/api/posts', data, {
+        const response = await axios.post('http://192.168.1.13:3000/api/posts', data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -125,10 +125,10 @@ messageListContainer: {
 messageContainer: {
     flex: 1,
     alignSelf: 'flex-end',
-    marginBottom: 10,
+    marginBottom: 7,
     marginRight: 10,
     maxWidth: '95%',
-    marginTop: 10,
+    marginTop: 5,
 },
 messageContent: {
     flexDirection: 'row',
@@ -147,7 +147,8 @@ messageAvatar: {
     borderWidth: 3,
     borderColor: '#7452B7',
     boxShadow: '0 0 5px black',
-    backgroundColor: 'gray',
+    backgroundColor: 'black',
+    opacity: 0.8,
 },
 messageTextContainer: {
     maxWidth: '80%',

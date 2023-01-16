@@ -6,13 +6,11 @@ import Login from "./screens/Login";
 import Register from './screens/Register';
 import Contact from './screens/Contact';
 
-
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import { SafeAreaView } from 'react-native-safe-area-context';
-
 
 const Tab = createMaterialTopTabNavigator();
 const TabNavigate = () => {
@@ -43,7 +41,6 @@ const TabNavigate = () => {
         tabBarStyle: { backgroundColor: '#0F1828' },
         tabBarIndicatorStyle: { backgroundColor: 'white' },
         // tabBarLabelStyle: {fontSize: 12, fontWeight: 'bold', color: 'white' },
-
 
       })}>
       <Tab.Screen name="Home" component={Home} />
@@ -85,11 +82,8 @@ const StackNavigate = () => {
   );
 }
 
-
-
 export default function App() {
   return (
-
     <NavigationContainer>
       {/* <TabNavigate /> */}
       <StackNavigate />
@@ -104,6 +98,4 @@ const styles = StyleSheet.create({
     //     alignItems: 'center',
     //     justifyContent: 'center',
   },
-
-
 });

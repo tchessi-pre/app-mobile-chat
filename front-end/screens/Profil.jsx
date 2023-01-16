@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity} from 'react-native';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 const Profil = ({navigation}) => {
@@ -20,23 +21,28 @@ const getUser = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
         //Retrieve the userId
-        const userId = await AsyncStorage.getItem('userId');
-        console.log(userId)
-        let response = await axios.get(`http://10.10.40.104:3000/api/users/${userId}`, {
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId;
+        console.log(userId);
+        let response = await axios.get(`http://192.168.1.13:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
         if(response.status === 200) {
-            setUserfirstName(response.data.firstName);
-            setUserlastName(response.data.lastName);
-            setUserEmail(response.data.email);
+            console.log('SUCCESS GETONE REQUEST');
+            setUserfirstName(response.data.user.firstName);
+            setUserlastName(response.data.user.lastName);
+            setUserEmail(response.data.user.email);
             console.log(response.data);
-            console.log(response.data.firstName + response.data.lastName + response.data.email);
+            // console.log(' Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
+            // console.log(JSON.stringify(response)); // Log the entire response object
         }
-    } catch (error) {
+    }catch (error) {
+        console.log('catch GET REQUEST');
+        console.log(error.AsyncStorage);
         console.error(error);
-        console.log(error.response);
+        console.log(JSON.stringify(error.response)); // Log the entire response object
     }
 };
 
@@ -48,7 +54,6 @@ useEffect(() => {
 const handleEdit = async()  => {
     if(firstName === "" || lastName === ""){
         alert('Les champs nom ou prénom ne peuvent pas être vide');
-
     }else if(!nameRegex.test(firstName)){
         alert('Le prénom n\'est pas valide');
     }else if(!nameRegex.test(lastName)){
@@ -57,7 +62,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://10.10.40.104:3000/api/auth/edit', {
+        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
         }, {
             headers: {
@@ -66,15 +71,15 @@ const handleEdit = async()  => {
         });
         if(response.status === 200) {
             console.log('success');
-            alert('success PUT REQUEST');
+            alert('Modification réussie !');
+            setReload(true);
         }
         else{
-            console.log('error');
-            alert('errorPUT REQUEST');
+            console.log('error PUT REQUEST');
         }
     }catch (error) {
+        console.log('catch PUT REQUEST');
         console.log(error);
-        alert('catch PUT REQUEST');
         console.log(error.data);
         console.log(error.response);
     }
@@ -100,6 +105,7 @@ const handleLogout = async () => {
         navigation.navigate('Home');
         console.log('Déconnexion réussie, jetons supprimés !');
         alert('Déconnexion réussie, jetons supprimés !');
+        setReload(true);
     } catch (error) {
         console.log(error);
     }
@@ -116,11 +122,6 @@ const LogoutButton = () => (
 
 return (
     <SafeAreaView style={styles.container}>
-    {/* Logo */}
-    <View>
-    <Text style={styles.nameUser}>Test{userfirstName} {userlastName}
-    {userEmail}</Text>
-    </View>
     {/* ADD IMAGE USER */}
     <View>
         <TouchableOpacity style={styles.imageArea}>
@@ -129,6 +130,12 @@ return (
             style={styles.image}
         />
         </TouchableOpacity>
+    </View>
+    {/* ID User */}
+    <View>
+        <Text style={styles.nameUser}>Prénom: {userfirstName}</Text>
+        <Text style={styles.nameUser}>Nom: {userlastName}</Text>
+        <Text style={styles.nameUser}>Email: {userEmail}</Text>
     </View>
     {/* Firstname */}
     <TextInput
@@ -170,7 +177,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 70,
 	},
 	input: {
-		height: 40,
+		height: 30,
 		margin: 10,
 		borderWidth: 1,
 		borderColor: "#152033",
@@ -196,14 +203,14 @@ const styles = StyleSheet.create({
 	},
 	nameUser: {
 		color: 'white',
-		fontSize: 24,
+		fontSize: 15,
 		fontWeight: 'bold',
 		fontStyle: 'italic',
 		textAlign: 'center',
 	},
-	imahe: {
-		width: 300,
-		height: 200,
+	image: {
+		width: 80,
+		height: 80,
 		objectFit: 'cover',
 	},
 })

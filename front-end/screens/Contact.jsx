@@ -1,5 +1,5 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -13,7 +13,7 @@ const [status, setStatus] = useState('');
 const handleSearch = async() => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://10.10.40.104:3000/api/users/', {
+        const response = await axios.get('http://192.168.1.13:3000/api/users/', {
             params: { search: search },
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -22,9 +22,10 @@ const handleSearch = async() => {
         if (response.status === 200) {
         setSearchUsers(response.data);
         setStatus(response.data.status); 
+        // console.log(JSON.stringify(response));
         }
         } catch (error) {
-        console.log('requete get all users, error !');
+        console.log('request GETALL users, error !');
         // console.log(error);
     }
 }

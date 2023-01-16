@@ -21,7 +21,6 @@ const Home = ({ navigation }) => {
 					onPress={() => navigation.navigate('Login', { name: 'Login' })}>
 					<Text style={styles.buttonText}>Connexion</Text>
 				</TouchableHighlight>
-
 				<Separator />
 				<TouchableHighlight
 					style={styles.button}
