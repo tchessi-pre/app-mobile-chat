@@ -10,12 +10,16 @@ export default StyleSheet.create({
 		textAlign: 'center',
 	},
 	logo: {
-		width: 250,
-		height: 250,
-		marginLeft: 30,
+		width: 320,
+		height: 300,
+		
 	},
 	minilogo: {
-		width: 200,
+		width: 350,
+		height: 250,
+	},
+	minilogoIn: {
+		width: 300,
 		height: 200,
 	},
 	connectText: {
@@ -78,6 +82,6 @@ export default StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+
 	},
-	
 })

@@ -9,7 +9,7 @@ const InscriptionScreen = () => {
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
 				<Text style={Styles.companyName} >TissApp</Text>
-				<Image style={Styles.minilogo} source={require('../assets/minilogo.png')} />
+				<Image style={Styles.minilogoIn} source={require('../assets/NewLogo.png')} />
 			</View>
 			<TextInput
 				style={Styles.input}
@@ -59,6 +59,7 @@ const InscriptionScreen = () => {
 
 const styles = StyleSheet.create({
 	container: {
+		flex:1,
 		justifyContent: 'center',
 		alignContent: 'center',
 		backgroundColor: '#0F1828',

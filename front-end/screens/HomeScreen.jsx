@@ -7,7 +7,7 @@ const HomeScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<Text style={Styles.companyName} >TissApp</Text>
-			<Image style={Styles.logo} source={require('../assets/logoapp.png')} />
+			<Image style={Styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={Styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
 
 			<View style={Styles.connectBtn}>
