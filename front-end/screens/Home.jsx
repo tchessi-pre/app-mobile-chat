@@ -19,9 +19,9 @@ const Home = ({ navigation }) => {
 
 					onPress={() => navigation.navigate('Login', { name: 'Login' })}>
 					<Text style={styles.buttonText}>Connexion</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
+				</TouchableHighlight>
+				<Separator />
+				<TouchableHighlight
 					style={styles.button}
 					onPress={() => navigation.navigate('Register', { name: 'Register' })}>
 					<Text style={styles.buttonText}>Inscription</Text>

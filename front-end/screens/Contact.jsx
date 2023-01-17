@@ -1,5 +1,5 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -21,15 +21,12 @@ const handleSearch = async() => {
         });
         if (response.status === 200) {
         setSearchUsers(response.data);
-        setStatus(response.data.status);
-        // console.log(response.data);
-        // console.log('requete get all users, 200 ok !');
+        setStatus(response.data.status); 
+        // console.log(JSON.stringify(response));
         }
         } catch (error) {
-        console.log('requete get all users, error !');
+        console.log('request GETALL users, error !');
         // console.log(error);
-        // console.log(error.response);
-        // console.log(error.response.data);
     }
 }
 useEffect(() => {

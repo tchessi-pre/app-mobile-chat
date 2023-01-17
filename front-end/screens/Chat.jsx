@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const Chat = () => {
@@ -14,7 +14,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.40.104:3000/api/posts`, {
+            const response = await axios.get(`http://10.10.40.104:3000/api/posts/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -23,8 +23,6 @@ const Chat = () => {
                 setMessages(response.data.posts);
             } else {
                 console.log('error');
-                console.log(response.data);
-                console.log(response.status);
             }
         } catch (error) {
             console.error(error);
@@ -45,7 +43,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.40.104:3000/api/posts', data, {
+                const response = await axios.post('http://192.168.1.13:3000/api/posts', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -55,62 +53,34 @@ const Chat = () => {
                     fetchMessages();
                     setNewMessage('');
                     setNewImageUrl('');
-                    console.log(response.data);
                 }
                 else {
                     console.log('error');
-                    console.log(response.data);
                     console.log(response.status);
                 }
             } catch (error) {
                 console.error(error);
                 console.log(error.response);
-                console.log(error.response.data);
-                console.log('je tombe dans le catch');
             }
         }
     };
 
-    return (
-        // Message view
-        <View style={styles.container}>
-            <FlatList
-                style={styles.messageListContainer}
-                inverted={true}
-                onEndReached={fetchMessages}
-                onEndReachedThreshold={0.5}
-                data={messages}
-                keyExtractor={item => `${item.id}-${item.createdAt}`}
-                renderItem={({ item }) =>
-                    <View style={styles.messageContainer}>
-                        <View style={styles.messageContent}>
-                            <Image style={styles.messageAvatar} source={item.imageUrl ? { uri: item.imageUrl } : require('../assets/avatar.png')} />
-                            <View style={styles.messageTextContainer}>
-                                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
-                                <Text style={styles.messageText}>{item.content}</Text>
-                                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
-                            </View>
-                        </View>
-                    </View>
-                }
-            />
-
-            {/* Input & Button views */}
-            <View style={styles.inputContainer}>
-                <TextInput
-                    value={newMessage}
-                    onChangeText={setNewMessage}
-                    placeholder="Entrez votre message"
-                    style={styles.input}
-                />
-                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-                    <Ionicons name="md-images" size={24} color="white" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Text style={styles.sendButtonText}>Envoyer</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+    {/* Input & Button views */ }
+    <View style={styles.inputContainer}>
+        <TextInput
+            value={newMessage}
+            onChangeText={setNewMessage}
+            placeholder="Entrez votre message"
+            style={styles.input}
+        />
+        <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
+            <Ionicons name="md-images" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
+            <Text style={styles.sendButtonText}>Envoyer</Text>
+        </TouchableOpacity>
+    </View>
+        </View >
     );
 };
 
@@ -131,10 +101,10 @@ const styles = StyleSheet.create({
     messageContainer: {
         flex: 1,
         alignSelf: 'flex-end',
-        marginBottom: 10,
+        marginBottom: 7,
         marginRight: 10,
         maxWidth: '95%',
-        marginTop: 10,
+        marginTop: 5,
     },
     messageContent: {
         flexDirection: 'row',
@@ -153,7 +123,8 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#7452B7',
         boxShadow: '0 0 5px black',
-        backgroundColor: 'gray',
+        backgroundColor: 'black',
+        opacity: 0.8,
     },
     messageTextContainer: {
         maxWidth: '80%',
@@ -175,7 +146,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
 
-    // Input 
+    // Input
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
