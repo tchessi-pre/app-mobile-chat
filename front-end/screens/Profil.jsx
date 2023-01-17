@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { View, Image, Button, TextInput, TouchableHighlight, StyleSheet, Text, TouchableOpacity, } from 'react-native';
+import { View, Image, TextInput, StyleSheet, Text, TouchableOpacity, } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-// const Separator = () => (
-//     <View style={styles.separator} />
-// );
+
 
 
 class Profil extends Component {

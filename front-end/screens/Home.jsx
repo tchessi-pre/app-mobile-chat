@@ -1,18 +1,10 @@
-import React, { Component } from 'react';
-import { View, Image, Button, TouchableHighlight, StyleSheet, Text, Alert } from 'react-native';
+import React, { } from 'react';
+import { View, Image, TouchableOpacity, StyleSheet, Text, } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
-
-
-
-const Separator = () => (
-	<View style={styles.separator} />
-);
-
 
 
 const Home = ({ navigation }) => {
 	return (
-		// <SafeAreaView>
 		<View style={styles.container}>
 			<Text style={styles.companyName} >TissApp</Text>
 			<Image style={styles.logo} source={require('../assets/logoapp.png')} />
@@ -20,23 +12,21 @@ const Home = ({ navigation }) => {
 
 			<View style={styles.connectBtn}>
 				<Text style={styles.textPrivacy} >Terms & Privacy Policy</Text>
-				<TouchableHighlight
+				<TouchableOpacity
 					style={styles.button}
 
 					onPress={() => navigation.navigate('Login', { name: 'Login' })}>
 					<Text style={styles.buttonText}>Connexion</Text>
-				</TouchableHighlight>
+				</TouchableOpacity>
 
-				<Separator />
-				<TouchableHighlight
+				<TouchableOpacity
 					style={styles.button}
 					onPress={() => navigation.navigate('Register', { name: 'Register' })}>
 					<Text style={styles.buttonText}>Inscription</Text>
-				</TouchableHighlight>
+				</TouchableOpacity>
 
 			</View>
 		</View>
-		// </SafeAreaView>
 	);
 }
 

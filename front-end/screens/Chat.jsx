@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, StyleSheet, Text, TouchableOpacity, } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-// const Separator = () => (
-//     <View style={styles.separator} />
-// );
-
-
 class Chat extends Component {
-
-    // const[nom, setNom] = useState('nom');
-    // const[prenom, setPrenom] = useState('prenom');
-    // const[pseudo, setPseudo] = useState('pseudo');
 
     render() {
 
