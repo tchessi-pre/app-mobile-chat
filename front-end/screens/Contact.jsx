@@ -13,7 +13,7 @@ const [status, setStatus] = useState('');
 const handleSearch = async() => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://10.10.40.104:3000/api/users/', {
+        const response = await axios.get('http://10.10.43.217:3000/api/users/', {
             params: { search: search },
             headers: {
                 'Authorization': `Bearer ${token}`,

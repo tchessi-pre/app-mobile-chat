@@ -24,7 +24,7 @@ const getUser = async () => {
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
         console.log(userId);
-        let response = await axios.get(`http://10.10.40.104:3000/api/users/${userId}`, {
+        let response = await axios.get(`http://10.10.43.217:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -62,7 +62,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://10.10.40.104:3000/api/auth/edit', {
+        let response = await axios.put('http://10.10.43.217:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
         }, {
             headers: {
@@ -124,7 +124,7 @@ return (
     <SafeAreaView style={styles.container}>
     {/* ADD IMAGE USER */}
     <View>
-        <TouchableOpacity style={styles.imageArea}>
+        <TouchableOpacity style={styles.imageArea} onPress>
         <Image
             source={require('../assets/avatar.png')}
             style={styles.image}
