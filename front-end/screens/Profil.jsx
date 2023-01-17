@@ -83,133 +83,136 @@ const Profil = ({ navigation }) => {
                 console.log(error.data);
                 console.log(error.response);
             }
+        }
+    }
 
-            // Edit Button
-            const EditButton = () => (
-                <TouchableOpacity style={styles.button}
-                    onPress={() =>
-                        handleEdit()
-                    }>
-                    <Text style={styles.buttonText}>Modifier le profil</Text>
-                </TouchableOpacity >
-            );
+    // Edit Button
+    const EditButton = () => (
+        <TouchableOpacity style={styles.button}
+            onPress={() =>
+                handleEdit()
+            }>
+            <Text style={styles.buttonText}>Modifier le profil</Text>
+        </TouchableOpacity >
+    );
 
-            // Logout Button
-            const handleLogout = async () => {
-                try {
-                    // Clear the token from storage
-                    await AsyncStorage.removeItem('token');
-                    // Redirect the user to the Home screen
-                    navigation.navigate('Home');
-                    console.log('Déconnexion réussie, jetons supprimés !');
-                    alert('Déconnexion réussie, jetons supprimés !');
-                    setReload(true);
-                } catch (error) {
-                    console.log(error);
-                }
+    // Logout Button
+    const handleLogout = async () => {
+        try {
+            // Clear the token from storage
+            await AsyncStorage.removeItem('token');
+            // Redirect the user to the Home screen
+            navigation.navigate('Home');
+            console.log('Déconnexion réussie, jetons supprimés !');
+            alert('Déconnexion réussie, jetons supprimés !');
+            setReload(true);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-                const LogoutButton = () => (
-                    <TouchableOpacity style={styles.button}
-                        onPress={() =>
-                            handleLogout()
-                        }>
-                        <Text style={styles.buttonText}>Se déconnecter</Text>
-                    </TouchableOpacity >
-                );
+    const LogoutButton = () => (
+        <TouchableOpacity style={styles.button}
+            onPress={() =>
+                handleLogout()
+            }>
+            <Text style={styles.buttonText}>Se déconnecter</Text>
+        </TouchableOpacity >
+    );
 
-                return (
-                    <SafeAreaView style={styles.container}>
-                        {/* ADD IMAGE USER */}
-                        <View>
-                            <TouchableOpacity style={styles.imageArea}>
-                                <Image
-                                    source={require('../assets/avatar.png')}
-                                    style={styles.image}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        {/* ID User */}
-                        <View>
-                            <Text style={styles.nameUser}>Prénom: {userfirstName}</Text>
-                            <Text style={styles.nameUser}>Nom: {userlastName}</Text>
-                            <Text style={styles.nameUser}>Email: {userEmail}</Text>
-                        </View>
-                        {/* Firstname */}
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Prénom"
-                            placeholderTextColor="#ffff"
-                            keyboardType="name"
-                            value={firstName}
-                            onChange={text => setFirstName(text)}
-                            onChangeText={text => setFirstName(text)}
-                        />
-                        {/* Lastname */}
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nom"
-                            placeholderTextColor="#ffff"
-                            keyboardType="name-family"
-                            value={lastName}
-                            onChange={text => setLastName(text)}
-                            onChangeText={text => setLastName(text)}
-                        />
-                        <View>
-                            {/* Button Edit & logout */}
-                            <EditButton />
-                            <LogoutButton />
-                        </View>
-                    </SafeAreaView>
-                );
-            }
+    return (
+        <SafeAreaView style={styles.container}>
+            {/* ADD IMAGE USER */}
+            <View>
+                <TouchableOpacity style={styles.imageArea}>
+                    <Image
+                        source={require('../assets/avatar.png')}
+                        style={styles.image}
+                    />
+                </TouchableOpacity>
+            </View>
+            {/* ID User */}
+            <View>
+                <Text style={styles.nameUser}>Prénom: {userfirstName}</Text>
+                <Text style={styles.nameUser}>Nom: {userlastName}</Text>
+                <Text style={styles.nameUser}>Email: {userEmail}</Text>
+            </View>
+            {/* Firstname */}
+            <TextInput
+                style={styles.input}
+                placeholder="Prénom"
+                placeholderTextColor="#ffff"
+                keyboardType="name"
+                value={firstName}
+                onChange={text => setFirstName(text)}
+                onChangeText={text => setFirstName(text)}
+            />
+            {/* Lastname */}
+            <TextInput
+                style={styles.input}
+                placeholder="Nom"
+                placeholderTextColor="#ffff"
+                keyboardType="name-family"
+                value={lastName}
+                onChange={text => setLastName(text)}
+                onChangeText={text => setLastName(text)}
+            />
+            <View>
+                {/* Button Edit & logout */}
+                <EditButton />
+                <LogoutButton />
+            </View>
+        </SafeAreaView>
+    );
+}
 
-            const styles = StyleSheet.create({
-                container: {
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    backgroundColor: '#0F1828',
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    paddingBottom: 70,
-                },
-                input: {
-                    height: 30,
-                    margin: 10,
-                    borderWidth: 1,
-                    borderColor: "#152033",
-                    backgroundColor: "#152033",
-                    borderRadius: 4,
-                    color: "#ffff",
-                    paddingLeft: 5,
-                },
-                button: {
-                    backgroundColor: '#FF6B6B',
-                    padding: 10,
-                    margin: 10,
-                    width: 350,
-                    borderRadius: 30,
-                    alignItems: 'center',
-                },
-                buttonText: {
-                    color: 'white',
-                },
-                imageArea: {
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                },
-                nameUser: {
-                    color: 'white',
-                    fontSize: 15,
-                    fontWeight: 'bold',
-                    fontStyle: 'italic',
-                    textAlign: 'center',
-                },
-                image: {
-                    width: 80,
-                    height: 80,
-                    objectFit: 'cover',
-                },
-            })
-            export default Profil
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        backgroundColor: '#0F1828',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 70,
+    },
+    input: {
+        height: 30,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: "#152033",
+        backgroundColor: "#152033",
+        borderRadius: 4,
+        color: "#ffff",
+        paddingLeft: 5,
+    },
+    button: {
+        backgroundColor: '#FF6B6B',
+        padding: 10,
+        margin: 10,
+        width: 350,
+        borderRadius: 30,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+    },
+    imageArea: {
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    nameUser: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        textAlign: 'center',
+    },
+    image: {
+        width: 80,
+        height: 80,
+        objectFit: 'cover',
+    },
+})
+export default Profil;
