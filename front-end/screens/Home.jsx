@@ -2,12 +2,14 @@ import React, { } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Text, } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
+const Separator = () => (
+	<View style={styles.separator} />
+);
 
 const Home = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
-			<Text style={styles.companyName} >TissApp</Text>
-			<Image style={styles.logo} source={require('../assets/logoapp.png')} />
+			<Image style={styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
 
 			<View style={styles.connectBtn}>
@@ -36,19 +38,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
-
-
 	},
-	companyName: {
-		color: '#ffffff',
-		fontSize: 24,
-		fontWeight: 'bold',
-		fontStyle: 'italic',
-		textAlign: 'center'
 
-	},
 	logo: {
-		width: 280,
+		width: 400,
 		height: 180,
 		objectFit: 'cover',
 		justifyContent: 'center',
@@ -65,23 +58,19 @@ const styles = StyleSheet.create({
 		paddingLeft: 30,
 		paddingRight: 30,
 		paddingBottom: 40,
-
 	},
-
 	buttonText: {
 		color: 'white',
 	},
-
-
 	button: {
 		backgroundColor: '#FF6B6B',
+		opacity: 0.9,
 		padding: 10,
 		margin: 10,
 		width: 300,
 		borderRadius: 30,
 		alignItems: 'center',
 	},
-
 	textPrivacy: {
 		textAlign: 'center',
 		color: '#ffffff',
@@ -92,7 +81,6 @@ const styles = StyleSheet.create({
 		borderBottomColor: '#ffffff0',
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
-
 })
 
 export default Home;

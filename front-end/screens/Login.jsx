@@ -1,39 +1,68 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+import SweetAlert from 'react-native-sweet-alert';
 
+
+
+// const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // Faire appel à l'API de login ici
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
+    // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
+
+    const handleLogin = async()  => {
+        console.log( email, password );
+        if (!emailRegex.test(email)) {
+            SweetAlert.showAlert('Example Title', 'Example message', 'OK');
+        alert("L'email n'est pas valide", "error");
+        } else if (!passwordRegex.test(password)) {
+        alert('Le mot de passe n\'est pas valide', 'alertType');
+        }else {
+           // requête axios here localhost3000/login
+        try {
+            const response = await axios.post('http://10.10.40.104:3000/api/auth/login', {
+                email: email,
+                password: password,
+            });
+            if (response.status === 201) {
+                // Stocker le token
+                await AsyncStorage.setItem('token', response.data.token);
+                console.log('Voici le token de l\'utilisateur',response.data.token)
+                alert('Connexion reussi, vous êtes connecté');
+                console.log("status: 201, request login successful");
+                navigation.navigate('Chat');
+            } else {
+                console.log("status: " + response.status + ", request unsuccessful");
+                alert('Connexion refusée, vérifié vos identifants', 'error');
+            }
+        }catch (error) {
+            console.log(error);
+            console.log(error.response);
+            alert('Erreur requête lors de la Connexion impossible.', 'error');
+        }
+        }
     };
 
-    const CustomButton = ({ }) => (
+    const CustomButton = () => (
         <TouchableOpacity style={styles.button}
             onPress={() =>
-                navigation.navigate('Home')}>
+                    handleLogin()
+                    }>
             <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity >
-
-
     );
-
-    // const BackButton = ({ onPress }) => (
-    //     <TouchableHighlight style={styles.backButton} onPress={onPress}>
-    //         <FontAwesome name="arrow-left" size={25} color="#FFF" />
-    //     </TouchableHighlight>
-    // );
 
     return (
         <View style={styles.container}>
-            {/* <BackButton onPress={() => navigation.goBack()} /> */}
-
-            <Text style={styles.companyName}>TissApp</Text>
+            {/* Logo */}
+            <Text style={styles.companyName}>Connection</Text>
             <Image style={styles.logo} source={require('../assets/tiss.png')} />
-            {/* <Text style={styles.companyName}>Connexion</Text> */}
-
             {/* Email */}
             <TextInput
                 placeholder='Email'
@@ -42,7 +71,6 @@ const Login = ({ navigation }) => {
                 onChangeText={setEmail}
                 style={styles.input}
             />
-
             {/* Mot de passe */}
             <TextInput
                 placeholder='Password'
@@ -53,10 +81,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
             />
             {/* Login Button */}
-            <CustomButton
-                onPress={() => console.log('Button login pressed!')}
-            />
-
+            <CustomButton/>
         </View>
     );
 };
@@ -68,24 +93,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#0F1828',
     },
-
     logo: {
         alignSelf: 'center',
-        // marginBottom: 20,
         width: 200,
         height: 200,
     },
-
     companyName: {
         color: '#ffffff',
         fontSize: 24,
         fontWeight: 'bold',
         fontStyle: 'italic',
         textAlign: 'center'
-
     },
-
-
     input: {
         width: 300,
         borderColor: 'none',
@@ -94,7 +113,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#152033',
         color: 'white',
     },
-
     button: {
         backgroundColor: '#FF6B6B',
         padding: 10,
@@ -103,7 +121,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignItems: 'center',
     },
-
     buttonText: {
         color: 'white',
     }
