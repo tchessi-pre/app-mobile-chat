@@ -7,6 +7,29 @@ import Styles from '../css/Styles';
 const ChatScreen = () => {
 	return (
 		<View style={styles.container}>
+			<View style={styles.chat_head}>
+				<View>
+					<Text style={styles.title}>Chat</Text>
+				</View>
+				<View style={styles.right_icons}>
+					<Icon
+						name='search'
+						type='evilicon'
+						color='#ffffff'
+						size={35}
+						onPress={() => console.log("Send")}
+						activeOpacity={0.7}
+					/>
+					<Icon
+						name='navicon'
+						type='evilicon'
+						color='#ffffff'
+						size={35}
+						onPress={() => console.log("Send")}
+						activeOpacity={0.7}
+					/>
+				</View>
+			</View>
 			<View style={styles.Bottomcontainer}>
 				<Icon
 					name='add'
@@ -41,7 +64,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'column',
-		backgroundColor: '#0F1828',
+		backgroundColor: '#152033',
 		paddingLeft: 10,
 		paddingRight: 10,
 	},
@@ -65,6 +88,27 @@ const styles = StyleSheet.create({
 		height: 60,
 		marginLeft: 5,
 		marginRight: 12,
+		backgroundColor: '#0F1828'
+	}, 
+	title: {
+		color: '#ffffff',
+		fontSize: 25,
+		fontWeight: '500'
+	},
+	chat_head: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		position: 'absolute',
+		width: "100%",
+		top: 0,
+		height: 60,
+		marginLeft: 15,
+		marginRight: 15,
+	},
+	right_icons: {
+		flexDirection: 'row',
+		paddingTop: 8,
 	}
 })
 

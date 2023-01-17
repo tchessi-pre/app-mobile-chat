@@ -38,10 +38,11 @@ export default function App() {
       <Tab.Navigator
         tabBarOptions={{
           activeTintColor: '#FF6B6B',
-
+          activeBackgroundColor: '#0F1828',
+          inactiveBackgroundColor: '#0F1828',
         }}
       >
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
@@ -77,7 +78,7 @@ export default function App() {
             headerShown: false,
             tabBarStyle: { display: "none" },
           }}
-        />
+        /> */}
         < Tab.Screen
           name="Disc."
           component={ChannelScreen}
@@ -89,6 +90,7 @@ export default function App() {
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
             headerShown: false,
+            
           }}
         />
         <Tab.Screen
@@ -102,6 +104,7 @@ export default function App() {
             tabBarBadge: 3,
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
+            headerShown: false,
           }}
         />
         <Tab.Screen
@@ -128,4 +131,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
 });

@@ -21,6 +21,7 @@ export default StyleSheet.create({
 	minilogoIn: {
 		width: 300,
 		height: 200,
+	
 	},
 	connectText: {
 		textAlign: 'center',

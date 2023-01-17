@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
 import { apiClient } from '../services/apiClient';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation}) => {
+
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -14,14 +21,17 @@ const RegisterScreen = () => {
 				style={Styles.input}
 				placeholder="Nom"
 				placeholderTextColor="#ffff"
-				keyboardType="name-family
-"
+				keyboardType="name-family"
+				value={firstName}
+				onChangeText={text => setFirstName(text)}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
 				placeholderTextColor="#ffff"
 				keyboardType="name"
+				value={lastName}
+				onChangeText={text => setLastName(text)}
 			/>
 			<TextInput
 				style={Styles.input}
@@ -29,6 +39,8 @@ const RegisterScreen = () => {
 				placeholderTextColor="#ffff"
 				keyboardType="email-address"
 				blurOnSubmit={true}
+				value={email}
+				onChangeText={text => setEmail(text)}
 			/>
 			<TextInput
 				style={Styles.input}
@@ -36,12 +48,18 @@ const RegisterScreen = () => {
 				placeholderTextColor="#ffff"
 				keyboardType="password"
 				autoComplete="password-new"
+				value={password}
+				onChangeText={text => setPassword(text)}
+				secureTextEntry
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Confirmez votre mot de passe"
 				placeholderTextColor="#ffff"
 				keyboardType="password"
+				value={confirmPassword}
+				onChangeText={text => setConfirmPassword(text)}
+				secureTextEntry
 			/>
 			<View>
 				<TouchableHighlight
