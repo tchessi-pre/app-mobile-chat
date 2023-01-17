@@ -65,22 +65,46 @@ const Chat = () => {
         }
     };
 
-    {/* Input & Button views */ }
-    <View style={styles.inputContainer}>
-        <TextInput
-            value={newMessage}
-            onChangeText={setNewMessage}
-            placeholder="Entrez votre message"
-            style={styles.input}
-        />
-        <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-            <Ionicons name="md-images" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-            <Text style={styles.sendButtonText}>Envoyer</Text>
-        </TouchableOpacity>
-    </View>
-        </View >
+    return (
+        // Message view
+        <View style={styles.container}>
+            <FlatList
+                style={styles.messageListContainer}
+                inverted={true}
+                onEndReached={fetchMessages}
+                onEndReachedThreshold={0.5}
+                data={messages}
+                keyExtractor={item => `${item.id}-${item.createdAt}`}
+                renderItem={({ item }) =>
+                    <View style={styles.messageContainer}>
+                        <View style={styles.messageContent}>
+                            <Image style={styles.messageAvatar} source={item.imageUrl ? { uri: item.imageUrl } : require('../assets/avatar.png')} />
+                            <View style={styles.messageTextContainer}>
+                                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+                                <Text style={styles.messageText}>{item.content}</Text>
+                                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
+                            </View>
+                        </View>
+                    </View>
+                }
+            />
+
+            {/* Input & Button views */}
+            <View style={styles.inputContainer}>
+                <TextInput
+                    value={newMessage}
+                    onChangeText={setNewMessage}
+                    placeholder="Entrez votre message"
+                    style={styles.input}
+                />
+                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
+                    <Ionicons name="md-images" size={24} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
+                    <Text style={styles.sendButtonText}>Envoyer</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 };
 
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
 
-    // Input
+    // Input 
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
