@@ -8,25 +8,26 @@ const ProfilScreen = () => {
 			<View style={Styles.logoArea}>
 				<TouchableOpacity onPress={() => console.log("Upload")}
 					activeOpacity={0.7} >
-					<Image style={Styles.minilogo} source={require('../assets/usericonplus.png')} />
+					<Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} />
 				</TouchableOpacity>
+				<Text style={styles.username}>John Doe</Text>
 			</View>
 			<TextInput
 				style={Styles.input}
 				placeholder="Nom"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="name-family"
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="name"
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="exemple@exemple.fr"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="email-address"
 				blurOnSubmit={true}
 			/>
@@ -62,6 +63,13 @@ const styles = StyleSheet.create({
 		marginTop: 40,
 		marginBottom: 40,
 	},
+	username: {
+		color: '#ffffff',
+		fontSize: 24,
+		position: 'absolute',
+		top:200,
+		fontWeight: '500',
+	}
 })
 
 export default ProfilScreen;

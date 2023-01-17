@@ -20,7 +20,7 @@ const RegisterScreen = ({navigation}) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Nom"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="name-family"
 				value={firstName}
 				onChangeText={text => setFirstName(text)}
@@ -28,7 +28,7 @@ const RegisterScreen = ({navigation}) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="name"
 				value={lastName}
 				onChangeText={text => setLastName(text)}
@@ -36,7 +36,7 @@ const RegisterScreen = ({navigation}) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Email"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="email-address"
 				blurOnSubmit={true}
 				value={email}
@@ -45,7 +45,7 @@ const RegisterScreen = ({navigation}) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Mot de passe"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="password"
 				autoComplete="password-new"
 				value={password}
@@ -55,7 +55,7 @@ const RegisterScreen = ({navigation}) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Confirmez votre mot de passe"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="password"
 				value={confirmPassword}
 				onChangeText={text => setConfirmPassword(text)}

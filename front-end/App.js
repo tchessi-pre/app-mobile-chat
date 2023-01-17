@@ -42,7 +42,7 @@ export default function App() {
           inactiveBackgroundColor: '#0F1828',
         }}
       >
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
@@ -78,7 +78,7 @@ export default function App() {
             headerShown: false,
             tabBarStyle: { display: "none" },
           }}
-        /> */}
+        />
         < Tab.Screen
           name="Disc."
           component={ChannelScreen}

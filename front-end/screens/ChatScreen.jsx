@@ -88,12 +88,11 @@ const styles = StyleSheet.create({
 		height: 60,
 		marginLeft: 5,
 		marginRight: 12,
-		backgroundColor: '#0F1828'
+		backgroundColor: '#0F1828',
 	}, 
 	title: {
 		color: '#ffffff',
-		fontSize: 25,
-		fontWeight: '500'
+		fontSize: 20
 	},
 	chat_head: {
 		flexDirection: 'row',
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		position: 'absolute',
 		width: "100%",
-		top: 0,
+		top: 20,
 		height: 60,
 		marginLeft: 15,
 		marginRight: 15,

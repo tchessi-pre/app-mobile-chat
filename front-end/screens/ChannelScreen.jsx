@@ -119,13 +119,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignContent: 'center',
 		backgroundColor: '#0F1828',
-		paddingHorizontal: 20,
+		paddingHorizontal: 25,
 	},
 	top: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignContent: 'center',
-		marginTop: 15,
+		marginTop: 40,
 
 	},
 	textTop: {

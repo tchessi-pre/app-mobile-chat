@@ -12,14 +12,15 @@ const ConnexionScreen = ({ navigation }) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Email"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="email-address"
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Mot de passe"
-				placeholderTextColor="#ffff"
+				placeholderTextColor="#9a9797"
 				keyboardType="password"
+				secureTextEntry
 			/>
 
 			<View>

@@ -18,6 +18,10 @@ export default StyleSheet.create({
 		width: 350,
 		height: 250,
 	},
+	logoplus: {
+		width: 300,
+		height: 250,
+	},
 	minilogoIn: {
 		width: 300,
 		height: 200,
