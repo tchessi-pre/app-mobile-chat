@@ -20,11 +20,11 @@ const nameRegex = /^[a-zA-Z]+$/;
 const getUser = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        //Retrieve the userId
+        //Retrieve the userId with the token
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
         console.log(userId);
-        let response = await axios.get(`http://192.168.1.13:3000/api/users/${userId}`, {
+        let response = await axios.get(`http://10.10.40.104:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -62,7 +62,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
+        let response = await axios.put('http://10.10.40.104:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
         }, {
             headers: {
@@ -140,7 +140,7 @@ return (
     {/* Firstname */}
     <TextInput
         style={styles.input}
-        placeholder=" Prénom"
+        placeholder="Prénom"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={firstName}
@@ -150,7 +150,7 @@ return (
     {/* Lastname */}
     <TextInput
         style={styles.input}
-        placeholder=" Nom"
+        placeholder="Nom"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
 		borderColor: "#152033",
 		backgroundColor: "#152033",
 		borderRadius: 4,
-		color: "#ffff"
+		color: "#ffff",
+        paddingLeft: 5,
 	},
     button: {
         backgroundColor: '#FF6B6B',
