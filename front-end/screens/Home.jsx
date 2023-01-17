@@ -1,5 +1,5 @@
-import React, { } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Text, } from 'react-native';
+import React, { Component } from 'react';
+import { View, Image, Button, TouchableHighlight, StyleSheet, Text, Alert } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Separator = () => (
@@ -8,13 +8,14 @@ const Separator = () => (
 
 const Home = ({ navigation }) => {
 	return (
+		// <SafeAreaView>
 		<View style={styles.container}>
 			<Image style={styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
 
 			<View style={styles.connectBtn}>
 				<Text style={styles.textPrivacy} >Terms & Privacy Policy</Text>
-				<TouchableOpacity
+				<TouchableHighlight
 					style={styles.button}
 
 					onPress={() => navigation.navigate('Login', { name: 'Login' })}>
@@ -25,10 +26,11 @@ const Home = ({ navigation }) => {
 					style={styles.button}
 					onPress={() => navigation.navigate('Register', { name: 'Register' })}>
 					<Text style={styles.buttonText}>Inscription</Text>
-				</TouchableOpacity>
+				</TouchableHighlight>
 
 			</View>
 		</View>
+		// </SafeAreaView>
 	);
 }
 
