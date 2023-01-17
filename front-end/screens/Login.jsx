@@ -15,43 +15,43 @@ const Login = ({ navigation }) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
-    const handleLogin = async()  => {
-        console.log( email, password );
+    const handleLogin = async () => {
+        console.log(email, password);
         if (!emailRegex.test(email)) {
-        alert("L'email n'est pas valide");
+            alert("L'email n'est pas valide");
         } else if (!passwordRegex.test(password)) {
-        alert('Le mot de passe n\'est pas valide');
-        }else {
-           // requête axios here localhost3000/login
-        try {
-            const response = await axios.post('http://10.10.40.104:3000/api/auth/login', {
-                email: email,
-                password: password,
-            });
-            if (response.status === 201) {
-                // Stocker le token
-                await AsyncStorage.setItem('token', response.data.token);
-                console.log('Voici le token de l\'utilisateur',response.data.token)
-                alert('Connexion reussi, vous êtes connecté');
-                console.log("status: 201, request login successful");
-                navigation.navigate('Chat');
-            } else {
-                console.log("status: " + response.status + ", request unsuccessful");
-                alert('Connexion refusée, vérifié vos identifants');
+            alert('Le mot de passe n\'est pas valide');
+        } else {
+            // requête axios here localhost3000/login
+            try {
+                const response = await axios.post('http://10.10.43.204:3000/api/auth/login', {
+                    email: email,
+                    password: password,
+                });
+                if (response.status === 201) {
+                    // Stocker le token
+                    await AsyncStorage.setItem('token', response.data.token);
+                    console.log('Voici le token de l\'utilisateur', response.data.token)
+                    alert('Connexion reussi, vous êtes connecté');
+                    console.log("status: 201, request login successful");
+                    navigation.navigate('Chat');
+                } else {
+                    console.log("status: " + response.status + ", request unsuccessful");
+                    alert('Connexion refusée, vérifié vos identifants');
+                }
+            } catch (error) {
+                console.log(error);
+                console.log(error.response);
+                alert('Erreur requête lors de la Connexion impossible.');
             }
-        }catch (error) {
-            console.log(error);
-            console.log(error.response);
-            alert('Erreur requête lors de la Connexion impossible.');
-        }
         }
     };
 
     const CustomButton = () => (
         <TouchableOpacity style={styles.button}
             onPress={() =>
-                    handleLogin()
-                    }>
+                handleLogin()
+            }>
             <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity >
     );
@@ -79,7 +79,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
             />
             {/* Login Button */}
-            <CustomButton/>
+            <CustomButton />
         </View>
     );
 };
