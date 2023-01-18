@@ -10,7 +10,6 @@ const Chat = () => {
     const [newImageUrl, setNewImageUrl] = useState('');
 
 
-
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
