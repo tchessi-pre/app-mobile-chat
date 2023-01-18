@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
+import { ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 const Profil = ({navigation}) => {
+    
     // Récupération state du Pseudo et du Prénom et l'email
 const [userfirstName, setUserfirstName] = useState('');
 const [userlastName, setUserlastName] = useState('');
@@ -13,36 +15,36 @@ const [userEmail, setUserEmail] = useState('');
 const [firstName, setFirstName] = useState('');
 const [lastName, setLastName] = useState('');
     // Regex for user
-const nameRegex = /^[a-zA-Z]+$/;
-    //Le nom et le prénom doivent contenir uniquement des lettres.
+const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
+    // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
 
-// Get user Request
+    // Get user Request
 const getUser = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
         //Retrieve the userId with the token
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
-        console.log(userId);
-        let response = await axios.get(`http://10.10.43.217:3000/api/users/${userId}`, {
+        // console.log(userId);
+        let response = await axios.get(`http://10.10.46.99:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
         if(response.status === 200) {
-            console.log('SUCCESS GETONE REQUEST');
             setUserfirstName(response.data.user.firstName);
             setUserlastName(response.data.user.lastName);
             setUserEmail(response.data.user.email);
-            console.log(response.data);
+            // console.log('SUCCESS GETONE REQUEST');
+            // console.log(response.data);
             // console.log(' Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
             // console.log(JSON.stringify(response)); // Log the entire response object
         }
     }catch (error) {
-        console.log('catch GET REQUEST');
-        console.log(error.AsyncStorage);
-        console.error(error);
-        console.log(JSON.stringify(error.response)); // Log the entire response object
+        // console.log('catch GET REQUEST');
+        // console.log(error.AsyncStorage);
+        // console.error(error);
+        // console.log(JSON.stringify(error.response)); // Log the entire response object
     }
 };
 
@@ -62,7 +64,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://10.10.43.217:3000/api/auth/edit', {
+        let response = await axios.put('http://10.10.46.99:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
         }, {
             headers: {
@@ -70,9 +72,9 @@ const handleEdit = async()  => {
             },
         });
         if(response.status === 200) {
-            console.log('success');
+            console.log('SUCCESS PUT REQUEST');
             alert('Modification réussie !');
-            setReload(true);
+            
         }
         else{
             console.log('error PUT REQUEST');

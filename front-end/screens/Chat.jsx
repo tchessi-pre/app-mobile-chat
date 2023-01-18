@@ -14,7 +14,7 @@ const [newImageUrl, setNewImageUrl] = useState('');
 const fetchMessages = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`http://10.10.43.217:3000/api/posts/`, {
+        const response = await axios.get(`http://10.10.46.99:3000/api/posts/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -25,8 +25,9 @@ const fetchMessages = async () => {
             console.log('error');
         }
     } catch (error) {
-        console.error(error);
-        console.log(error.response);
+        // console.error(error);
+        // console.log(error.response);
+        // console.log('request GETALL messages, error !');
     }
 };
 
@@ -43,7 +44,7 @@ const handleSendMessage = async () => {
         if(newMessage) data.content = newMessage;
         if(newImageUrl) data.imageUrl = newImageUrl;
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.post('http://10.10.43.217:3000/api/posts', data, {
+        const response = await axios.post('http://10.10.46.99:3000/api/posts', data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -53,6 +54,7 @@ const handleSendMessage = async () => {
             fetchMessages();
             setNewMessage('');
             setNewImageUrl('');
+            console.log('request POST message, success !');
         }
         else{
             console.log('error');
@@ -61,6 +63,7 @@ const handleSendMessage = async () => {
     }catch (error) {
         console.error(error);
         console.log(error.response);
+        console.log('request POST message, error !');
     }
 }
 };

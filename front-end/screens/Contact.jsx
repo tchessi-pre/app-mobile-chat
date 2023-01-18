@@ -13,7 +13,7 @@ const [status, setStatus] = useState('');
 const handleSearch = async() => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://10.10.43.217:3000/api/users/', {
+        const response = await axios.get('http://10.10.46.99:3000/api/users/', {
             params: { search: search },
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -25,7 +25,7 @@ const handleSearch = async() => {
         // console.log(JSON.stringify(response));
         }
         } catch (error) {
-        console.log('request GETALL users, error !');
+        // console.log('request GETALL users, error !');
         // console.log(error);
     }
 }

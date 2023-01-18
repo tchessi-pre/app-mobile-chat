@@ -10,8 +10,8 @@ const InscriptionScreen = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-  const nameRegex = /^[a-zA-Z]+$/;
-  //Le nom et le prénom doivent contenir uniquement des lettres.
+  const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
+  // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
@@ -32,7 +32,7 @@ const InscriptionScreen = ({navigation}) => {
     } else {
        // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.43.217:3000/api/auth/signup', {
+        const response = await axios.post('http://10.10.46.99:3000/api/auth/signup', {
             firstName: firstName,
             lastName: lastName,
             email: email,

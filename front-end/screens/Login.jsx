@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -9,6 +9,8 @@ import axios from 'axios';
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // Vérifier si l'utilisateur est connecté ou pas 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
@@ -24,7 +26,7 @@ const Login = ({ navigation }) => {
         }else {
            // requête axios here localhost3000/login
         try {
-            const response = await axios.post('http://10.10.43.217:3000/api/auth/login', {
+            const response = await axios.post('http://10.10.46.99:3000/api/auth/login', {
                 email: email,
                 password: password,
             });
@@ -40,8 +42,8 @@ const Login = ({ navigation }) => {
                 alert('Connexion refusée, vérifié vos identifants');
             }
         }catch (error) {
-            console.log(error);
-            console.log(error.response);
+            // console.log(error);
+            // console.log(error.response);
             alert('Erreur requête lors de la Connexion impossible.');
         }
         }
