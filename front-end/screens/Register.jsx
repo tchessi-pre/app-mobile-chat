@@ -32,7 +32,7 @@ const InscriptionScreen = ({ navigation }) => {
     } else {
       // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.43.204/api/auth/signup', {
+        const response = await axios.post('http://10.10.46.197:3000/api/auth/signup', {
           firstName: firstName,
           lastName: lastName,
           email: email,
