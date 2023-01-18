@@ -46,10 +46,13 @@ return (
         <View style={styles.searchContainer}>
         <TextInput 
             style={styles.searchInput} 
-            placeholder="Rechercher un utilisateur" 
+            placeholder= "🔍 Rechercher un utilisateur" 
+            placeholderTextColor={'white'}
             onChangeText={onSearchChange}
             value={search}
+            
         />
+        
     </View>
         <FlatList
             style={styles.listContainer}
@@ -62,7 +65,7 @@ return (
             <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/avatar.png')} />
             <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
             {/* mettre le status hors ligne ou en ligne */}
-            <Text style={styles.userStatus}>Status: {status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
+            <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
             <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
             </TouchableOpacity>
             )}
@@ -91,9 +94,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     },
     searchButton: {
-    backgroundColor: '#0F1828',
+    backgroundColor: 'black',
     padding: 7,
-    borderRadius: 5,
+    borderRadius: 10,
     },
     searchInput: {
     width: '95%',
@@ -102,8 +105,9 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     boxShadow: '0 0 5px black',
     padding: 8,
-    borderRadius: 5,
+    borderRadius: 10,
     backgroundColor: 'gray',
+    opacity: 0.5,
     margin: 10,
     },
     searchContainer: {
@@ -112,7 +116,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     },
-
     // list users Containers
     listContainer: {
         width: '100%',
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         borderBottomWidth: 1,
-        borderBottomColor: 'lightgray',
+        borderBottomColor: 'gray',
         margin: 10,
         padding: 10,
         boxShadow: '0 0 5px black',
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginLeft: 10,
         borderWidth: 2,
-        borderColor: '#7452B7',
+        borderColor: 'purple',
         boxShadow: '0 0 5px black',
     },
     userName: {

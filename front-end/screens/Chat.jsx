@@ -132,15 +132,17 @@ messageContainer: {
     marginRight: 10,
     maxWidth: '95%',
     marginTop: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 20,
 },
 messageContent: {
     flexDirection: 'row',
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'black',
     opacity: 0.8,
     borderRadius: 20,
     padding: 10,
     alignItems: 'center',
-    
 },
 messageAvatar: {
     width: 50,
@@ -154,25 +156,27 @@ messageAvatar: {
     opacity: 0.8,
 },
 messageTextContainer: {
-    maxWidth: '80%',
+    width: '80%',
     margin: 10,
     paddingRight: 10,
+
 },
 messageUsername: {
     fontWeight: 'bold',
     fontSize: 15,
-    color: '#333',
+    color: 'white',
 },
 messageText: {
-    fontSize: 14,
-    color: '#333',
+    fontSize: 13,
+    padding: 5,
+    color: 'white',
+    
 },
 messageCreatedAt: {
     fontSize: 8,
-    color: '#333',
+    color: 'white',
     alignSelf: 'flex-end',
 },
-
 // Input 
 inputContainer: {
 flexDirection: 'row',
@@ -182,21 +186,19 @@ padding: 8,
 bottom: 10,
 position: 'absolute',
 width: '100%',
-
 },
 input: {
 flex: 1,
-padding: 8,
+padding: 5,
 borderWidth: 1,
 borderColor: 'gray',
 borderRadius: 8,
 backgroundColor: 'gray',
 },
-
 // Button
 sendButton: {
 backgroundColor: '#FF6B6B',
-padding: 8,
+padding: 5,
 borderRadius: 8,
 },
 sendButtonText: {
@@ -205,7 +207,7 @@ fontWeight: 'bold',
 },
 selectImageButton: {
 backgroundColor: '#FF6B6B',
-padding: 5,
+padding: 2,
 margin: 5,
 borderRadius: 8,    
 },

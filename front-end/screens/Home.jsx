@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Button, TouchableHighlight, StyleSheet, Text, Alert } from 'react-native';
-// import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const Separator = () => (
 	<View style={styles.separator} />
@@ -8,7 +8,6 @@ const Separator = () => (
 
 const Home = ({ navigation }) => {
 	return (
-		// <SafeAreaView>
 		<View style={styles.container}>
 			<Image style={styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
@@ -30,7 +29,6 @@ const Home = ({ navigation }) => {
 
 			</View>
 		</View>
-		// </SafeAreaView>
 	);
 }
 

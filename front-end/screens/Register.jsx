@@ -3,7 +3,6 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Im
 import axios from 'axios';
 
 const InscriptionScreen = ({navigation}) => {
-
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -68,8 +67,8 @@ return (
     <SafeAreaView style={styles.container}>
     {/* Logo */}
     <View style={styles.logoArea}>
+        <Image style={styles.logo} source={require('../assets/NewLogo.png')}/>
         <Text style={styles.companyName} >Inscription</Text>
-        <Image style={styles.logo} source={require('../assets/minilogo.png')} />
     </View>
     {/* Firstname */}
     <TextInput
@@ -83,7 +82,7 @@ return (
     {/* Lastname */}
     <TextInput
         style={styles.input}
-        placeholder=" Lastname"
+        placeholder=" Nom"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
@@ -92,7 +91,7 @@ return (
     {/* Email */}
     <TextInput
         style={styles.input}
-        placeholder=" Email"
+        placeholder=" adresse e-mail"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={email}
@@ -101,9 +100,9 @@ return (
     {/* Password */}
     <TextInput
         style={styles.input}
-        placeholder=" Password"
+        placeholder=" Mot de passe"
         placeholderTextColor="#ffff"
-        keyboardType="password"
+        keyboardType="Mot de passe"
         secureTextEntry={true}
         value={password}
         onChangeText={text => setPassword(text)}
@@ -111,7 +110,7 @@ return (
     {/* C-Password */}
     <TextInput
         style={styles.input}
-        placeholder=" ConfirmPassword"
+        placeholder=" Confirmez votre mot de passe"
         placeholderTextColor="#ffff"
         keyboardType="password"
         secureTextEntry={true}
@@ -169,8 +168,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	logo: {
-		width: 200,
-		height: 200,
+		width: 250,
+		height: 100,
 		objectFit: 'cover',
 	},
 })

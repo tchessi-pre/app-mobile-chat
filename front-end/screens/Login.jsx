@@ -3,14 +3,11 @@ import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHi
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-
-
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // Vérifier si l'utilisateur est connecté ou pas 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
@@ -58,14 +55,23 @@ const Login = ({ navigation }) => {
         </TouchableOpacity >
     );
 
+    const RegisterNavButton = () => (
+        <TouchableOpacity style={styles.buttonRegister}
+            onPress={() =>
+                navigation.navigate('Register')
+                    }>
+            <Text style={styles.buttonText}>S'inscrire</Text>
+        </TouchableOpacity >
+    );
+
     return (
         <View style={styles.container}>
             {/* Logo */}
+            <Image style={styles.logo} source={require('../assets/NewLogo.png')}/>
             <Text style={styles.companyName}>Connection</Text>
-            <Image style={styles.logo} source={require('../assets/tiss.png')} />
             {/* Email */}
             <TextInput
-                placeholder='Email'
+                placeholder='addresse e-mail'
                 placeholderTextColor='white'
                 value={email}
                 onChangeText={setEmail}
@@ -73,7 +79,7 @@ const Login = ({ navigation }) => {
             />
             {/* Mot de passe */}
             <TextInput
-                placeholder='Password'
+                placeholder='Mot de passe'
                 placeholderTextColor='white'
                 value={password}
                 onChangeText={setPassword}
@@ -82,6 +88,8 @@ const Login = ({ navigation }) => {
             />
             {/* Login Button */}
             <CustomButton/>
+            <Text style={styles.textRegister}>Vous n'avez pas de compte ?</Text>
+            <RegisterNavButton/>
         </View>
     );
 };
@@ -95,8 +103,8 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignSelf: 'center',
-        width: 200,
-        height: 200,
+        width: 250,
+        height: 100,
     },
     companyName: {
         color: '#ffffff',
@@ -123,7 +131,21 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-    }
+    },
+    textRegister: {
+        color: 'white',
+        fontSize: 13,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    buttonRegister: {
+        backgroundColor: 'gray',
+        padding: 10,
+        margin: 10,
+        width: 300,
+        borderRadius: 30,
+        alignItems: 'center',
+    },
 });
 
 export default Login;

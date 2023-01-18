@@ -3,6 +3,7 @@ import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacit
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import { ActivityIndicator } from 'react-native';
+import { ImagePicker, Permissions } from 'expo';
 import axios from 'axios';
 
 const Profil = ({navigation}) => {
@@ -10,6 +11,7 @@ const Profil = ({navigation}) => {
     // Récupération state du Pseudo et du Prénom et l'email
 const [userfirstName, setUserfirstName] = useState('');
 const [userlastName, setUserlastName] = useState('');
+const [image, setImage] = useState();
 const [userEmail, setUserEmail] = useState('');
      // Modification state FirnstName et LastName
 const [firstName, setFirstName] = useState('');
@@ -38,7 +40,7 @@ const getUser = async () => {
             // console.log('SUCCESS GETONE REQUEST');
             // console.log(response.data);
             // console.log(' Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
-            // console.log(JSON.stringify(response)); // Log the entire response object
+            console.log(JSON.stringify(response)); // Log the entire response object
         }
     }catch (error) {
         // console.log('catch GET REQUEST');
@@ -66,6 +68,7 @@ const handleEdit = async()  => {
         const token = await AsyncStorage.getItem('token');
         let response = await axios.put('http://10.10.46.99:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
+            
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -107,7 +110,6 @@ const handleLogout = async () => {
         navigation.navigate('Home');
         console.log('Déconnexion réussie, jetons supprimés !');
         alert('Déconnexion réussie, jetons supprimés !');
-        setReload(true);
     } catch (error) {
         console.log(error);
     }
@@ -122,16 +124,31 @@ const LogoutButton = () => (
     </TouchableOpacity >
 );
 
+// Image Picker function
+const pickImage = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    }
+};
+
 return (
     <SafeAreaView style={styles.container}>
     {/* ADD IMAGE USER */}
     <View>
-        <TouchableOpacity style={styles.imageArea} onPress>
+    <TouchableOpacity style={styles.imageArea} onPress={pickImage}>
         <Image
             source={require('../assets/avatar.png')}
             style={styles.image}
         />
         </TouchableOpacity>
+        
     </View>
     {/* ID User */}
     <View>
