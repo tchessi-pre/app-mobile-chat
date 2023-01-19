@@ -36,7 +36,7 @@ export default function App() {
     <NavigationContainer style={styles.container}>
       <StatusBar backgroundColor="#0F1828" barStyle="light-content" />
       <Tab.Navigator
-        tabBarOptions={{
+        options={{
           activeTintColor: '#FF6B6B',
           activeBackgroundColor: '#0F1828',
           inactiveBackgroundColor: '#0F1828',

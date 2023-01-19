@@ -58,9 +58,11 @@ export default StyleSheet.create({
 		paddingBottom: 12,
 		backgroundColor: '#152033',
 		borderRadius: 30,
+		borderWidth: 1,
 		borderColor: '#FF6B6B',
 		marginBottom: 10,
 		marginTop: 10,
+		
 	},
 	submitText: {
 		color: '#ffffff',
