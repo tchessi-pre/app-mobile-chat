@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Icon} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
 const InscriptionScreen = ({navigation}) => {
@@ -8,6 +9,8 @@ const InscriptionScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    // Permission to show the password
+    const [hidePass, setHidePass] = useState(true);
 
   const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
   // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
@@ -31,7 +34,7 @@ const InscriptionScreen = ({navigation}) => {
     } else {
        // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.46.99:3000/api/auth/signup', {
+        const response = await axios.post('http://192.168.1.13:3000/api/auth/signup', {
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -91,7 +94,7 @@ return (
     {/* Email */}
     <TextInput
         style={styles.input}
-        placeholder=" adresse e-mail"
+        placeholder=" E-mail"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={email}
@@ -103,20 +106,27 @@ return (
         placeholder=" Mot de passe"
         placeholderTextColor="#ffff"
         keyboardType="Mot de passe"
-        secureTextEntry={true}
+        secureTextEntry={hidePass ? true : false}
         value={password}
         onChangeText={text => setPassword(text)}
-    />
+      />
     {/* C-Password */}
     <TextInput
         style={styles.input}
         placeholder=" Confirmez votre mot de passe"
         placeholderTextColor="#ffff"
         keyboardType="password"
-        secureTextEntry={true}
+        secureTextEntry={hidePass ? true : false}
         value={confirmPassword}
         onChangeText={text => setConfirmPassword(text)}
     />
+    <Text style={styles.textHidePass} onPress={() => setHidePass(!hidePass)} >
+    <Ionicons
+        style={styles.icon}
+        name={hidePass ? 'eye-off-outline' : 'eye-outline'}
+    />
+    Afficher le mot de passe ! 
+    </Text>
 	<View>
     {/* Button Register */}
     <CustomButton />
@@ -172,6 +182,17 @@ const styles = StyleSheet.create({
 		height: 100,
 		objectFit: 'cover',
 	},
+  icon: {
+    color: 'white',
+    fontSize: 14,
+},
+textHidePass: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 13,
+    marginRight: 10,
+    paddingBottom: 10,
+},
 })
 
 export default InscriptionScreen;

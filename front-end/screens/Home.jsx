@@ -2,25 +2,20 @@ import React, { Component } from 'react';
 import { View, Image, Button, TouchableHighlight, StyleSheet, Text, Alert } from 'react-native';
 
 
-const Separator = () => (
-	<View style={styles.separator} />
-);
+
 
 const Home = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<Image style={styles.logo} source={require('../assets/NewLogo.png')} />
 			<Text style={styles.connectText} >Connectez vous et discutez avec le monde entier en toute sérénité </Text>
-
 			<View style={styles.connectBtn}>
 				<Text style={styles.textPrivacy} >Terms & Privacy Policy</Text>
 				<TouchableHighlight
 					style={styles.button}
-
 					onPress={() => navigation.navigate('Login', { name: 'Login' })}>
 					<Text style={styles.buttonText}>Connexion</Text>
 				</TouchableHighlight>
-				<Separator />
 				<TouchableHighlight
 					style={styles.button}
 					onPress={() => navigation.navigate('Register', { name: 'Register' })}>

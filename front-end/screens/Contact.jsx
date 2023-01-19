@@ -13,7 +13,7 @@ const [status, setStatus] = useState('');
 const handleSearch = async() => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://10.10.46.99:3000/api/users/', {
+        const response = await axios.get('http://192.168.1.13:3000/api/users/', {
             params: { search: search },
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -50,10 +50,8 @@ return (
             placeholderTextColor={'white'}
             onChangeText={onSearchChange}
             value={search}
-            
         />
-        
-    </View>
+        </View>
         <FlatList
             style={styles.listContainer}
             data={usersSearch.users}
@@ -62,7 +60,7 @@ return (
             renderItem={({ item }) => (
             <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
             {/* mettre l'image de l'utilisateur */}
-            <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/avatar.png')} />
+            <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
             <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
             {/* mettre le status hors ligne ou en ligne */}
             <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
@@ -133,15 +131,15 @@ const styles = StyleSheet.create({
         boxShadow: '0 0 5px black',
     },
     listItemAvatar: {
-        position: 'relative',
-        width: 60,
-        height: 60,
-        borderRadius: 18,
-        marginRight: 10,
-        marginLeft: 10,
-        borderWidth: 2,
-        borderColor: 'purple',
+        width: 50,
+        height: 50,
+        borderRadius: 17,
+        marginRight: 8,
+        borderWidth: 3,
+        borderColor: '#7452B7',
         boxShadow: '0 0 5px black',
+        backgroundColor: 'black',
+        opacity: 0.8,
     },
     userName: {
         color: 'white',

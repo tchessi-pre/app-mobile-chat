@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import { ActivityIndicator } from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import axios from 'axios';
 
 const Profil = ({navigation}) => {
-    
     // Récupération state du Pseudo et du Prénom et l'email
 const [userfirstName, setUserfirstName] = useState('');
 const [userlastName, setUserlastName] = useState('');
@@ -28,7 +26,7 @@ const getUser = async () => {
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
         // console.log(userId);
-        let response = await axios.get(`http://10.10.46.99:3000/api/users/${userId}`, {
+        let response = await axios.get(`http://192.168.1.13:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -40,16 +38,13 @@ const getUser = async () => {
             // console.log('SUCCESS GETONE REQUEST');
             // console.log(response.data);
             // console.log(' Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
-            console.log(JSON.stringify(response)); // Log the entire response object
+            // console.log(JSON.stringify(response)); // Log the entire response object
         }
     }catch (error) {
         // console.log('catch GET REQUEST');
-        // console.log(error.AsyncStorage);
-        // console.error(error);
         // console.log(JSON.stringify(error.response)); // Log the entire response object
     }
 };
-
 useEffect(() => {
     getUser();
 }, []);
@@ -66,9 +61,8 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://10.10.46.99:3000/api/auth/edit', {
+        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
-            
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -77,21 +71,25 @@ const handleEdit = async()  => {
         if(response.status === 200) {
             console.log('SUCCESS PUT REQUEST');
             alert('Modification réussie !');
-            
+
+            try { useEffect(() => {
+                handleEdit();
+            }, [getUser()]);
+            }catch (error) {
+                console.log(error);
+            }
         }
         else{
             console.log('error PUT REQUEST');
         }
     }catch (error) {
-        console.log('catch PUT REQUEST');
-        console.log(error);
-        console.log(error.data);
-        console.log(error.response);
+        console.log('Catch PUT REQUEST');
+        console.log(error.AsyncStorage);
+        console.log(JSON.stringify(error.response));
     }
     }
 }
 
-// Edit Button
 const EditButton = () => (
     <TouchableOpacity style={styles.button}
         onPress={() =>
@@ -101,22 +99,25 @@ const EditButton = () => (
     </TouchableOpacity >
 );
 
-// Logout Button
+// Logout Button 
 const handleLogout = async () => {
     try {
       // Clear the token from storage
         await AsyncStorage.removeItem('token');
       // Redirect the user to the Home screen
-        navigation.navigate('Home');
         console.log('Déconnexion réussie, jetons supprimés !');
         alert('Déconnexion réussie, jetons supprimés !');
+        navigation.navigate('Home');
+        useEffect(() => {
+            handleLogout();
+        }, []);
     } catch (error) {
         console.log(error);
     }
 }
 
 const LogoutButton = () => (
-    <TouchableOpacity style={styles.button}
+    <TouchableOpacity style={styles.buttonLogout}
         onPress={() =>
             handleLogout()
                 }>
@@ -147,14 +148,12 @@ return (
             source={require('../assets/avatar.png')}
             style={styles.image}
         />
-        </TouchableOpacity>
-        
+        </TouchableOpacity>       
     </View>
     {/* ID User */}
     <View>
-        <Text style={styles.nameUser}>Prénom: {userfirstName}</Text>
-        <Text style={styles.nameUser}>Nom: {userlastName}</Text>
-        <Text style={styles.nameUser}>Email: {userEmail}</Text>
+        <Text style={styles.nameUser}>{userfirstName} {userlastName}</Text>
+        <Text style={styles.nameUser}>{userEmail}</Text>
     </View>
     {/* Firstname */}
     <TextInput
@@ -177,10 +176,10 @@ return (
         onChangeText={text => setLastName(text)}
     />
 	<View>
-    {/* Button Edit & logout */}
-    <EditButton />
-    <LogoutButton />
-		</View>
+        {/* Button Edit & logout */}
+        <EditButton />
+        <LogoutButton />
+	</View>
 	</SafeAreaView>
 	);
 }
@@ -213,6 +212,14 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         alignItems: 'center',
     },
+    buttonLogout: {
+        backgroundColor: 'gray',
+        padding: 10,
+        margin: 10,
+        width: 350,
+        borderRadius: 30,
+        alignItems: 'center',
+    },
     buttonText: {
         color: 'white',
     },
@@ -220,6 +227,9 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+        maxWidth: 100,
+        alignSelf: "center",
+        margin: 15,
 	},
 	nameUser: {
 		color: 'white',
@@ -232,6 +242,12 @@ const styles = StyleSheet.create({
 		width: 80,
 		height: 80,
 		objectFit: 'cover',
+        borderRadius: 17,
+        borderWidth: 3,
+        borderColor: '#7452B7',
+        boxShadow: '0 0 5px black',
+        backgroundColor: 'black',
+        opacity: 0.8,
 	},
 })
 export default Profil;

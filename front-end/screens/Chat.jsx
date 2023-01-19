@@ -14,7 +14,7 @@ const [newImageUrl, setNewImageUrl] = useState('');
 const fetchMessages = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`http://10.10.46.99:3000/api/posts/`, {
+        const response = await axios.get(`http://192.168.1.13:3000/api/posts/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -37,19 +37,18 @@ useEffect(() => {
 
 const handleSendMessage = async () => {
     if(newMessage === '' ) {
-        alert('Le message ne peut pas être vide')
+        alert('Vous ne pouvez pas envoyez un message vide !')
     }else {
     try {
         const data = {};
         if(newMessage) data.content = newMessage;
         if(newImageUrl) data.imageUrl = newImageUrl;
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.post('http://10.10.46.99:3000/api/posts', data, {
+        const response = await axios.post('http://192.168.1.13:3000/api/posts', data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
-    
         if(response.status === 201) {
             fetchMessages();
             setNewMessage('');
@@ -81,7 +80,7 @@ return (
             renderItem={({ item }) =>  
             <View style={styles.messageContainer}>
             <View style={styles.messageContent}>
-            <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/avatar.png')}/>
+            <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/DefaultUser.png')}/>
             <View style={styles.messageTextContainer}>
                 <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
                 <Text style={styles.messageText}>{item.content}</Text>
@@ -124,7 +123,6 @@ messageListContainer: {
     backgroundColor: '#0F1828',
     bottom: '15%',
 },
-
 messageContainer: {
     flex: 1,
     alignSelf: 'flex-end',
@@ -147,7 +145,7 @@ messageContent: {
 messageAvatar: {
     width: 50,
     height: 50,
-    borderRadius: 15,
+    borderRadius: 17,
     marginRight: 8,
     borderWidth: 3,
     borderColor: '#7452B7',
