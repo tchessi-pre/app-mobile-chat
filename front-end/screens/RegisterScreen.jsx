@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
 import Styles from '../css/Styles'
-import { apiClient } from '../services/apiClient';
-
+// import { apiClient } from '../services/apiClient';
+import axios from 'axios';
+const API_URL = 'http://10.10.46.33:3000/'
 const RegisterScreen = ({navigation}) => {
 
 	const [firstName, setFirstName] = useState('');
@@ -11,6 +12,28 @@ const RegisterScreen = ({navigation}) => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	
+	
+	const handleSubmit = async () => {
+		if (password !== confirmPassword) {
+			alert("Passwords do not match");
+			return;
+		}
+
+		axios.post(`${API_URL}api/auth/signup`, {
+			firstName,
+			lastName,
+			email,
+			password
+		})
+			.then(response => {
+				console.log(response.data);
+				navigation.navigate("Login");
+			})
+			.catch(error => {
+				console.log(error);
+				alert("Registration Failed");
+			});
+	}
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -64,8 +87,7 @@ const RegisterScreen = ({navigation}) => {
 			<View>
 				<TouchableHighlight
 					style={styles.submit}
-					onPress={() =>
-					console.log('Inscription') }
+					onPress={handleSubmit}
 				>
 					<Text style={Styles.submitText}>S'inscrire</Text>
 				</TouchableHighlight>
