@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
         <View style={styles.container}>
             {/* Logo */}
             <Image style={styles.logo} source={require('../assets/NewLogo.png')}/>
-            <Text style={styles.companyName}>Connection</Text>
+            <Text style={styles.companyName}>Connexion</Text>
             {/* Email */}
             <TextInput
                 placeholder='E-mail'
