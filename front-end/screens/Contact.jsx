@@ -13,10 +13,10 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.46.197:3000/api/users/', {
+            const response = await axios.get('http://192.168.1.149:3000/api/users/', {
                 params: { search: search },
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    token: `${token}`,
                 },
             });
             if (response.status === 200) {

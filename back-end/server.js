@@ -1,48 +1,46 @@
-const http = require('http');
-const app = require('./app');
+// const http = require('http');
+// const { isObject } = require('util');
+// const app = require('./app');
+// const http = require('http').createServer(app);
+// const io = require('socket.io')(http);
 
-const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+// module.exports = io;
 
-  if (isNaN(port)) {
-    return val;
-  }
-  if (port >= 0) {
-    return port;
-  }
-  return false;
-};
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// const normalizePort = (val) => {
+//   const port = parseInt(val, 10);
+//   if (isNaN(port)) {
+//     return val;
+//   }
+//   return port >= 0 ? port : false;
+// };
 
-const errorHandler = (error) => {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-  const address = server.address();
-  const bind =
-    typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges.');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use.');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-};
+// const port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
 
-const server = http.createServer(app);
+// const errorHandler = (error) => {
+//   if (error.syscall !== 'listen') {
+//     throw error;
+//   }
+//   const bind = typeof port === 'string' ? 'pipe ' + port : 'port ' + port;
+//   switch (error.code) {
+//     case 'EACCES':
+//       console.error(bind + ' requires elevated privileges.');
+//       process.exit(1);
+//       break;
+//     case 'EADDRINUSE':
+//       console.error(bind + ' is already in use.');
+//       process.exit(1);
+//       break;
+//     default:
+//       throw error;
+//   }
+// };
 
-server.on('error', errorHandler);
-server.on('listening', () => {
-  const address = server.address();
-  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Serveur en route sur le ' + bind + ' ✅ ' + 'http://localhost:' + port + '/');
-});
 
-server.listen(port);
+// // http.on('error', errorHandler);
+// // http.on('listening', () => {
+// //   const bind = typeof port === 'string' ? 'pipe ' + port : 'port ' + port;
+// //   console.log(`Serveur en route sur le ${bind} http://localhost:${port}/`);
+// // });
+
+// // http.listen(3000);

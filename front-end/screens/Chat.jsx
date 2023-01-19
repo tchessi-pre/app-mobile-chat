@@ -3,6 +3,7 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } 
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
@@ -14,9 +15,9 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.46.197:3000/api/posts/`, {
+            const response = await axios.get(`http://192.168.1.149:3000/api/posts/`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    token: `${token}`,
                 },
             });
             if (response.status === 200) {
@@ -26,11 +27,17 @@ const Chat = () => {
             }
         } catch (error) {
             console.error(error);
-            console.log(error.response);
+            console.error(error.response);
         }
     };
 
     useEffect(() => {
+        const socket = io('http://192.168.1.149:3000');
+
+        socket.on('newPost', function (msg) {
+            // setMessages(messages, [...messages, msg]);
+            console.warn(msg);
+        });
         fetchMessages();
     }, []);
 
@@ -43,14 +50,13 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.46.197:3000/api/posts', data, {
+                const response = await axios.post('http://192.168.1.149:3000/api/posts', data, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        token: `${token}`,
                     },
                 });
 
                 if (response.status === 201) {
-                    fetchMessages();
                     setNewMessage('');
                     setNewImageUrl('');
                 }
@@ -65,9 +71,11 @@ const Chat = () => {
         }
     };
 
+
     return (
         // Message view
         <View style={styles.container}>
+
             <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
@@ -91,6 +99,7 @@ const Chat = () => {
 
             {/* Input & Button views */}
             <View style={styles.inputContainer}>
+
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
@@ -107,6 +116,8 @@ const Chat = () => {
         </View>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     // Container

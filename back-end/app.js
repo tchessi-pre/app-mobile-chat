@@ -2,6 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
+module.exports = io;
 
 const path = require('path');
 
@@ -38,7 +42,10 @@ app.get('/api/users', auth, userCtrl.getAllUsers); // avec authentification et m
 app.get('/api/usersAll', userCtrl.FindAllUsers); // sans authentification // mettre authentification plus tard
 app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
 
-app.get('/api/notifications',auth,notificationsCtrl.getNotificationsOfOneUser);
-app.delete('/api/notifications/:id',auth,notificationsCtrl.deleteNotification);
+app.get('/api/notifications', auth, notificationsCtrl.getNotificationsOfOneUser);
+app.delete('/api/notifications/:id', auth, notificationsCtrl.deleteNotification);
 
-module.exports = app;
+
+
+
+http.listen(3000);

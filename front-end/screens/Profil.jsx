@@ -26,7 +26,7 @@ const Profil = ({ navigation }) => {
             console.log(userId);
             let response = await axios.get(`http://10.10.46.197:3000/api/users/${userId}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    token: `${token}`,
                 },
             });
             if (response.status === 200) {
@@ -62,11 +62,11 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.46.197:3000/api/auth/edit', {
+                let response = await axios.put('http://192.168.1.149:3000/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        token: `${token}`,
                     },
                 });
                 if (response.status === 200) {

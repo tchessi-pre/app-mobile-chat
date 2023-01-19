@@ -1,6 +1,10 @@
 const fs = require('fs');
 
 const db = require('../models');
+const io = require('../app');
+
+io.on('connection', socket => console.log("user connected"));
+
 const { Post } = db.sequelize.models;
 
 exports.createPost = async (req, res, next) => {
@@ -8,9 +12,8 @@ exports.createPost = async (req, res, next) => {
 
   if (req.file) {
     postObject = JSON.parse(req.body.post);
-    postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${
-      req.file.filename
-    }`;
+    postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${req.file.filename
+      }`;
   }
 
   try {
@@ -18,9 +21,9 @@ exports.createPost = async (req, res, next) => {
       ...postObject,
       userId: req.user.id,
     });
+    io.emit('newPost', post);
 
     post = await Post.findOne({ where: { id: post.id }, include: db.User });
-
     res.status(201).json({ post });
   } catch (error) {
     console.log(error);
@@ -70,11 +73,10 @@ exports.getAllPosts = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
   const postObject = req.file
     ? {
-        ...JSON.parse(req.body.post),
-        imageUrl: `${req.protocol}://${req.get('host')}/public/${
-          req.file.filename
+      ...JSON.parse(req.body.post),
+      imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename
         }`,
-      }
+    }
     : { ...req.body };
 
   Post.findOne({
