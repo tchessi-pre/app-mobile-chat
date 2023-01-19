@@ -33,9 +33,9 @@ const Login = ({ navigation }) => {
                 // Stocker le token
                 await AsyncStorage.setItem('token', response.data.token);
                 console.log('Voici le token de l\'utilisateur',response.data.token)
-                alert('Connexion reussi, vous êtes connecté');
+                alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
                 console.log("status: 201, request login successful");
-                navigation.navigate('Chat');
+                navigation.navigate('Profil');
             } else {
                 console.log("status: " + response.status + ", request unsuccessful");
                 alert('Connexion refusée, vérifié vos identifants');
@@ -44,6 +44,7 @@ const Login = ({ navigation }) => {
             // console.log(error);
             // console.log(error.response);
             alert('Erreur requête lors de la Connexion impossible.');
+            // console.log(JSON.stringify(error.response));
         }
         }
     };

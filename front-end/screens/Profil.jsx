@@ -36,9 +36,7 @@ const getUser = async () => {
             setUserlastName(response.data.user.lastName);
             setUserEmail(response.data.user.email);
             // console.log('SUCCESS GETONE REQUEST');
-            // console.log(response.data);
-            // console.log(' Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
-            // console.log(JSON.stringify(response)); // Log the entire response object
+            // console.log('🪙 Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
         }
     }catch (error) {
         // console.log('catch GET REQUEST');
@@ -105,7 +103,7 @@ const handleLogout = async () => {
       // Clear the token from storage
         await AsyncStorage.removeItem('token');
       // Redirect the user to the Home screen
-        console.log('Déconnexion réussie, jetons supprimés !');
+        console.log('Déconnexion réussie, 🪙 jetons supprimés 🪙 !');
         alert('Déconnexion réussie, jetons supprimés !');
         navigation.navigate('Home');
         useEffect(() => {

@@ -3,8 +3,10 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } 
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const Chat = () => {
+const navigation = useNavigation();
 const [messages, setMessages] = useState([]);
 const [newMessage, setNewMessage] = useState('');
 const [newImageUrl, setNewImageUrl] = useState('');
@@ -96,7 +98,8 @@ return (
     <TextInput
         value={newMessage}
         onChangeText={setNewMessage}
-        placeholder="Entrez votre message"
+        placeholder="Entrez votre message ✉️"
+        placeholderTextColor={'white'}
         style={styles.input}
     />
     <TouchableOpacity  value={newImageUrl} style={styles.selectImageButton}>
@@ -126,7 +129,6 @@ messageListContainer: {
 messageContainer: {
     flex: 1,
     alignSelf: 'flex-end',
-    marginBottom: 7,
     marginRight: 10,
     maxWidth: '95%',
     marginTop: 5,
@@ -157,7 +159,6 @@ messageTextContainer: {
     width: '80%',
     margin: 10,
     paddingRight: 10,
-
 },
 messageUsername: {
     fontWeight: 'bold',
@@ -179,11 +180,10 @@ messageCreatedAt: {
 inputContainer: {
 flexDirection: 'row',
 alignItems: 'center',
-backgroundColor: 'black',
-padding: 8,
+padding: 7,
 bottom: 10,
 position: 'absolute',
-width: '100%',
+width: '95%',
 },
 input: {
 flex: 1,
@@ -192,7 +192,11 @@ borderWidth: 1,
 borderColor: 'gray',
 borderRadius: 8,
 backgroundColor: 'gray',
-},
+borderWidth: 1,
+borderColor: 'black',
+borderRadius: 10,
+opacity: 0.7,
+color: 'white',},
 // Button
 sendButton: {
 backgroundColor: '#FF6B6B',
