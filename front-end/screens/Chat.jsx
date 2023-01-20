@@ -15,7 +15,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://192.168.1.149:3000/api/posts/`, {
+            const response = await axios.get(`http://10.10.51.92:3000/api/posts/`, {
                 headers: {
                     token: `${token}`,
                 },
@@ -32,10 +32,10 @@ const Chat = () => {
     };
 
     useEffect(() => {
-        const socket = io('http://192.168.1.149:3000');
+        const socket = io('http://10.10.51.92:3000');
 
         socket.on('newPost', function (msg) {
-            // setMessages(messages, [...messages, msg]);
+            setMessages(messages, [...messages, msg]);
             console.warn(msg);
         });
         fetchMessages();
@@ -50,7 +50,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://192.168.1.149:3000/api/posts', data, {
+                const response = await axios.post('http://10.10.51.92:3000/api/posts', data, {
                     headers: {
                         token: `${token}`,
                     },

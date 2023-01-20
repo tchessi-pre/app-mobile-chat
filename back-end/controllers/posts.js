@@ -45,7 +45,7 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-  const limit = 500;
+  const limit = 20;
   const page = parseInt(req.query.page) || 1;
 
   const options = {
