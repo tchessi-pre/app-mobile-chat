@@ -11,6 +11,7 @@ const ProfilScreen = () => {
 					<Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} />
 				</TouchableOpacity>
 				<Text style={styles.username}>John Doe</Text>
+				<Text style={styles.useremail}>test@test.fr</Text>
 			</View>
 			<TextInput
 				style={Styles.input}
@@ -23,13 +24,6 @@ const ProfilScreen = () => {
 				placeholder="Prénom"
 				placeholderTextColor="#9a9797"
 				keyboardType="name"
-			/>
-			<TextInput
-				style={Styles.input}
-				placeholder="exemple@exemple.fr"
-				placeholderTextColor="#9a9797"
-				keyboardType="email-address"
-				blurOnSubmit={true}
 			/>
 			<View>
 				<TouchableHighlight
@@ -71,8 +65,15 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		fontSize: 24,
 		position: 'absolute',
-		top:200,
+		top:180,
 		fontWeight: '500',
+	},
+	useremail: {
+		color: '#ffffff',
+		fontSize: 16,
+		position: 'absolute',
+		top:220,
+		fontWeight: '200',
 	}
 })
 

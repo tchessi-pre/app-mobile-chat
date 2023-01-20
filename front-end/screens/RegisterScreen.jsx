@@ -120,7 +120,7 @@ const RegisterScreen = (props) => {
 					}}
 				/>
 				<Text style={styles.successTextStyle}>
-					Bravo! Inscription réeussi
+					Bravo !
 				</Text>
 				<TouchableOpacity
 					style={styles.submit}

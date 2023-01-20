@@ -19,7 +19,7 @@ export default StyleSheet.create({
 		height: 250,
 	},
 	logoplus: {
-		width: 300,
+		width: 250,
 		height: 250,
 	},
 	minilogoIn: {
