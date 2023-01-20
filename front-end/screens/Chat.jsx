@@ -16,7 +16,7 @@ const [newImageUrl, setNewImageUrl] = useState('');
 const fetchMessages = async () => {
     try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`http://192.168.1.13:3000/api/posts/`, {
+        const response = await axios.get(`http://10.10.51.3:3000/api/posts/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -46,7 +46,7 @@ const handleSendMessage = async () => {
         if(newMessage) data.content = newMessage;
         if(newImageUrl) data.imageUrl = newImageUrl;
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.post('http://192.168.1.13:3000/api/posts', data, {
+        const response = await axios.post('http://10.10.51.3:3000/api/posts', data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },

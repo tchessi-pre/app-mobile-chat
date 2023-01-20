@@ -26,7 +26,7 @@ const getUser = async () => {
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
         // console.log(userId);
-        let response = await axios.get(`http://192.168.1.13:3000/api/users/${userId}`, {
+        let response = await axios.get(`http://10.10.51.3:3000/api/users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -59,7 +59,7 @@ const handleEdit = async()  => {
        // requête axios here localhost3000/edit
     try {
         const token = await AsyncStorage.getItem('token');
-        let response = await axios.put('http://192.168.1.13:3000/api/auth/edit', {
+        let response = await axios.put('http://10.10.51.3:3000/api/auth/edit', {
             firstName : firstName, lastName : lastName
         }, {
             headers: {

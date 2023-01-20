@@ -21,20 +21,20 @@ const InscriptionScreen = ({navigation}) => {
 
   const handleSubmit = async()  => {
     console.log(firstName, lastName, email, password, confirmPassword);
-    if (!nameRegex.test(lastName)) {
-      alert('Le nom n\'est pas valide', 'alertType');
-    } else if (!nameRegex.test(firstName)) {
-      alert('Le prénom n\'est pas valide', 'alertType');
-    } else if (!emailRegex.test(email)) {
-      alert('L\'email n\'est pas valide', 'alertType');
-    } else if (!passwordRegex.test(password)) {
-      alert('Le mot de passe n\'est pas valide', 'alertType');
-    } else if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas', 'alertType');
-    } else {
+      if (!nameRegex.test(firstName)) {
+        alert('Le prénom n\'est pas valide', 'alertType');
+      }else if (!nameRegex.test(lastName)) {
+        alert('Le nom n\'est pas valide', 'alertType');
+      }else if (!emailRegex.test(email)) {
+        alert('L\'email n\'est pas valide', 'alertType');
+      }else if (!passwordRegex.test(password)) {
+        alert('Le mot de passe n\'est pas valide', + 'le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial', 'alertType');
+      }else if (password !== confirmPassword) {
+        alert('Les mots de passe ne correspondent pas', 'alertType');
+      }else {
        // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://192.168.1.13:3000/api/auth/signup', {
+        const response = await axios.post('http://10.10.51.3:3000/api/auth/signup', {
             firstName: firstName,
             lastName: lastName,
             email: email,
