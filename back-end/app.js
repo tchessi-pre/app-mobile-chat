@@ -46,5 +46,12 @@ app.delete('/api/notifications/:id',auth,notificationsCtrl.deleteNotification);
 
 
 
-http.listen(3000);
-// console.log('listening on http://localhost' + http.listen);
+http.listen(3000, () => {
+  console.log('Serveur en route sur le port:', 3000);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log('Port 3000 is already in use, please select a different port.');
+  } else {
+    console.log(`An error occurred: ${err}`);
+  }
+});
