@@ -1,24 +1,76 @@
 import React, {useState} from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Animated  } from 'react-native';
 import Styles from '../css/Styles'
+import Loader from '../components/Loader';
 // import { apiClient } from '../services/apiClient';
 import axios from 'axios';
-const API_URL = 'http://10.10.46.33:3000/'
-const RegisterScreen = ({navigation}) => {
+const API_URL = 'http://10.10.50.78:3000/';
 
+const RegisterScreen = (props) => {
+
+	let rotateValueHolder = new Animated.Value(0);
+	const startImageRotateFunction = () => {
+		rotateValueHolder.setValue(0);
+		Animated.timing(rotateValueHolder, {
+			toValue: 1,
+			duration: 5000,
+			easing: Easing.linear,
+			useNativeDriver: false,
+		}).start(() => startImageRotateFunction());
+	};
+
+	const rotateData = rotateValueHolder.interpolate({
+		inputRange: [0, 1],
+		outputRange: ['0deg', '360deg'],
+	});
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-	
-	
+	const [loading, setLoading] = useState(false);
+	const [errortext, setErrortext] = useState('');
+	const [
+		isRegistraionSuccess,
+		setIsRegistraionSuccess
+	] = useState(false);
+
 	const handleSubmit = async () => {
-		if (password !== confirmPassword) {
-			alert("Passwords do not match");
+		setErrortext('');
+		if (firstName == '') {
+			alert('Merci de remplir le prénom');
 			return;
 		}
-
+		if (lastName == '') {
+			alert('Merci de remplir le nom');
+			return;
+		}
+		if (email == '') {
+			alert('Merci de remplir l\'email');
+			return;
+		}
+		if (password == '') {
+			alert('Merci de remplir le mot de passe');
+			return;
+		}
+		if (password !== confirmPassword) {
+			alert("les mots de passe ne correspondent pas");
+			return;
+		}
+		//Show Loader
+		setLoading(true);
+		var dataToSend = {
+			firstName: firstName,
+			lastName: lastName,
+			email: email,
+			password: password,
+		};
+		var formBody = [];
+		for (var key in dataToSend) {
+			var encodedKey = encodeURIComponent(key);
+			var encodedValue = encodeURIComponent(dataToSend[key]);
+			formBody.push(encodedKey + '=' + encodedValue);
+		}
 		axios.post(`${API_URL}api/auth/signup`, {
 			firstName,
 			lastName,
@@ -26,23 +78,69 @@ const RegisterScreen = ({navigation}) => {
 			password
 		})
 			.then(response => {
+				setLoading(false);
 				console.log(response.data);
-				navigation.navigate("Login");
+				// navigation.navigate("Login");
+				if (response.status === 201) {
+					setIsRegistraionSuccess(true);
+					console.log(
+						'Registration Successful. Please Login to proceed'
+					);
+				} else {
+					setErrortext(response.msg);
+				}
+			})
+			.catch((error) => {
+				//Hide Loader
+				setLoading(false);
+				console.error(error);
 			})
 			.catch(error => {
 				console.log(error);
 				alert("Registration Failed");
 			});
+	};
+	if (isRegistraionSuccess) {
+		
+		
+		return (
+			<View
+				style={{
+					flex: 1,
+					backgroundColor: '#0F1828',
+					justifyContent: 'center',
+				}}>
+				<Animated.Image
+					source={require('../assets/success.png')}
+					style={{
+						height: 100,
+						resizeMode: 'contain',
+						alignSelf: 'center',
+						transform: [{ rotate: rotateData }],
+					}}
+				/>
+				<Text style={styles.successTextStyle}>
+					Bravo! Inscription réeussi
+				</Text>
+				<TouchableOpacity
+					style={styles.submit}
+					activeOpacity={0.5}
+					onPress={() => props.navigation.navigate('Login')}>
+					<Text style={Styles.submitText}>Connectez-vous</Text>
+				</TouchableOpacity>
+			</View>
+		);
 	}
 	return (
 		<View style={styles.container}>
+			<Loader loading={loading} />
 			<View style={Styles.logoArea}>
 				<Text style={Styles.companyName} >TissApp</Text>
 				<Image style={Styles.minilogoIn} source={require('../assets/NewLogo.png')} />
 			</View>
 			<TextInput
 				style={Styles.input}
-				placeholder="Nom"
+				placeholder="Prénom"
 				placeholderTextColor="#9a9797"
 				keyboardType="name-family"
 				value={firstName}
@@ -50,7 +148,7 @@ const RegisterScreen = ({navigation}) => {
 			/>
 			<TextInput
 				style={Styles.input}
-				placeholder="Prénom"
+				placeholder="Nom"
 				placeholderTextColor="#9a9797"
 				keyboardType="name"
 				value={lastName}
@@ -84,6 +182,11 @@ const RegisterScreen = ({navigation}) => {
 				onChangeText={text => setConfirmPassword(text)}
 				secureTextEntry
 			/>
+			{errortext != '' ? (
+				<Text style={styles.errorTextStyle}>
+					{errortext}
+				</Text>
+			) : null}
 			<View>
 				<TouchableHighlight
 					style={styles.submit}
@@ -113,7 +216,17 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FF6B6B',
 		borderRadius: 30,
 	},
-	
+	errorTextStyle: {
+		color: 'red',
+		textAlign: 'center',
+		fontSize: 14,
+	},
+	successTextStyle: {
+		color: 'white',
+		textAlign: 'center',
+		fontSize: 18,
+		padding: 30,
+	},
 })
 
 export default RegisterScreen ;

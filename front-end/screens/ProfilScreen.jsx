@@ -34,10 +34,16 @@ const ProfilScreen = () => {
 			<View>
 				<TouchableHighlight
 					style={styles.submit}
-					onPress={() => console.log("Save")}
+					onPress={() => console.log("Update")}
 					activeOpacity={0.7}
 				>
-					<Text style={Styles.submitText}>Enrégistrer</Text>
+					<Text style={Styles.submitText}>Modifier</Text>
+				</TouchableHighlight>
+				<TouchableHighlight
+					style={Styles.inscriptionBack}
+					onPress={() => console.log("Save")}
+				>
+					<Text style={Styles.submitText}>Se déconnecter</Text>
 				</TouchableHighlight>
 			</View>
 		</View>
@@ -60,8 +66,6 @@ const styles = StyleSheet.create({
 		paddingBottom: 12,
 		backgroundColor: '#FF6B6B',
 		borderRadius: 30,
-		marginTop: 40,
-		marginBottom: 40,
 	},
 	username: {
 		color: '#ffffff',

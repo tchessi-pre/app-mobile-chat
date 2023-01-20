@@ -1,44 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import { View, StyleSheet, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loader from '../components/Loader';
 import axios from 'axios';
-const API_URL = 'http://10.10.46.33:3000/';
+const API_URL = 'http://10.10.50.78:3000/';
 
 const ConnexionScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [errortext, setErrortext] = useState('');
+
+	const passwordInputRef = createRef();
 
 	const handleLogin = async () => {
 	
-		if (email != '' && password != ''){
-			// requête axios here localhost3000/login
-			try {
-				const response = await axios.post(`${API_URL}api/auth/login`, {
-					email: email,
-					password: password,
-				});
-				if (response.status === 201) {
-					// Stocker le token
-					await AsyncStorage.setItem('token', response.data.token);
-					console.log('Voici le token de l\'utilisateur', response.data.token)
-					// alert('Connexion reussi, vous êtes connecté');
-					console.log("status: 201, request login successful");
-					navigation.navigate('Disc.');
-				} else {
-					console.log("status: " + response.status + ", request unsuccessful");
-					alert('Connexion refusée, vérifié vos identifants');
-				}
-			} catch (error) {
-				console.log(error);
-				console.log(error.response);
-				alert('Erreur requête lors de la Connexion impossible.');
-			}
+		setErrortext('');
+		if (email == '') {
+			alert('Merci de remplir l\'email');
+			return;
 		}
+		if (password == '') {
+			alert('Merci de remplir le mot de passe');
+			return;
+		}
+		setLoading(true);
+		axios.post(`${API_URL}api/auth/login`, {
+			email,
+			password
+		})
+			.then((response) => {
+				//Hide Loader
+				setLoading(false);
+				console.log(response);
+				// If server response message same as Data Matched
+				if (response.status === 201) {
+					AsyncStorage.setItem('token', response.data.token);
+					console.log(response.data.token);
+					navigation.navigate('Chat');
+				} else {
+					setErrortext(response.msg);
+					console.log('Please check your email id or password');
+				}
+			})
+			.catch((error) => {
+				//Hide Loader
+				setLoading(false);
+				console.error(error);
+			});
+		
 	};
 
 	return (
 		<View style={styles.container}>
+			<Loader loading={loading} />
 			<View style={Styles.logoArea}>
 				<Text style={Styles.companyName} >TissApp</Text>
 				<Image style={Styles.minilogo} source={require('../assets/NewLogo.png')} />
