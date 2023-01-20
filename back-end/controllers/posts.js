@@ -1,7 +1,9 @@
 const fs = require('fs');
-
 const db = require('../models');
 const { Post } = db.sequelize.models;
+const io = require('../app');
+
+io.on('connection', socket => console.log('user connected socket io')); 
 
 exports.createPost = async (req, res, next) => {
   let postObject = req.body;
@@ -18,6 +20,7 @@ exports.createPost = async (req, res, next) => {
       ...postObject,
       userId: req.user.id,
     });
+    io.emit('NewPost', post);
 
     post = await Post.findOne({ where: { id: post.id }, include: db.User });
 

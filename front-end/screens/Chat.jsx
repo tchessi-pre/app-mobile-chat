@@ -4,14 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import io from 'socket.io-client';
 
 const Chat = () => {
 const navigation = useNavigation();
 const [messages, setMessages] = useState([]);
 const [newMessage, setNewMessage] = useState('');
 const [newImageUrl, setNewImageUrl] = useState('');
-
-
 
 const fetchMessages = async () => {
     try {
@@ -34,6 +33,12 @@ const fetchMessages = async () => {
 };
 
 useEffect(() => {
+    const socket = io('http://10.10.51.92:3000');
+
+    socket.on('newPost', function (msg) {
+        setMessages(messages, [...messages, msg]);
+        console.warn(msg);
+    });
     fetchMessages();
 }, []);
 
