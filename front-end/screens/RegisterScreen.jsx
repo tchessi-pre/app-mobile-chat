@@ -4,7 +4,7 @@ import Styles from '../css/Styles'
 import Loader from '../components/Loader';
 // import { apiClient } from '../services/apiClient';
 import axios from 'axios';
-const API_URL = 'http://10.10.50.78:3000/';
+const API_URL = 'http://192.168.1.16:3000/';
 
 const RegisterScreen = (props) => {
 
@@ -141,7 +141,7 @@ const RegisterScreen = (props) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="name-family"
 				value={firstName}
 				onChangeText={text => setFirstName(text)}
@@ -149,7 +149,7 @@ const RegisterScreen = (props) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Nom"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="name"
 				value={lastName}
 				onChangeText={text => setLastName(text)}
@@ -157,7 +157,7 @@ const RegisterScreen = (props) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Email"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="email-address"
 				blurOnSubmit={true}
 				value={email}
@@ -166,7 +166,7 @@ const RegisterScreen = (props) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Mot de passe"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="password"
 				autoComplete="password-new"
 				value={password}
@@ -176,7 +176,7 @@ const RegisterScreen = (props) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Confirmez votre mot de passe"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="password"
 				value={confirmPassword}
 				onChangeText={text => setConfirmPassword(text)}

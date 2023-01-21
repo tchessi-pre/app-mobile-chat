@@ -4,7 +4,7 @@ import Styles from '../css/Styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from '../components/Loader';
 import axios from 'axios';
-const API_URL = 'http://10.10.50.78:3000/';
+const API_URL = 'http://192.168.1.16:3000/';
 
 const ConnexionScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
@@ -62,14 +62,14 @@ const ConnexionScreen = ({ navigation }) => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Email"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="email-address"
 				onChangeText={(value) => setEmail(value)}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Mot de passe"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="password"
 				secureTextEntry
 				onChangeText={(value) => setPassword(value)}

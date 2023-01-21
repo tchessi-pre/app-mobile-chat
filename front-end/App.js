@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import AnimatedSplash from "react-native-animated-splash-screen";
 import { StyleSheet, Animated, View, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -32,9 +34,23 @@ const forFade = ({ current, next }) => {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [loading, setLoading] = useState(false);
+
+  setTimeout(() => {
+    setLoading(true);
+  }, 3000);
+
   return (
     <NavigationContainer style={styles.container}>
       <StatusBar backgroundColor="#0F1828" barStyle="light-content" />
+      <AnimatedSplash
+        translucent={true}
+        isLoaded={loading}
+        logoImage={require("./assets/NewLogo.png")}
+        backgroundColor={"#0F1828"}
+        logoHeight={350}
+        logoWidth={350}
+      >
       <Tab.Navigator
         options={{
           activeTintColor: '#FF6B6B',
@@ -120,6 +136,7 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
+    </AnimatedSplash>
     </NavigationContainer>
   );
 }

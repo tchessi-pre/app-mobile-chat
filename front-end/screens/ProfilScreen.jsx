@@ -16,13 +16,13 @@ const ProfilScreen = () => {
 			<TextInput
 				style={Styles.input}
 				placeholder="Nom"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="name-family"
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
-				placeholderTextColor="#9a9797"
+				placeholderTextColor="#F7F7FC"
 				keyboardType="name"
 			/>
 			<View>
