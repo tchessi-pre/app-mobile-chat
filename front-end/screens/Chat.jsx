@@ -22,6 +22,7 @@ const fetchMessages = async () => {
         });
         if (response.status === 200) {
             setMessages(response.data.posts);
+            
         } else {
             console.log('error');
         }
@@ -32,15 +33,7 @@ const fetchMessages = async () => {
     }
 };
 
-useEffect(() => {
-    const socket = io('http://10.10.51.92:3000');
 
-    socket.on('newPost', function (msg) {
-        setMessages(messages, [...messages, msg]);
-        console.warn(msg);
-    });
-    fetchMessages();
-}, []);
 
 const handleSendMessage = async () => {
     if(newMessage === '' ) {
@@ -57,7 +50,6 @@ const handleSendMessage = async () => {
             },
         });
         if(response.status === 201) {
-            fetchMessages();
             setNewMessage('');
             setNewImageUrl('');
             console.log('request POST message, success !');
@@ -73,7 +65,18 @@ const handleSendMessage = async () => {
     }
 }
 };
-
+useEffect(() => {
+    
+    fetchMessages();
+    const socket = io('http://10.10.51.3:3000');
+    setTimeout(() => {
+        console.log(socket.connected)
+    }, 2000);
+    socket.on('newPost', (msg) => {
+        setMessages(messages => [...messages, msg]);
+        console.warn(msg);
+    });
+}, []);
 return (
     // Message view
     <View style={styles.container}>
@@ -86,17 +89,16 @@ return (
             keyExtractor={item => `${item.id}-${item.createdAt}`}
             renderItem={({ item }) =>  
             <View style={styles.messageContainer}>
-            <View style={styles.messageContent}>
-            <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/DefaultUser.png')}/>
-            <View style={styles.messageTextContainer}>
-                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
-                <Text style={styles.messageText}>{item.content}</Text>
-                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
-        </View>
-    </View>
-</View>
-}
-/>
+                <View style={styles.messageContent}>
+                    <Image style={styles.messageAvatar} source={item.imageUrl ? {uri: item.imageUrl} : require('../assets/DefaultUser.png')}/>
+                    <View style={styles.messageTextContainer}>
+                        <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+                        <Text style={styles.messageText}>{item.content}</Text>
+                        <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
+                    </View>
+                </View>
+            </View>} 
+            />
 
 {/* Input & Button views */}
 <View style={styles.inputContainer}>

@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+io.on('connection', socket => console.log('user connected socket io')); 
 module.exports = io;
 
 const path = require('path');
-
 const auth = require('./middleware/auth');
 
 const userCtrl = require('./controllers/user');
@@ -37,17 +37,15 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/auth', userRoutes);
 
 app.get('/api/users/:id', auth, userCtrl.getOneUser);
-app.get('/api/users', auth, userCtrl.getAllUsers); // avec authentification et methode search // sans authentification TEST 
+app.get('/api/users',  userCtrl.getAllUsers); // avec authentification et methode search // sans authentification TEST 
 app.get('/api/usersAll', userCtrl.FindAllUsers); // sans authentification // mettre authentification plus tard
 app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
 
 app.get('/api/notifications',auth,notificationsCtrl.getNotificationsOfOneUser);
 app.delete('/api/notifications/:id',auth,notificationsCtrl.deleteNotification);
 
-
-
-http.listen(3000, () => {
-  console.log('Serveur en route sur le port:', 3000);
+http.listen(3100, () => {
+  console.log('Serveur en route sur le port:', 3100);
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.log('Port 3000 is already in use, please select a different port.');
