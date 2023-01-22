@@ -1,8 +1,40 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, Image, TextInput, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfilScreen = () => {
+
+const ProfilScreen = ({ navigation }) => { 
+	const handleLogout = async () => {
+		try {
+			// Clear the token from storage
+			await AsyncStorage.removeItem('token');
+			// Redirect the user to the Home screen
+			Alert.alert(
+				'Déconnexion',
+				'Êtes-vous sûr? Vous voulez vous déconnecter ?',
+				[
+					{
+						text: 'Annuler',
+						onPress: () => {
+							return null;
+						},
+					},
+					{
+						text: 'Confirmer',
+						onPress: () => {
+							AsyncStorage.clear();
+							navigation.navigate('Home');
+						},
+					},
+				],
+				{ cancelable: false },
+			);
+			navigation.navigate('Home'); 
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -35,7 +67,7 @@ const ProfilScreen = () => {
 				</TouchableHighlight>
 				<TouchableHighlight
 					style={Styles.inscriptionBack}
-					onPress={() => console.log("Save")}
+					onPress={handleLogout}
 				>
 					<Text style={Styles.submitText}>Se déconnecter</Text>
 				</TouchableHighlight>
