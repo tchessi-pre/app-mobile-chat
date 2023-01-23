@@ -1,9 +1,10 @@
 <template>
-  <Tutorial/>
+  <login />
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
+  name: "IndexPage",
+  components: { login }
 }
 </script>

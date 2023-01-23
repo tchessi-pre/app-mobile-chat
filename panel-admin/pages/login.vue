@@ -31,7 +31,10 @@ export default {
         return {
             email: '',
             password: '',
-            errorMessage: ''
+            errorMessage: '',
+            mounted() {
+                this.getUsers()
+            },
         }
     },
     methods: {
