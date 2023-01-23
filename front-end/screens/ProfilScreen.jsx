@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Image, TextInput, Alert, TouchableOpacity, Touc
 import Styles from '../css/Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
+import UploadImage from '../components/UploadImage';
 import axios from 'axios';
 
 const API_URL = 'http://10.10.53.237:3000/';
@@ -64,20 +65,6 @@ const ProfilScreen = ({ navigation }) => {
 				if (response.status === 200) {
 					console.log('SUCCESS PUT REQUEST');
 					alert('Modification réussie !');
-					return (
-						<View style={styles.container}>
-							<Button title="Toggle Toast" onPress={() => showToast()} />
-							<Button
-								title="Toggle Toast With Gravity"
-								onPress={() => showToastWithGravity()}
-							/>
-							<Button
-								title="Toggle Toast With Gravity & Offset"
-								onPress={() => showToastWithGravityAndOffset()}
-							/>
-						</View>
-					);
-
 					try {
 						useEffect(() => {
 							handleEdit();
@@ -134,11 +121,13 @@ const ProfilScreen = ({ navigation }) => {
 			<View style={Styles.logoArea}>
 				<TouchableOpacity onPress={() => console.log("Upload")}
 					activeOpacity={0.7} >
-					<Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} />
+					<UploadImage style={Styles.logoplus} />
+					{/* <Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} /> */}
 				</TouchableOpacity>
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
+			<View style={styles.textInputContainer}>
 			<TextInput
 				style={Styles.input}
 				placeholder="Nom"
@@ -157,6 +146,7 @@ const ProfilScreen = ({ navigation }) => {
 				onChange={text => setLastName(text)}
 				onChangeText={text => setLastName(text)}
 			/>
+			</View>
 			<View>
 				<TouchableHighlight
 					style={styles.submit}
@@ -185,6 +175,11 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		paddingRight: 10,
 	},
+	textInputContainer: {
+		justifyContent: 'center',
+		alignContent: 'center',
+		marginTop: 50,
+	},
 	submit: {
 		marginLeft: 20,
 		marginRight: 20,
@@ -196,15 +191,13 @@ const styles = StyleSheet.create({
 	username: {
 		color: '#ffffff',
 		fontSize: 24,
-		position: 'absolute',
-		top:180,
 		fontWeight: '500',
 	},
 	useremail: {
 		color: '#ffffff',
 		fontSize: 16,
 		position: 'absolute',
-		top:220,
+		top: 140,
 		fontWeight: '200',
 	}
 })
