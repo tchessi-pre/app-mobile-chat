@@ -13,6 +13,8 @@ const ProfilScreen = ({ navigation }) => {
 	const [userlastName, setUserlastName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 	// Get firstName, lastName and email of one user
 	
 	const getUser = async () => {
@@ -39,7 +41,64 @@ const ProfilScreen = ({ navigation }) => {
 		getUser();
 	}, []);
 
+  // Edit user firstName and lastName
+	const handleEdit = async () => {
+		if (firstName == '') {
+			alert('Merci de remplir le prénom');
+			return;
+		}
+		if (lastName == '') {
+			alert('Merci de remplir le nom');
+			return;
+		} else {
+			// requête axios here localhost3000/edit
+			try {
+				const token = await AsyncStorage.getItem('token');
+				let response = await axios.put(`${API_URL}api/auth/edit`, {
+					firstName: firstName, lastName: lastName
+				}, {
+					headers: {
+						'Authorization': `Bearer ${token}`,
+					},
+				});
+				if (response.status === 200) {
+					console.log('SUCCESS PUT REQUEST');
+					alert('Modification réussie !');
+					return (
+						<View style={styles.container}>
+							<Button title="Toggle Toast" onPress={() => showToast()} />
+							<Button
+								title="Toggle Toast With Gravity"
+								onPress={() => showToastWithGravity()}
+							/>
+							<Button
+								title="Toggle Toast With Gravity & Offset"
+								onPress={() => showToastWithGravityAndOffset()}
+							/>
+						</View>
+					);
+
+					try {
+						useEffect(() => {
+							handleEdit();
+						}, [getUser()]);
+					} catch (error) {
+						console.log(error);
+					}
+				}
+				else {
+					console.log('error PUT REQUEST');
+				}
+			} catch (error) {
+				console.log('Catch PUT REQUEST');
+				console.log(error.AsyncStorage);
+				console.log(JSON.stringify(error.response));
+			}
+		}
+	}
+
 	const handleLogout = async () => {
+		
 		try {
 			// Clear the token from storage
 			await AsyncStorage.removeItem('token');
@@ -84,18 +143,24 @@ const ProfilScreen = ({ navigation }) => {
 				style={Styles.input}
 				placeholder="Nom"
 				placeholderTextColor="#F7F7FC"
-				keyboardType="name-family"
+				keyboardType="name"
+				value={firstName}
+				onChange={text => setFirstName(text)}
+				onChangeText={text => setFirstName(text)}
 			/>
 			<TextInput
 				style={Styles.input}
 				placeholder="Prénom"
 				placeholderTextColor="#F7F7FC"
 				keyboardType="name"
+				value={lastName}
+				onChange={text => setLastName(text)}
+				onChangeText={text => setLastName(text)}
 			/>
 			<View>
 				<TouchableHighlight
 					style={styles.submit}
-					onPress={() => console.log("Update")}
+					onPress={handleEdit}
 					activeOpacity={0.7}
 				>
 					<Text style={Styles.submitText}>Modifier</Text>
