@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Animated  } from 'react-native';
 import Styles from '../css/Styles'
 import Loader from '../components/Loader';
+
 // import { apiClient } from '../services/apiClient';
 import axios from 'axios';
-const API_URL = 'http://192.168.1.16:3000/';
+const API_URL = 'http://10.10.53.237:3000/';
 
 const RegisterScreen = (props) => {
 

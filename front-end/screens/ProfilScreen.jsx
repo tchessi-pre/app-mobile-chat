@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TextInput, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from "jwt-decode";
+import axios from 'axios';
 
+const API_URL = 'http://10.10.53.237:3000/';
 
 const ProfilScreen = ({ navigation }) => { 
+	
+	const [userfirstName, setUserfirstName] = useState('');
+	const [userlastName, setUserlastName] = useState('');
+	const [userEmail, setUserEmail] = useState('');
+	
+	// Get firstName, lastName and email of one user
+	
+	const getUser = async () => {
+		try {
+			const token = await AsyncStorage.getItem('token');
+			//Retrieve the userId with the token
+			const decodedToken = jwt_decode(token);
+			const userId = decodedToken.userId;
+			// console.log(userId);
+			let response = await axios.get(`${API_URL}api/users/${userId}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			if (response.status === 200) {
+				setUserfirstName(response.data.user.firstName);
+				setUserlastName(response.data.user.lastName);
+				setUserEmail(response.data.user.email);
+			}
+		} catch (error) {
+		}
+	};
+	useEffect(() => {
+		getUser();
+	}, []);
+
 	const handleLogout = async () => {
 		try {
 			// Clear the token from storage
@@ -35,6 +69,7 @@ const ProfilScreen = ({ navigation }) => {
 			console.log(error);
 		}
 	}
+	
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -42,8 +77,8 @@ const ProfilScreen = ({ navigation }) => {
 					activeOpacity={0.7} >
 					<Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} />
 				</TouchableOpacity>
-				<Text style={styles.username}>John Doe</Text>
-				<Text style={styles.useremail}>test@test.fr</Text>
+				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
+				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
 			<TextInput
 				style={Styles.input}
