@@ -61,7 +61,7 @@ const StackNavigate = () => {
   }, []);
   return (
 <Stack.Navigator
-  initialRouteName={isLoggedIn ? 'Chat' : 'Home'}
+  initialRouteName={isLoggedIn ? 'Profil' : 'Home'}
   component={TabNavigate}
   screenOptions={{
     headerStyle: {
@@ -86,10 +86,10 @@ const StackNavigate = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ title: 'TissApp 👾' }}
+        options={{ title: 'TissApp ' }}
       />
 
-      <Tab.Screen name="Profil" component={TabNavigate} options={{ title: 'TissApp 👾', headerShown: true, headerLeft: null }} />      
+      <Tab.Screen name="Profil" component={TabNavigate} options={{ title: 'TissApp ', headerShown: true, headerLeft: null }} />      
     </Stack.Navigator>
   );
 }

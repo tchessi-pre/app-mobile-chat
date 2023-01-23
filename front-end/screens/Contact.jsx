@@ -46,8 +46,9 @@ const Contact = () => {
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
-                    placeholder="🔍 Rechercher un utilisateur"
+                    placeholder="Rechercher un utilisateur..."
                     placeholderTextColor={'white'}
+                    color={'white'}
                     onChangeText={onSearchChange}
                     value={search}
                 />
@@ -58,7 +59,7 @@ const Contact = () => {
                 onEndReachedThreshold={0.5}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
+                    <TouchableOpacity style={styles.userContainer} >
                         {/* mettre l'image de l'utilisateur */}
                         <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>

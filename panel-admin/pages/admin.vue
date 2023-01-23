@@ -1,41 +1,43 @@
 <script>
-
 export default {
     data() {
         return {
             search: '',
-            users: [],
+            users: []
         }
     },
     methods: {
         async getUsers() {
-            try {
-                // const token = await this.$store.state.token
-                const { data } = await axios.get('http://192.168.1.13:3100/api/users/', {
-                    params: { search: this.search },
-                    // headers: {
-                    //     'Authorization': `Bearer ${token}`,
-                    // },
+            await fetch('http://localhost:3100/api/auth/users', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 200) {
+                        this.users = response.users;
+                        response.log(users)
+                    } else {
+                        console.log("error");
+                    }
                 })
-                this.users = data
-            } catch (error) {
-                console.log(error)
-            }
+                .catch(err => {
+                    console.log(err);
+                    console.log("catch");
+                });
+
         },
-        editUser(id) {
-            // implement edit user logic here
-            console.log(`Editing user with ID: ${id}`)
-        },
-        banUser(id) {
-            // implement ban user logic here
-            console.log(`Banning user with ID: ${id}`)
-        },
-    },
-    logout() {
-        action = "/login"
-        // Perform logout logic here
+        logout() {
+            removeLocalStorage('token');
+            this.$router.push({ path: '/login' });
+        }
     }
 }
+</script>
+
+
 </script>
 
 <template>
@@ -65,8 +67,7 @@ export default {
                         <td class="w-text">{{ user.username }}</td>
                         <td class="w-text">{{ user.createdAt }}</td>
                         <td>
-                            <button class="btn btn-primary" @click="editUser(user.id)">Modifier</button>
-                            <button class="btn btn-danger" @click="banUser(user.id)">Bannir</button>
+
                         </td>
                     </tr>
                 </tbody>

@@ -69,7 +69,7 @@ const Chat = () => {
     useEffect(() => {
 
         fetchMessages();
-        const socket = io('http://10.10.51.3:3000');
+        const socket = io('http://10.10.51.3:2000');
         setTimeout(() => {
             console.log(socket.connected)
         }, 2000);
@@ -103,18 +103,18 @@ const Chat = () => {
 
             {/* Input & Button views */}
             <View style={styles.inputContainer}>
+                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
+                    <Ionicons name="add-outline" size={24} color="white" />
+                </TouchableOpacity>
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
-                    placeholder="Entrez votre message ✉️"
+                    placeholder="Entrez votre message..."
                     placeholderTextColor={'white'}
                     style={styles.input}
                 />
-                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-                    <Ionicons name="md-images" size={24} color="white" />
-                </TouchableOpacity>
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Text style={styles.sendButtonText}>Envoyer</Text>
+                    <Ionicons name="send-sharp" size={20} color="white" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -130,23 +130,28 @@ const styles = StyleSheet.create({
 
     messageListContainer: {
         flex: 1,
-        width: '100%',
+        width: '95%',
         backgroundColor: '#0F1828',
-        bottom: '15%',
+        bottom: '1%',
+        alignSelf: 'center',
     },
     messageContainer: {
         flex: 1,
         alignSelf: 'flex-end',
         marginRight: 10,
-        maxWidth: '95%',
+        maxWidth: '90%',
         marginTop: 5,
         borderWidth: 1,
         borderColor: 'gray',
-        borderRadius: 20,
+        borderTopRightRadius: 20,
+        paddingTopleft: -20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        marginBottom: 5,
     },
     messageContent: {
         flexDirection: 'row',
-        backgroundColor: 'black',
+        backgroundColor: '#152033',
         opacity: 0.8,
         borderRadius: 20,
         padding: 10,
@@ -188,18 +193,17 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 7,
-        bottom: 10,
-        position: 'absolute',
-        width: '95%',
+        padding: 10,
+        bottom: 5,
+        width: '100%',
     },
     input: {
         flex: 1,
-        padding: 5,
+        padding: 10,
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: '#152033',
         borderRadius: 8,
-        backgroundColor: 'gray',
+        backgroundColor: '#152033',
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 10,
@@ -208,16 +212,10 @@ const styles = StyleSheet.create({
     },
     // Button
     sendButton: {
-        backgroundColor: '#FF6B6B',
         padding: 5,
         borderRadius: 8,
     },
-    sendButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
     selectImageButton: {
-        backgroundColor: '#FF6B6B',
         padding: 2,
         margin: 5,
         borderRadius: 8,

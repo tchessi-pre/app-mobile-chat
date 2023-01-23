@@ -6,6 +6,7 @@ import axios from 'axios';
 
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // Vérifier si l'utilisateur est connecté ou pas 
@@ -35,10 +36,12 @@ const Login = ({ navigation }) => {
                     console.log('Voici le token de l\'utilisateur', response.data.token)
                     alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
                     console.log("status: 201, request login successful");
+                    setLoading(true);
                     navigation.navigate('Profil');
                 } else {
                     console.log("status: " + response.status + ", request unsuccessful");
                     alert('Connexion refusée, vérifié vos identifants');
+                    setLoading(false);
                 }
             } catch (error) {
                 // console.log(error);

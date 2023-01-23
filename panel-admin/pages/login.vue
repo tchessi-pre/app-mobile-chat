@@ -1,5 +1,4 @@
 <template>
-
     <div class="main-container">
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
@@ -7,7 +6,7 @@
         </header>
         <section>
             <div>
-                <form class="login-form" method="post" action="/admin">
+                <form class="login-form">
                     <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
                     <h1 class="w-text login-text">Connexion Administration</h1>
                     <label class="w-text label-text" for="email">Email :</label>
@@ -16,7 +15,8 @@
                     <label class="w-text label-text" for="password">Mot de passe :</label>
                     <input class="input-text" id="password" type="password" v-model="password"
                         placeholder="Entrez votre mot de passe" />
-                    <button class="button1" @click="submitLogin">Connexion</button>
+                    <button class="button1" @click.prevent="submitLogin">Connexion</button>
+                    <p class="error-text">{{ errorMessage }}</p>
                 </form>
             </div>
         </section>
@@ -24,19 +24,51 @@
 </template>
 
 <script>
+
 export default {
+
     data() {
         return {
             email: '',
             password: '',
+            errorMessage: ''
         }
     },
     methods: {
-        submitLogin() {
-            // Code pour soumettre les données de connexion
+        async submitLogin() {
+            const data = {
+                email: this.email,
+                password: this.password
+            };
+            await fetch('http://localhost:3100/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.user.admin === false) {
+                        console.log(res);
+                        console.log(res.user);
+                        localStorage.setItem('token', res.token);
+                        this.$router.push({ path: '/admin' });
+                        console.log("sucess login");
+                    } else {
+                        this.errorMessage = 'Une erreur est suvenue lors de la connexion'
+                        console.log("error");
+                    }
+                })
+                .catch(err => {
+                    this.errorMessage = 'Erreur lors de la connexion au serveur, veillez réessayer'
+                    console.log(err);
+                    console.log("catch");
+                });
         }
     }
 }
+
 </script>
 
 <style scoped>
@@ -47,7 +79,6 @@ export default {
     height: 100vh;
     background-color: #0F1828;
 }
-
 
 .header {
     display: flex;
@@ -143,5 +174,14 @@ export default {
     justify-content: center;
     text-shadow: 2px 2px 3px #7c7c7c;
     width: 60%;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.8rem;
+    font-weight: 600;
+    justify-content: center;
+    text-shadow: 2px 2px 3px #7c7c7c;
+    padding: 5px;
 }
 </style>
