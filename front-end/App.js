@@ -34,7 +34,7 @@ const TabNavigate = () => {
         tabBarStyle: { backgroundColor: '#0F1828' },
         tabBarIndicatorStyle: { backgroundColor: 'white' },
       })}>
-      <Tab.Screen name="Chat" component={Chat}/>
+      <Tab.Screen name="Chat" component={Chat} />
       <Tab.Screen name="Contact" component={Contact} />
       <Tab.Screen name="Profil" component={Profil} />
     </Tab.Navigator>
@@ -46,33 +46,33 @@ const StackNavigate = () => {
   console.log(StackNavigate);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const checkToken = async() => {
+  const checkToken = async () => {
     const token = await AsyncStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-      console.log('Status :',isLoggedIn);
+      console.log('Status :', isLoggedIn);
     } else {
       setIsLoggedIn(false);
-      console.log('Status :',isLoggedIn);
+      console.log('Status :', isLoggedIn);
     }
   }
   useEffect(() => {
     checkToken();
   }, []);
   return (
-<Stack.Navigator
-  initialRouteName={isLoggedIn ? 'Chat' : 'Home'}
-  component={TabNavigate}
-  screenOptions={{
-    headerStyle: {
-      backgroundColor: '#0F1828',
-    },
-    cardStyle: {
-      backgroundColor: '#0F1828',
-    },
-    headerTintColor: '#fff',
-  }}
->
+    <Stack.Navigator
+      initialRouteName={isLoggedIn ? 'Profil' : 'Home'}
+      component={TabNavigate}
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#0F1828',
+        },
+        cardStyle: {
+          backgroundColor: '#0F1828',
+        },
+        headerTintColor: '#fff',
+      }}
+    >
       <Stack.Screen
         name="Login"
         component={Login}
@@ -86,10 +86,10 @@ const StackNavigate = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ title: 'TissApp 👾' }}
+        options={{ title: 'TissApp ' }}
       />
 
-      <Tab.Screen name="Profil" component={TabNavigate} options={{ title: 'TissApp 👾', headerShown: true, headerLeft: null }} />      
+      <Tab.Screen name="Profil" component={TabNavigate} options={{ title: 'TissApp ', headerShown: true, headerLeft: null }} />
     </Stack.Navigator>
   );
 }
@@ -97,8 +97,7 @@ const StackNavigate = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <StackNavigate/>
+      <StackNavigate />
     </NavigationContainer >
   );
 }
-
