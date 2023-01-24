@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import Styles from '../css/Styles';
+import * as ImagePicker from 'expo-image-picker';
+
 export default function UploadImage() {
 	const [image, setImage] = useState(null);
-	const addImage = () => { };
+
+	const addImage = async () => { 
+		let _image = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+		console.log(JSON.stringify(_image));
+		if (!_image.canceled) {
+			setImage(_image.uri);
+		}
+	};
 	return (
 		<View >
 		<View style={imageUploaderStyles.container}>
@@ -13,8 +26,8 @@ export default function UploadImage() {
 			}
 			<View style={imageUploaderStyles.uploadBtnContainer}>
 				<TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-					<Text>{image ? 'Edit' : 'Upload'} Image</Text>
-					<AntDesign name="camera" size={30} color="black" />
+					<Text>{image ? 'Edit' : 'Upload'}</Text>
+					<AntDesign name="camera" size={30} color="white" />
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -29,14 +42,16 @@ const imageUploaderStyles = StyleSheet.create({
 		backgroundColor: '#152033',
 		position: 'relative',
 		borderRadius: 999,
+		borderWidth: 1,
+		borderColor: 'white',
 		overflow: 'hidden',
 	},
 	uploadBtnContainer: {
 		opacity: 0.7,
-		position: 'absolute',
+		position: 'relative',
 		left: 0,
-		top: 0,
-		backgroundColor: 'lightgrey',
+		top: 15,
+		backgroundColor: '#ffffff01',
 		width: '100%',
 		height: '100%',
 	},
