@@ -30,32 +30,21 @@ export default {
         },
         async deleteUser(userId) {
             try {
-                await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 })
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.user.admin === true) {
-                            console.log(res);
-                            console.log(res.user);
-                            console.log("sucess Delete");
-                        } else {
-                            this.errorMessage = "Vous n'êtes pas un administrateur";
-                            console.log("Your are not admin");
-                        }
-                    })
-                    .catch(err => {
-                        this.errorMessage = "Requête DELETE échouée";
-                        console.log(err);
-                        console.log("Request echouée delete admin");
-                    });
+                const response = await data.json();
+                console.log("success delete")
+                console.log(response);
                 this.getUsers();
             } catch (error) {
+                console.log("catch delete")
                 console.log(error);
+                this.errorMessage = error.message;
             }
         },
         logout() {
@@ -67,7 +56,6 @@ export default {
         this.getUsers()
     },
 }
-
 </script>
 <template>
     <section class="main-container">
@@ -76,7 +64,6 @@ export default {
             <h1 class="w-text h-text">TISSAPP Admin panel</h1>
             <button id="logout-button" @click="logout" class="logout-button">Déconnexion</button>
         </header>
-
         <div>
             <div class="form-group">
                 <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
@@ -88,8 +75,10 @@ export default {
                 <thead>
                     <tr>
                         <th class="w-text">ID</th>
+                        <!-- <th class="w-text">Avatar</th> -->
                         <th class="w-text">Nom d'utilisateur</th>
                         <th class="w-text">Email</th>
+                        <th class="w-text">Rôle</th>
                         <th class="w-text">Date de création</th>
                         <th class="w-text">Actions</th>
                     </tr>
@@ -97,14 +86,18 @@ export default {
                 <tbody>
                     <tr v-for="user in setUsers" :key="user.id">
                         <td class="w-text">{{ user.id }}</td>
+                        <!-- <td class="w-text">{{ user.imageUrl }}</td> -->
                         <td class="w-text">{{ user.firstName }} {{ user.lastName }}</td>
-                        <td class="w-text">{{ user.email }}</td>
+                        <td class="w-text">{{ user.email }} </td>
+                        <td>
+                            <p class="text-sucess" v-if="user.admin === true">Administrateur</p>
+                            <p class="text-info" v-if="user.admin === false">Utilisateur</p>
+                        </td>
                         <td class="w-text">{{ user.createdAt }}</td>
                         <td>
                             <button class="btn btn-primary">Modifier</button>
-                            <button class="btn btn-danger" @click="deleteUser(user.id)">Supprimer</button>
+                            <button class="btn btn-danger" @click.prevent="deleteUser(user.id)">Supprimer</button>
                             <p class="error-text">{{ errorMessage }}</p>
-
                         </td>
                     </tr>
                 </tbody>
@@ -119,9 +112,10 @@ export default {
     align-items: center;
     justify-content: center;
     background-color: #0F1828;
-    width: 100%;
-    height: 100vh;
+    max-height: auto;
+    max-width: auto;
     margin: auto;
+    margin-bottom: -5rem,
 }
 
 .header {
@@ -164,7 +158,6 @@ export default {
     color: white;
     font-size: 1rem;
     font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .h-text {
@@ -187,5 +180,13 @@ export default {
     color: white;
     font-size: 1rem;
     font-weight: 600;
+}
+
+.text-sucess {
+    color: green;
+}
+
+.text-info {
+    color: rgb(52, 124, 233);
 }
 </style>
