@@ -59,7 +59,7 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.54.141:3100/api/auth/edit', {
+                let response = await axios.put('http://10.10.57.143:3100/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {

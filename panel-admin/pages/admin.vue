@@ -4,18 +4,18 @@ export default {
         return {
             search: '',
             setUsers: [],
-            totalUsers: 0
+            totalUsers: 0,
+            errorMessage: '',
         }
     },
     methods: {
         async getUsers() {
             try {
-                const token = localStorage.getItem('token');
                 const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
                 const response = await data.json();
@@ -26,6 +26,36 @@ export default {
             } catch (error) {
                 console.log(error);
                 console.log("catch");
+            }
+        },
+        async deleteUser(userId) {
+            try {
+                await fetch(`http://localhost:3100/api/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.user.admin === true) {
+                            console.log(res);
+                            console.log(res.user);
+                            console.log("sucess Delete");
+                        } else {
+                            this.errorMessage = "Vous n'êtes pas un administrateur";
+                            console.log("Your are not admin");
+                        }
+                    })
+                    .catch(err => {
+                        this.errorMessage = "Requête DELETE échouée";
+                        console.log(err);
+                        console.log("Request echouée delete admin");
+                    });
+                this.getUsers();
+            } catch (error) {
+                console.log(error);
             }
         },
         logout() {
@@ -72,7 +102,9 @@ export default {
                         <td class="w-text">{{ user.createdAt }}</td>
                         <td>
                             <button class="btn btn-primary">Modifier</button>
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-danger" @click="deleteUser(user.id)">Supprimer</button>
+                            <p class="error-text">{{ errorMessage }}</p>
+
                         </td>
                     </tr>
                 </tbody>
@@ -82,18 +114,13 @@ export default {
 </template>
 
 <style scoped>
-#__nuxt {
-    height: 100%;
-    background-color: #0F1828;
-}
-
 .main-container {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #0F1828;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     margin: auto;
 }
 

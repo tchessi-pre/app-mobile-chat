@@ -6,7 +6,7 @@ export default {
   head: {
     title: 'TissApp Administration Panel',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'fr'
     },
     meta: [
       { charset: 'utf-8' },

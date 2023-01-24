@@ -13,7 +13,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.54.141:3100/api/users/', {
+            const response = await axios.get('http://10.10.57.143:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -145,10 +145,10 @@ const styles = StyleSheet.create({
     userName: {
         color: 'white',
         marginRight: 10,
-        fontSize: 16,
+        fontSize: 13,
         flex: 1,
         alignSelf: 'flex-start',
-        marginTop: 20,
+        marginTop: 15,
     },
     userStatus: {
         color: 'white',

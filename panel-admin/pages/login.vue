@@ -22,11 +22,8 @@
         </section>
     </div>
 </template>
-
 <script>
-
 export default {
-
     data() {
         return {
             email: '',
@@ -52,26 +49,24 @@ export default {
             })
                 .then(res => res.json())
                 .then(res => {
-                    if (res.user.admin === false) {
+                    if (res.user.admin === true) {
                         console.log(res);
                         console.log(res.user);
                         localStorage.setItem('token', res.token);
                         this.$router.push({ path: '/admin' });
                         console.log("sucess login");
                     } else {
-                        this.errorMessage = 'Une erreur est suvenue lors de la connexion'
-                        console.log("error");
+                        this.errorMessage = "Vous n'êtes pas un administrateur";
+                        console.log("not admin");
                     }
                 })
                 .catch(err => {
-                    this.errorMessage = 'Erreur lors de la connexion au serveur, veillez réessayer'
+                    this.errorMessage = "Email ou mot de passe incorrect";
                     console.log(err);
-                    console.log("catch");
                 });
-        }
+        },
     }
 }
-
 </script>
 
 <style scoped>

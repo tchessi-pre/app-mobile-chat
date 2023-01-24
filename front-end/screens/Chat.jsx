@@ -15,7 +15,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.54.141:3100/api/posts/`, {
+            const response = await axios.get(`http://10.10.57.143:3100/api/posts/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -44,7 +44,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.54.141:3100/api/posts', data, {
+                const response = await axios.post('http://10.10.57.143:3100/api/posts', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -69,7 +69,7 @@ const Chat = () => {
     useEffect(() => {
 
         fetchMessages();
-        const socket = io('http://10.10.51.3:2000');
+        const socket = io('http://110.10.57.143.3:2000');
         setTimeout(() => {
             console.log(socket.connected)
         }, 2000);
@@ -114,7 +114,7 @@ const Chat = () => {
                     style={styles.input}
                 />
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Ionicons name="send-sharp" size={20} color="white" />
+                    <Ionicons style={styles.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
                 </TouchableOpacity>
             </View>
         </View>
