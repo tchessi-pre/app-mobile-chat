@@ -29,7 +29,7 @@ const SearchBar = ({ clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 					value={searchPhrase}
 					onChangeText={setSearchPhrase}
 					onFocus={() => {
-						setClicked(true);
+						
 					}}
 				/>
 				{/* cross Icon, depending on whether the search bar is clicked or not */}

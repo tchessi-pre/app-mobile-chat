@@ -33,6 +33,6 @@ export default StyleSheet.create({
 		fontSize: 14,
 		marginLeft: 10,
 		width: "90%",
-
+		color: 'white'
 	},
 })

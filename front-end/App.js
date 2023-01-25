@@ -124,7 +124,7 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Mon profil"
+          name="Profil"
           component={SettingsScreen}
           options={{
             tabBarLabel: 'Profil',
