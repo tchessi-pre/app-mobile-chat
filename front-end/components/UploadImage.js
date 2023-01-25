@@ -15,7 +15,7 @@ export default function UploadImage() {
 		});
 		console.log(JSON.stringify(_image));
 		if (!_image.canceled) {
-			setImage(_image.uri);
+			setImage(_image.assets[0].uri);
 		}
 	};
 	return (
@@ -48,7 +48,7 @@ const imageUploaderStyles = StyleSheet.create({
 	},
 	uploadBtnContainer: {
 		opacity: 0.7,
-		position: 'relative',
+		position: 'absolute',
 		left: 0,
 		top: 15,
 		backgroundColor: '#ffffff01',
