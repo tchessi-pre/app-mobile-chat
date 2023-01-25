@@ -32,7 +32,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.58.0:3000/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.60.123:3000/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -76,7 +76,7 @@ const Profil = ({ navigation }) => {
                     });
                 }
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.58.0:3000/api/auth/edit', {
+                let response = await axios.put('http://10.10.60.123:3000/api/auth/edit', {
                     formData,
                     firstName: firstName, lastName: lastName
                 }, {

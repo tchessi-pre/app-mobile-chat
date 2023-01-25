@@ -48,20 +48,26 @@ export default function UploadImage(props) {
     return (
         <View >
             <View style={imageUploaderStyles.container}>
-                {
-
-                    image ?
-                        <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
-                        :
-                        <Image source={require('../assets/DefaultUser.png')} />
-                }
                 <View style={imageUploaderStyles.uploadBtnContainer}>
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
-                        {/* <Text>{image ? 'Edit' : 'Upload'}</Text> */}
-                        <AntDesign name="camera" size={30} color="grey" style={{ width: 100, height: 100 }} />
-                    </TouchableOpacity>
+                    {
+
+                        image ?
+                            <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 100, }} />
+                            :
+                            <Image source={require('../assets/DefaultUser.png')} style={{ width: 100, height: 100 }} />
+                    }
                 </View>
+
+
+                {/* <View style={imageUploaderStyles.uploadBtnContainer}> */}
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn}>
+                    {/* <Text>{image ? 'Edit' : 'Upload'}</Text> */}
+
+                    <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
+                </TouchableOpacity>
+                {/* </View> */}
             </View>
+
             <Modal animationType="slide" transparent={true} visible={modalVisible}>
                 <View style={modalStyles.container}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
@@ -85,29 +91,20 @@ export default function UploadImage(props) {
 }
 const imageUploaderStyles = StyleSheet.create({
     container: {
-        height: 100,
-        width: 100,
-        backgroundColor: '#152033',
-        position: 'relative',
-        borderRadius: 999,
-        borderWidth: 1,
         borderColor: 'white',
-        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'row',
     },
     uploadBtnContainer: {
-        opacity: 0.7,
-        position: 'absolute',
-        left: 35,
-        top: 10,
-        backgroundColor: '#ffffff01',
-        width: '100%',
-        height: '100%',
+        borderRadius: 100,
+        overflow: 'hidden'
+
 
     },
     uploadBtn: {
-        display: 'flex',
-        alignItems: "center",
-        justifyContent: 'center'
+        position: 'absolute',
+        left: 95,
+        top: 65
     },
 
 })
