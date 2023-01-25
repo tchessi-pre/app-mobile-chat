@@ -76,7 +76,7 @@ exports.getAllUsers = (req, res, next) => {
       deleted: false
     }
     ],
-    limit: 10,
+    limit: 40,
   };
 
   User.findAll(options)
