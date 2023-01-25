@@ -1,12 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TextInput, Image } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
+
 import Styles from '../css/Styles';
 
+import axios from 'axios';
+const API_URL = 'http://10.10.59.213:3000/';
 
 const ChatScreen = () => {
+	const navigation = useNavigation();
 	const [image, setImage] = useState(null);
+	const [messages, setMessages] = useState([]);
+	const [newMessage, setNewMessage] = useState('');
+	const [newImageUrl, setNewImageUrl] = useState('');
+	const [currentDate, setCurrentDate] = useState('');
+
+	const fetchMessages = async () => {
+		try {
+			const token = await AsyncStorage.getItem('token');
+			const response = await axios.get(`${API_URL}api/posts/`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			if (response.status === 200) {
+				setMessages(response.data.posts);
+			} else {
+				console.log('error');
+			}
+		} catch (error) {
+	
+		}
+	};
+
+	useEffect(() => {
+		var date = new Date().getDate(); //Current Date
+		var month = new Date().getMonth() + 1; //Current Month
+		var year = new Date().getFullYear(); //Current Year
+		var hours = new Date().getHours(); //Current Hours
+		var min = new Date().getMinutes(); //Current Minutes
+		var sec = new Date().getSeconds(); //Current Seconds
+		setCurrentDate(
+			date + '/' + month + '/' + year
+			+ ' ' + hours + ':' + min 
+		);
+		fetchMessages();
+	}, []);
+
 
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
@@ -23,6 +67,38 @@ const ChatScreen = () => {
 			setImage(result.assets[0].uri);
 		}
 	};
+	const handleSendMessage = async () => {
+		if (newMessage === '') {
+			alert('Vous ne pouvez pas envoyez un message vide !')
+		} else {
+			try {
+				const data = {};
+				if (newMessage) data.content = newMessage;
+				if (newImageUrl) data.imageUrl = newImageUrl;
+				const token = await AsyncStorage.getItem('token');
+				const response = await axios.post(`${API_URL}api/posts`, data, {
+					headers: {
+						'Authorization': `Bearer ${token}`,
+					},
+				});
+				if (response.status === 201) {
+					fetchMessages();
+					setNewMessage('');
+					setNewImageUrl('');
+					console.log('request POST message, success !');
+				}
+				else {
+					console.log('error');
+					console.log(response.status);
+				}
+			} catch (error) {
+				console.error(error);
+				console.log(error.response);
+				console.log('request POST message, error !');
+			}
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.chat_head}>
@@ -48,11 +124,33 @@ const ChatScreen = () => {
 					/>
 				</View>
 			</View>
-			<View style={styles.msgContainer}>
+			<FlatList
+				style={styles.chatContainer}
+				inverted={true}
+				onEndReached={fetchMessages}
+				onEndReachedThreshold={0.5}
+				data={messages}
+				keyExtractor={item => `${item.id}-${item.createdAt}`}
+				renderItem={({ item }) =>
+					<ScrollView>
+					<View style={styles.msgContainer}>
+						
+							{image && <Image source={{ uri: image }} style={styles.imageContent} />}
+							<View style={styles.messageTextContainer}>
+								<Text style={styles.contentText}>{item.content}</Text>
+							</View>
+							<Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+						<Text style={styles.date}>{currentDate}</Text>
+						<Text style={styles.separator}></Text>
+					</View>
+					</ScrollView>
+				}
+			/>
+			{/* <View style={styles.msgContainer}>
 				{image && <Image source={{ uri: image }} style={styles.imageContent} />}
 				<Text style={styles.contentText}>Look at how chocho sleep in my arms!</Text>
 				<Text style={styles.date}>18.06</Text>
-			</View>
+			</View> */}
 			<View style={styles.Bottomcontainer}>
 				<Icon
 					name='add'
@@ -69,13 +167,15 @@ const ChatScreen = () => {
 					multiline
 					numberOfLines={4}
 					maxLength={40}
+					value={newMessage}
+					onChangeText={setNewMessage}
 				/>
 				<Icon
 					name='sc-telegram'
 					type='evilicon'
 					color='#FF6B6B'
 					size={40}
-					onPress={() => console.log("Send")}
+					onPress={handleSendMessage}
 					activeOpacity={0.7}
 				/>
 			</View>
@@ -118,11 +218,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		position: 'absolute',
 		width: "100%",
-		top: 20,
+		top: 30,
 		height: 60,
-		marginLeft: 15,
-		marginRight: 15,
+		marginLeft: 0,
+		backgroundColor: '#0F1828',
 	},
+	
 	right_icons: {
 		flexDirection: 'row',
 		paddingTop: 8,
@@ -134,6 +235,9 @@ const styles = StyleSheet.create({
 		top: 10,
 		left: 10,
 	},
+	chatContainer: {
+		top: 90,
+	},
 	msgContainer: {
 		width: 226,
 		height: 208,
@@ -141,9 +245,9 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 16,
 		borderBottomRightRadius: 16,
 		borderBottomLeftRadius: 0,
+		marginBottom: 20,
 		backgroundColor: '#0F1828',
-		position: 'absolute',
-		top: 100,
+		top: 0,
 		left: 10,
 	},
 	contentText: {
@@ -156,10 +260,18 @@ const styles = StyleSheet.create({
 	date: {
 		color: '#ADB5BD',
 		position: 'absolute',
-		bottom: 10,
+		bottom: 5,
+		right: 10,
+		fontSize: 10,
+	},
+	messageUsername: {
+		position: 'absolute',
+		bottom: 5,
 		left: 10,
 		fontSize: 10,
-
+		fontWeight: 'bold',
+		textTransform: 'uppercase',
+		color: 'white'
 	}
 })
 
