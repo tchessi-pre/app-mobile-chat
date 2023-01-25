@@ -91,9 +91,12 @@ export default function UploadImage(props) {
 }
 const imageUploaderStyles = StyleSheet.create({
     container: {
+        borderWidth: 1,
         borderColor: 'white',
         display: 'flex',
         flexDirection: 'row',
+        borderRadius: 100,
+
     },
     uploadBtnContainer: {
         borderRadius: 100,
