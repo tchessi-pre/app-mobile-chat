@@ -74,13 +74,6 @@ export default {
                 this.errorMessage = error.message;
             }
         },
-        chat() {
-            this.showSpinner = true;
-            setTimeout(() => {
-                this.showSpinner = false;
-                this.$router.push({ path: '/chat' });
-            }, 1000);
-        },
         logout() {
             this.showSpinner = true;
             localStorage.removeItem('token');
@@ -114,14 +107,10 @@ export default {
             <h1 class="w-text h-text">TISSAPP Admin panel
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
-            <div class="button-header">
-                <!-- chat button -->
-                <button id="chat-button" @click="chat(); showSpinner = true">Chat pannel</button>
-                <!-- logout button -->
-                <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
-                <!-- spinner -->
-                <custom-spinner v-if="showSpinner"></custom-spinner>
-            </div>
+            <!-- logout button -->
+            <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
+            <!-- spinner -->
+            <custom-spinner v-if="showSpinner"></custom-spinner>
         </header>
         <!-- SEARCH USER -->
         <div>
@@ -200,34 +189,15 @@ export default {
     display: block;
 }
 
-.button-header {
-    display: flex;
-    justify-content: flex-end;
-    align-self: flex-end;
-    margin-left: 45rem;
-}
-
 #logout-button {
     color: white;
     background-color: red;
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
-    margin: 20px;
+    margin-left: auto;
+    margin-right: 20px;
     border-radius: 5px;
-
-}
-
-#chat-button {
-    color: white;
-    background-color: rgb(96, 52, 177);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-
-    border-radius: 5px;
-    align-self: flex-end;
 }
 
 .form-group {

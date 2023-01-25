@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
         } else {
             // requête axios here localhost3000/login
             try {
-                const response = await axios.post('http://10.10.57.143:3100/api/auth/login', {
+                const response = await axios.post('http://10.10.60.75:3100/api/auth/login', {
                     email: email,
                     password: password,
                 });
@@ -36,7 +36,6 @@ const Login = ({ navigation }) => {
                     console.log('Voici le token de l\'utilisateur', response.data.token)
                     alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
                     console.log("status: 201, request login successful");
-                    setLoading(true);
                     navigation.navigate('Profil');
                 } else {
                     console.log("status: " + response.status + ", request unsuccessful");

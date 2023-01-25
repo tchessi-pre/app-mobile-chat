@@ -1,31 +1,11 @@
-<template>
-    <div class="main-container">
-        <header class="header">
-            <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel</h1>
-        </header>
-        <section>
-            <div>
-                <form class="login-form">
-                    <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
-                    <h1 class="w-text login-text">Connexion Administration</h1>
-                    <label class="w-text label-text" for="email">Email :</label>
-                    <input class="input-text" id="email" type="email" v-model="email"
-                        placeholder="Entrez votre Email Admin" />
-                    <label class="w-text label-text" for="password">Mot de passe :</label>
-                    <input class="input-text" id="password" type="password" v-model="password"
-                        placeholder="Entrez votre mot de passe" />
-                    <button class="button1" @click.prevent="submitLogin">Connexion</button>
-                    <p class="error-text">{{ errorMessage }}</p>
-                </form>
-            </div>
-        </section>
-    </div>
-</template>
+
 <script>
+import CustomSpinner from '../components/spinner.vue'
 export default {
+    components: { CustomSpinner },
     data() {
         return {
+            showSpinner: false, //Spinner
             email: '',
             password: '',
             errorMessage: '',
@@ -53,7 +33,11 @@ export default {
                         console.log(res);
                         console.log(res.user);
                         localStorage.setItem('token', res.token);
-                        this.$router.push({ path: '/admin' });
+                        this.showSpinner = true;
+                        setTimeout(() => {
+                            this.showSpinner = false;
+                            this.$router.push({ path: '/admin' });
+                        }, 1000);
                         console.log("sucess login");
                     } else {
                         this.errorMessage = "Vous n'êtes pas un administrateur";
@@ -68,6 +52,34 @@ export default {
     }
 }
 </script>
+
+<template>
+    <div class="main-container">
+        <header class="header">
+            <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
+            <h1 class="w-text h-text">TISSAPP Admin panel</h1>
+        </header>
+        <section>
+            <div>
+                <form class="login-form">
+                    <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
+                    <h1 class="w-text login-text">Connexion Administration</h1>
+                    <label class="w-text label-text" for="email">Email :</label>
+                    <input class="input-text" id="email" type="email" v-model="email"
+                        placeholder="Entrez votre Email Admin" />
+                    <label class="w-text label-text" for="password">Mot de passe :</label>
+                    <input class="input-text" id="password" type="password" v-model="password"
+                        placeholder="Entrez votre mot de passe" />
+                    <!-- Login Button -->
+                    <button class="button1" @click.prevent="submitLogin(); showSpinner = true">Connexion</button>
+                    <!-- spinner -->
+                    <custom-spinner v-if="showSpinner"></custom-spinner>
+                    <p class=" error-text">{{ errorMessage }}</p>
+                </form>
+            </div>
+        </section>
+    </div>
+</template>
 
 <style scoped>
 .main-container {

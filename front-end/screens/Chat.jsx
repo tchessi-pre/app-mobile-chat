@@ -15,7 +15,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.57.143:3100/api/posts/`, {
+            const response = await axios.get(`http://10.10.60.75:3100/api/posts/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -44,7 +44,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.57.143:3100/api/posts', data, {
+                const response = await axios.post('http://10.10.60.75:3100/api/posts', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
