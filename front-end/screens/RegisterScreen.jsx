@@ -5,7 +5,7 @@ import Loader from '../components/Loader';
 
 // import { apiClient } from '../services/apiClient';
 import axios from 'axios';
-const API_URL = 'http://10.10.59.213:3000/';
+const API_URL = 'http://10.10.62.74:3000/';
 
 const RegisterScreen = (props) => {
 

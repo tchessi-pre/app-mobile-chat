@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
 import axios from 'axios';
 
-const API_URL = 'http://10.10.59.213:3000/';
+const API_URL = 'http://10.10.62.74:3000/';
 
 const ProfilScreen = ({ navigation }) => { 
 	

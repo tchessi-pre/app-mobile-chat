@@ -5,7 +5,7 @@ import SearchBar from '../components/SearchBar';
 import Profil from '../components/Profil';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const API_URL = 'http://10.10.59.213:3000/';
+const API_URL = 'http://10.10.62.74:3000/';
 
 const ChannelScreen = ({ navigation }) => {
 	const [search, setSearch] = useState('');
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 		borderRadius: 100, 
 		width: 22, height: 22, 
 		borderColor: '#F7F7FC', 
-		textAlign: 'center'
+		textAlign: 'center',
 	},
 	profil__button: {
 		width: 30,

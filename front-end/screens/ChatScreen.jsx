@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Styles from '../css/Styles';
 
 import axios from 'axios';
-const API_URL = 'http://10.10.59.213:3000/';
+const API_URL = 'http://10.10.62.74:3000/';
 
 const ChatScreen = () => {
 	const navigation = useNavigation();
@@ -134,14 +134,13 @@ const ChatScreen = () => {
 				renderItem={({ item }) =>
 					<ScrollView>
 					<View style={styles.msgContainer}>
-						
 							{image && <Image source={{ uri: image }} style={styles.imageContent} />}
 							<View style={styles.messageTextContainer}>
 								<Text style={styles.contentText}>{item.content}</Text>
 							</View>
 							<Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
 						<Text style={styles.date}>{currentDate}</Text>
-						<Text style={styles.separator}></Text>
+						
 					</View>
 					</ScrollView>
 				}
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: "100%",
 		top: 30,
-		height: 60,
+		height: 'auto',
 		marginLeft: 0,
 		backgroundColor: '#0F1828',
 	},
@@ -236,8 +235,9 @@ const styles = StyleSheet.create({
 		left: 10,
 	},
 	chatContainer: {
-		top: 90,
+		top: 95,
 	},
+	
 	msgContainer: {
 		width: 226,
 		height: 208,
@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 0,
 		marginBottom: 20,
 		backgroundColor: '#0F1828',
+
 		top: 0,
 		left: 10,
 	},

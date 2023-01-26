@@ -3,6 +3,7 @@ import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
+
 export default function UploadImage() {
 	const [image, setImage] = useState(null);
 
@@ -20,17 +21,17 @@ export default function UploadImage() {
 	};
 	return (
 		<View >
-		<View style={imageUploaderStyles.container}>
-			{
-				image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
-			}
+			<View style={imageUploaderStyles.container}>
+				{
+					image && <Image  source={{ uri: image }} style={{ width: 100, height: 100 }} />
+				}
+			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>
-				<TouchableOpacity onPress={addImage} style={imageUploaderStyles.uploadBtn} >
-					<Text>{image ? 'Edit' : 'Upload'}</Text>
-					<AntDesign name="camera" size={30} color="white" />
+				<TouchableOpacity  onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+					
+				<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
 				</TouchableOpacity>
 			</View>
-		</View>
 		</View>
 	);
 }
@@ -43,14 +44,14 @@ const imageUploaderStyles = StyleSheet.create({
 		position: 'relative',
 		borderRadius: 999,
 		borderWidth: 1,
-		borderColor: 'white',
+		borderColor: '#152033',
 		overflow: 'hidden',
 	},
 	uploadBtnContainer: {
 		opacity: 0.7,
 		position: 'absolute',
 		left: 0,
-		top: 15,
+		top: 85,
 		backgroundColor: '#ffffff01',
 		width: '100%',
 		height: '100%',
@@ -58,7 +59,12 @@ const imageUploaderStyles = StyleSheet.create({
 	uploadBtn: {
 		display: 'flex',
 		alignItems: "center",
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
+	iconplus: {
+		position: 'absolute',
+		zIndex: 999,
+		right: 0,
+	}
 	
 })
