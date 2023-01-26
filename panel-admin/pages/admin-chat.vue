@@ -8,6 +8,7 @@ export default {
             search: '', //Search user
             setOneUser: {}, //GetOneUser
             setAllUsers: [], //GetAllUser
+            setAllPosts: [], //GetAllPost
             totalUsers: 0, //Count nb user
             errorMessage: '', //Text Err Msge
         }
@@ -31,30 +32,7 @@ export default {
                 console.log("catch get one user");
             }
         },
-        async getUsers() {
-            try {
-                const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                const response = await data.json();
-                this.setAllUsers = response.users;
-                this.totalUsers = this.setAllUsers.length;
-                console.log(response);
-                console.log("success get all user");
-            } catch (error) {
-                console.log(error);
-                console.log("catch get all user");
-            }
-        },
-        confirmDelete(userId) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-                this.deleteUser(userId);
-            }
-        },
+
         async deleteUser(userId) {
             try {
                 const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
@@ -74,6 +52,32 @@ export default {
                 this.errorMessage = error.message;
             }
         },
+
+        async getPosts() {
+            try {
+                const response = await fetch(`http://localhost:3100/api/posts`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+                console.log(data);
+                this.setAllPosts = data.posts;
+                console.log("success get all posts");
+            } catch (error) {
+                console.log(error);
+                console.log("catch get all posts");
+            }
+        },
+
+        userPannel() {
+            setTimeout(() => {
+                this.showSpinner = false;
+                this.$router.push({ path: '/admin-user' });
+            }, 1000);
+        },
         logout() {
             this.showSpinner = true;
             localStorage.removeItem('token');
@@ -81,10 +85,15 @@ export default {
                 this.showSpinner = false;
                 this.$router.push({ path: '/login' });
             }, 1000);
-        }
+        },
+        confirmDelete(userId) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) {
+
+            }
+        },
     },
     created() {
-        this.getUsers()
+        this.getPosts()
         //Decode token and get user connected
         if (typeof (Storage) !== "undefined") {
             // Code for localStorage/sessionStorage.
@@ -104,23 +113,22 @@ export default {
         <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel
+            <h1 class="w-text h-text">TISSAPP Admin pannel
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
-            <!-- logout button -->
-            <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
-            <!-- spinner -->
-            <custom-spinner v-if="showSpinner"></custom-spinner>
-        </header>
-        <!-- SEARCH USER -->
-        <div>
-            <div class="form-group">
-                <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
-                <input v-model="search" type="text" class="form-control" id="search"
-                    placeholder="Entrer un nom d'utilisateur" @input.prevent="getUsers" />
-                <label class="w-text" for="totalUsers">Nombre d'utilisateurs total : {{ totalUsers }}</label>
+            <div class="button-header">
+                <!-- chat button -->
+                <button id="chat-button" @click="userPannel(); showSpinner = true">User-pannel</button>
+                <!-- logout button -->
+                <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
+                <!-- spinner -->
+                <custom-spinner v-if="showSpinner"></custom-spinner>
             </div>
-            <div class="overflow-auto user-container" style="max-height: 500px">
+        </header>
+        <!-- MAIN -->
+        <div>
+            <div class="overflow-auto post-container" style="max-height: 600px">
+                <h1 class="w-text title ">Chat Pannel</h1>
                 <!-- TABLE USER -->
                 <table class="table">
                     <thead>
@@ -128,29 +136,23 @@ export default {
                             <th class="w-text">ID</th>
                             <!-- <th class="w-text">Avatar</th> -->
                             <th class="w-text">Nom d'utilisateur</th>
-                            <th class="w-text">Email</th>
-                            <th class="w-text">Rôle</th>
+                            <th class="w-text">Posts</th>
                             <th class="w-text">Date de création</th>
-                            <th class="w-text">Actions</th>
+                            <th class="w-text">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- USER DATA -->
-                        <tr v-for="user in setAllUsers" :key="user.id">
-                            <td class="w-text">{{ user.id }}</td>
-                            <!-- <td class="w-text">{{ user.imageUrl }}</td> -->
-                            <td class="w-text">{{ user.firstName }} {{ user.lastName }}</td>
-                            <td class="w-text">{{ user.email }} </td>
+                        <!-- POST DATA -->
+                        <tr v-for="post in setAllPosts" :key="post.id">
+                            <td class="w-text">{{ post.id }}</td>
+                            <td class="w-text">{{ post.User.firstName }} {{ post.User.lastName }}</td>
+                            <td class="w-text">{{ post.content }}</td>
+                            <td class="w-text">{{ post.createdAt }}</td>
                             <td>
-                                <p class="text-sucess" v-if="user.admin === true">Administrateur</p>
-                                <p class="text-info" v-if="user.admin === false">Utilisateur</p>
-                            </td>
-                            <td class="w-text">{{ user.createdAt }}</td>
-                            <td v-if="user.admin === false">
                                 <!-- EDIT USER -->
                                 <button class="btn btn-primary">Modifier</button>
                                 <!-- DELETE USER -->
-                                <button class="btn btn-danger" @click="confirmDelete(user.id)">Supprimer</button>
+                                <button class="btn btn-danger">Supprimer</button>
                                 <!-- MSGE ERROR -->
                                 <p class="error-text">{{ errorMessage }}</p>
                             </td>
@@ -189,15 +191,34 @@ export default {
     display: block;
 }
 
+.button-header {
+    display: flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+    margin-left: 45rem;
+}
+
 #logout-button {
     color: white;
     background-color: red;
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
-    margin-left: auto;
-    margin-right: 20px;
+    margin: 20px;
     border-radius: 5px;
+
+}
+
+#chat-button {
+    color: white;
+    background-color: rgb(96, 52, 177);
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 20px;
+
+    border-radius: 5px;
+    align-self: flex-end;
 }
 
 .form-group {
@@ -215,7 +236,7 @@ export default {
     font-weight: 600;
 }
 
-.user-container {
+.post-container {
     border: 1px solid rgb(96, 97, 97);
     border-radius: 20px;
     padding: 0.2rem;
@@ -230,12 +251,12 @@ export default {
     text-shadow: 2px 2px 3px #7c7c7c;
 }
 
-.label-search {
-    float: left;
-    font-size: 1rem;
+.title {
+    font-size: 2rem;
     font-weight: 600;
     justify-content: center;
     text-shadow: 2px 2px 3px #7c7c7c;
+    padding: 15px;
 }
 
 .w-text {

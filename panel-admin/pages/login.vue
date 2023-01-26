@@ -36,7 +36,7 @@ export default {
                         this.showSpinner = true;
                         setTimeout(() => {
                             this.showSpinner = false;
-                            this.$router.push({ path: '/admin' });
+                            this.$router.push({ path: '/admin-user' });
                         }, 1000);
                         console.log("sucess login");
                     } else {

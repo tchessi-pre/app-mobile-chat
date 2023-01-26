@@ -8,6 +8,7 @@ export default {
             search: '', //Search user
             setOneUser: {}, //GetOneUser
             setAllUsers: [], //GetAllUser
+            setAllPosts: [], //GetAllPost
             totalUsers: 0, //Count nb user
             errorMessage: '', //Text Err Msge
         }
@@ -31,6 +32,7 @@ export default {
                 console.log("catch get one user");
             }
         },
+
         async getUsers() {
             try {
                 const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
@@ -50,11 +52,7 @@ export default {
                 console.log("catch get all user");
             }
         },
-        confirmDelete(userId) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-                this.deleteUser(userId);
-            }
-        },
+
         async deleteUser(userId) {
             try {
                 const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
@@ -74,11 +72,30 @@ export default {
                 this.errorMessage = error.message;
             }
         },
-        chat() {
-            this.showSpinner = true;
+
+        async getPosts() {
+            try {
+                const response = await fetch(`http://localhost:3100/api/posts`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+                console.log(data);
+                this.setAllPosts = data.posts;
+                console.log("success get all posts");
+            } catch (error) {
+                console.log(error);
+                console.log("catch get all posts");
+            }
+        },
+
+        chatPannel() {
             setTimeout(() => {
                 this.showSpinner = false;
-                this.$router.push({ path: '/chat' });
+                this.$router.push({ path: '/admin-chat' });
             }, 1000);
         },
         logout() {
@@ -88,7 +105,12 @@ export default {
                 this.showSpinner = false;
                 this.$router.push({ path: '/login' });
             }, 1000);
-        }
+        },
+        confirmDelete(userId) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
+                this.deleteUser(userId);
+            }
+        },
     },
     created() {
         this.getUsers()
@@ -111,12 +133,12 @@ export default {
         <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel
+            <h1 class="w-text h-text">TISSAPP Admin pannel
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
                 <!-- chat button -->
-                <button id="chat-button" @click="chat(); showSpinner = true">Chat pannel</button>
+                <button id="chat-button" @click="chatPannel(); showSpinner = true">Chat-pannel</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
@@ -131,8 +153,9 @@ export default {
                     placeholder="Entrer un nom d'utilisateur" @input.prevent="getUsers" />
                 <label class="w-text" for="totalUsers">Nombre d'utilisateurs total : {{ totalUsers }}</label>
             </div>
-            <div class="overflow-auto user-container" style="max-height: 500px">
+            <div class="overflow-auto user-container" style="max-height: 600px">
                 <!-- TABLE USER -->
+                <h1 class="w-text title ">User Pannel</h1>
                 <table class="table">
                     <thead>
                         <tr>
@@ -228,6 +251,14 @@ export default {
 
     border-radius: 5px;
     align-self: flex-end;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 600;
+    justify-content: center;
+    text-shadow: 2px 2px 3px #7c7c7c;
+    padding: 15px;
 }
 
 .form-group {
