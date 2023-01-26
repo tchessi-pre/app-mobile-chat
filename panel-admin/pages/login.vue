@@ -36,7 +36,7 @@ export default {
                         this.showSpinner = true;
                         setTimeout(() => {
                             this.showSpinner = false;
-                            this.$router.push({ path: '/admin-user' });
+                            this.$router.push({ path: '/admin' });
                         }, 1000);
                         console.log("sucess login");
                     } else {
@@ -88,12 +88,14 @@ export default {
     justify-content: center;
     height: 100vh;
     background-color: #0F1828;
+    background-image: linear-gradient(360deg, #0F1828, #272929);
 }
 
 .header {
     display: flex;
     align-items: center;
     background-color: #423f3f54;
+    background-image: linear-gradient(120deg, #155799, #159957);
     opacity: 0.8;
     padding-left: 20rem;
 }

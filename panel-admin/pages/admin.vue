@@ -101,13 +101,14 @@ export default {
             }
         },
 
-        // ADMIN PANEL
-        adminPanel() {
+        // user PANEL
+        userPanel() {
             setTimeout(() => {
                 this.showSpinner = false;
-                this.$router.push({ path: '/admin' });
+                this.$router.push({ path: '/admin-user' });
             }, 1000);
         },
+
 
         // CHAT PANEL
         chatPanel() {
@@ -204,11 +205,13 @@ export default {
     <section class="main-container">
         <!-- HEADER -->
         <header class="header">
-            <img @click="adminPanel(); showSpinner = true" class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
+            <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
             <h1 class="w-text h-text">TISSAPP Admin panel
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
+                <!-- user button -->
+                <button id="user-button" @click="userPanel(); showSpinner = true">User-panel</button>
                 <!-- chat button -->
                 <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat-panel</button>
                 <!-- logout button -->
@@ -217,54 +220,7 @@ export default {
                 <custom-spinner v-if="showSpinner"></custom-spinner>
             </div>
         </header>
-        <!-- SEARCH USER -->
-        <div>
-            <div class="form-group">
-                <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
-                <input v-model="search" type="text" class="form-control" id="search"
-                    placeholder="Entrer un nom d'utilisateur" @input.prevent="getUsers" />
-                <label class="w-text" for="totalUsers">Nombre d'utilisateurs total : {{ totalUsers }}</label>
-            </div>
-            <div class="overflow-auto user-container" style="max-height: 600px">
-                <!-- TABLE USER -->
-                <h1 class="w-text title ">User Panel</h1>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="w-text">ID</th>
-                            <!-- <th class="w-text">Avatar</th> -->
-                            <th class="w-text">Nom d'utilisateur</th>
-                            <th class="w-text">Email</th>
-                            <th class="w-text">Rôle</th>
-                            <th class="w-text">Date de création</th>
-                            <th class="w-text">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- USER DATA -->
-                        <tr v-for="user in setAllUsers" :key="user.id">
-                            <td class="w-text">{{ user.id }}</td>
-                            <!-- <td class="w-text">{{ user.imageUrl }}</td> -->
-                            <td class="w-text">{{ user.firstName }} {{ user.lastName }}</td>
-                            <td class="w-text">{{ user.email }} </td>
-                            <td>
-                                <p class="text-sucess" v-if="user.admin === true">Administrateur</p>
-                                <p class="text-info" v-if="user.admin === false">Utilisateur</p>
-                            </td>
-                            <td class="w-text">{{ user.createdAt }}</td>
-                            <td v-if="user.admin === false">
-                                <!-- EDIT USER -->
-                                <button class="btn btn-primary" @click="confirmEdit()">Modifier</button>
-                                <!-- DELETE USER -->
-                                <button class="btn btn-danger" @click="confirmDelete(user.id)">Supprimer</button>
-                                <!-- MSGE ERROR -->
-                                <p class="error-text">{{ errorMessage }}</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
     </section>
 </template>
 
@@ -295,7 +251,6 @@ export default {
     opacity: 1;
     object-fit: contain;
     display: block;
-    cursor: pointer;
 }
 
 .button-header {
@@ -316,7 +271,8 @@ export default {
 
 }
 
-#chat-button {
+#chat-button,
+#user-button {
     color: white;
     background-color: rgb(96, 52, 177);
     border: none;
@@ -334,29 +290,6 @@ export default {
     justify-content: center;
     text-shadow: 2px 2px 3px #7c7c7c;
     padding: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    margin: 20px;
-}
-
-.table {
-    width: 95%;
-    margin: 20px;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.user-container {
-    border: 1px solid rgb(96, 97, 97);
-    border-radius: 20px;
-    padding: 0.2rem;
-    margin: 1rem;
-    box-shadow: 10px 5px 5px rgb(70, 70, 70);
 }
 
 .h-text {

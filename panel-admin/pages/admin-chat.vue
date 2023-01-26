@@ -72,7 +72,14 @@ export default {
             }
         },
 
-        userPannel() {
+        adminPanel() {
+            setTimeout(() => {
+                this.showSpinner = false;
+                this.$router.push({ path: '/admin' });
+            }, 1000);
+        },
+
+        userPanel() {
             setTimeout(() => {
                 this.showSpinner = false;
                 this.$router.push({ path: '/admin-user' });
@@ -112,13 +119,13 @@ export default {
     <section class="main-container">
         <!-- HEADER -->
         <header class="header">
-            <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin pannel
+            <img @click="adminPanel(); showSpinner = true" class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
+            <h1 class="w-text h-text">TISSAPP Admin panel
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
                 <!-- chat button -->
-                <button id="chat-button" @click="userPannel(); showSpinner = true">User-pannel</button>
+                <button id="chat-button" @click="userPanel(); showSpinner = true">User-panel</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
@@ -127,8 +134,8 @@ export default {
         </header>
         <!-- MAIN -->
         <div>
-            <div class="overflow-auto post-container" style="max-height: 600px">
-                <h1 class="w-text title ">Chat Pannel</h1>
+            <div class="overflow-auto post-container" style="max-height: 800px">
+                <h1 class="w-text title ">Chat Panel</h1>
                 <!-- TABLE USER -->
                 <table class="table">
                     <thead>
@@ -136,7 +143,8 @@ export default {
                             <th class="w-text">ID</th>
                             <!-- <th class="w-text">Avatar</th> -->
                             <th class="w-text">Nom d'utilisateur</th>
-                            <th class="w-text">Posts</th>
+                            <th class="w-text">Image</th>
+                            <th class="w-text">Message</th>
                             <th class="w-text">Date de création</th>
                             <th class="w-text">Action</th>
                         </tr>
@@ -145,7 +153,12 @@ export default {
                         <!-- POST DATA -->
                         <tr v-for="post in setAllPosts" :key="post.id">
                             <td class="w-text">{{ post.id }}</td>
-                            <td class="w-text">{{ post.User.firstName }} {{ post.User.lastName }}</td>
+                            <td class="w-text">{{ post.User.firstName }} {{ post.User.lastName }} <p class="w-text">{{
+                                post.User.email
+                            }}</p>
+                            </td>
+                            <td class="w-text">{{ post.imageUrl }}
+                            </td>
                             <td class="w-text">{{ post.content }}</td>
                             <td class="w-text">{{ post.createdAt }}</td>
                             <td>
@@ -170,6 +183,7 @@ export default {
     align-items: center;
     justify-content: center;
     background-color: #0F1828;
+    background-image: linear-gradient(360deg, #0F1828, #272929);
     height: 100vh;
 
 }
@@ -178,6 +192,7 @@ export default {
     display: flex;
     align-items: center;
     background-color: #423f3f54;
+    background-image: linear-gradient(120deg, #155799, #159957);
     opacity: 0.8;
     padding-left: 20rem;
 }
@@ -189,6 +204,7 @@ export default {
     opacity: 1;
     object-fit: contain;
     display: block;
+    cursor: pointer;
 }
 
 .button-header {
@@ -216,16 +232,17 @@ export default {
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
-
     border-radius: 5px;
     align-self: flex-end;
 }
+
 
 .form-group {
     display: flex;
     flex-direction: column;
     width: 20%;
     margin: 20px;
+    width: 95%;
 }
 
 .table {
@@ -242,6 +259,7 @@ export default {
     padding: 0.2rem;
     margin: 1rem;
     box-shadow: 10px 5px 5px rgb(70, 70, 70);
+    width: 95%;
 }
 
 .h-text {
