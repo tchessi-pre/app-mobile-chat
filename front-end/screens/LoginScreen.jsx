@@ -38,7 +38,7 @@ const ConnexionScreen = ({ navigation }) => {
 				if (response.status === 201) {
 					AsyncStorage.setItem('token', response.data.token);
 					console.log(response.data.token);
-					navigation.navigate('Chat');
+					navigation.navigate('Contacts');
 				} else {
 					setErrortext(response.msg);
 					console.log('Please check your email id or password');

@@ -122,7 +122,6 @@ const ProfilScreen = ({ navigation }) => {
 				<TouchableOpacity onPress={() => console.log("Upload")}
 					activeOpacity={0.7} >
 					<UploadImage />
-					{/* <Image style={Styles.logoplus} source={require('../assets/usericonplus.png')} /> */}
 				</TouchableOpacity>
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>

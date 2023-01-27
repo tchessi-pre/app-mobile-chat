@@ -8,7 +8,7 @@ export default StyleSheet.create({
 		alignItems: "center",
 		flexDirection: "row",
 		width: "90%",
-		marginHorizontal: 20,
+		marginHorizontal: 10,
 	},
 	searchBar__unclicked: {
 		padding: 6,

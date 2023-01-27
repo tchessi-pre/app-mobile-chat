@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity, Image, Button, TouchableHighlight } from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import SearchBar from '../components/SearchBar';
-import Profil from '../components/Profil';
+import Footer from '../components/Footer';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const API_URL = 'http://10.10.62.74:3000/';
 
 const ChannelScreen = ({ navigation }) => {
@@ -46,7 +47,7 @@ const ChannelScreen = ({ navigation }) => {
 				<Text style={styles.textTop}>Utilisateurs</Text>
 				<Avatar
 					rounded
-					source={require('../assets/monprofil.png')}
+					source={require('../assets/tuấn-kiệt.jpg')}
 					onPress={() => console.log("Works!")}
 					activeOpacity={0.7}
 				/>
@@ -67,7 +68,7 @@ const ChannelScreen = ({ navigation }) => {
 							<View>
 								<TouchableOpacity activeOpacity={.5} onPress={() =>
 									navigation.navigate('Profil')} >
-									<Image style={styles.profilImage} source={item.imageUrl || require('../assets/monprofil.png')} />
+									<Image style={styles.profilImage} source={item.imageUrl || require('../assets/vinicius-wiesehofer.jpg')} />
 								</TouchableOpacity>
 								<Text
 									style={styles.status}
@@ -80,7 +81,7 @@ const ChannelScreen = ({ navigation }) => {
 						</TouchableOpacity>
 					)}
 				/>
-			
+				<Footer/>
 		</View>
 	);
 }
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignContent: 'center',
 		backgroundColor: '#0F1828',
-		paddingHorizontal: 25,
+		paddingHorizontal: 10,
 	},
 	containeContact: {
 		flexDirection: 'row',
@@ -100,10 +101,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
 		width: 300,
-		marginBottom: 1,
 		paddingBottom: 10,
 		paddingTop: 10,
-		borderWidth: 1,
 		borderBottomColor: '#20252d'
 	},
 	top: {
@@ -111,6 +110,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignContent: 'center',
 		marginTop: 40,
+		paddingHorizontal: 5,
 
 	},
 	textTop: {
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
 	statut: {
 		color: "#adb5bd",
 		fontSize: 10
-	}
+	},
 })
 
 export default ChannelScreen;

@@ -110,7 +110,7 @@ const ChatScreen = () => {
 						name='search'
 						type='evilicon'
 						color='#ffffff'
-						size={35}
+						size={30}
 						onPress={() => console.log("Send")}
 						activeOpacity={0.7}
 					/>
@@ -118,7 +118,7 @@ const ChatScreen = () => {
 						name='navicon'
 						type='evilicon'
 						color='#ffffff'
-						size={35}
+						size={30}
 						onPress={() => console.log("Send")}
 						activeOpacity={0.7}
 					/>
@@ -140,16 +140,11 @@ const ChatScreen = () => {
 							</View>
 							<Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
 						<Text style={styles.date}>{currentDate}</Text>
-						
 					</View>
+					
 					</ScrollView>
 				}
 			/>
-			{/* <View style={styles.msgContainer}>
-				{image && <Image source={{ uri: image }} style={styles.imageContent} />}
-				<Text style={styles.contentText}>Look at how chocho sleep in my arms!</Text>
-				<Text style={styles.date}>18.06</Text>
-			</View> */}
 			<View style={styles.Bottomcontainer}>
 				<Icon
 					name='add'
@@ -218,8 +213,10 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: "100%",
 		top: 30,
-		height: 'auto',
-		marginLeft: 0,
+		height: 50,
+		paddingHorizontal: 10,
+		// marginLeft: 10,
+		// marginRight: 10,
 		backgroundColor: '#0F1828',
 	},
 	
@@ -235,7 +232,7 @@ const styles = StyleSheet.create({
 		left: 10,
 	},
 	chatContainer: {
-		top: 95,
+		top: 82,
 	},
 	
 	msgContainer: {
@@ -247,7 +244,6 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 0,
 		marginBottom: 20,
 		backgroundColor: '#0F1828',
-
 		top: 0,
 		left: 10,
 	},
@@ -273,7 +269,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textTransform: 'uppercase',
 		color: 'white'
-	}
+	},
 })
 
 export default ChatScreen;
