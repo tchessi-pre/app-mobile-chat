@@ -5,8 +5,9 @@ import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseUrl from '../services/BaseUrl';
 
-const API_URL = 'http://10.10.62.74:3000/';
+const API_URL = BaseUrl;
 
 const ChannelScreen = ({ navigation }) => {
 	const [search, setSearch] = useState('');
@@ -64,7 +65,6 @@ const ChannelScreen = ({ navigation }) => {
 					renderItem={({ item }) => (
 						<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() =>
 							console.log('Redirect to chatscreen')}>
-							<View style={styles.separator}></View>
 							<View>
 								<TouchableOpacity activeOpacity={.5} onPress={() =>
 									navigation.navigate('Profil')} >
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
 		width: 300,
 		paddingBottom: 10,
 		paddingTop: 10,
-		borderBottomColor: '#20252d'
 	},
 	top: {
 		flexDirection: 'row',
@@ -140,12 +139,6 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		fontSize: 18,
 		textAlign: 'center',
-	},
-	separator: {
-		height: 1,
-		backgroundColor: "#20252d",
-		marginTop: 10,
-		marginBottom: 10,
 	},
 	profilImage: {
 		width: 60,

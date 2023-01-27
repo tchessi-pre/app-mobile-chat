@@ -4,12 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
-
-import Styles from '../css/Styles';
-
 import axios from 'axios';
-const API_URL = 'http://10.10.62.74:3000/';
+import BaseUrl from '../services/BaseUrl';
+
+const API_URL = BaseUrl;
 
 const ChatScreen = () => {
 	const navigation = useNavigation();
@@ -270,6 +268,7 @@ const styles = StyleSheet.create({
 		textTransform: 'uppercase',
 		color: 'white'
 	},
+
 })
 
 export default ChatScreen;

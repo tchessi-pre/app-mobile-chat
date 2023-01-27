@@ -5,8 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
 
-const API_URL = 'http://10.10.62.74:3000/';
+const API_URL = BaseUrl;
 
 const ProfilScreen = ({ navigation }) => { 
 	

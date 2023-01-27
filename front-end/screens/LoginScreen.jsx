@@ -4,7 +4,9 @@ import Styles from '../css/Styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from '../components/Loader';
 import axios from 'axios';
-const API_URL = 'http://10.10.62.74:3000/';
+import BaseUrl from '../services/BaseUrl';
+
+const API_URL = BaseUrl;
 
 const ConnexionScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
