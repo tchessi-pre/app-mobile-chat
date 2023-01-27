@@ -53,7 +53,7 @@ export default {
                 const response = await data.json();
                 this.setAllUsers = response.users;
                 this.totalUsers = this.setAllUsers.length;
-                this.lastFourUsers = this.setAllUsers.slice(-4);
+                this.lastFourUsers = this.setAllUsers.slice(-4).reverse();
                 console.log(response);
                 console.log("success get all user");
             } catch (error) {
@@ -76,7 +76,7 @@ export default {
                 console.log(data);
                 this.setAllPosts = data.posts;
                 this.totalPosts = this.setAllPosts.length;
-                this.lastFourPosts = this.setAllPosts.slice(-4);
+                this.lastFourPosts = this.setAllPosts.reverse().slice(-4).reverse();
                 console.log("success get all posts");
             } catch (error) {
                 console.log(error);
@@ -132,7 +132,6 @@ export default {
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
             <h1 class="w-text h-text">TISSAPP Admin panel
-                <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
                 <!-- user button -->
@@ -147,7 +146,7 @@ export default {
         </header>
         <!-- -->
         <div>
-            <h2 class="title-admin">Bonjour {{ setOneUser.firstName }} {{ setOneUser.lastName }}!</h2>
+            <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
         </div>
         <!-- first square -->
         <div class="container">
@@ -227,6 +226,7 @@ export default {
 #logout-button {
     color: white;
     background-color: red;
+    background-image: linear-gradient(120deg, #fd3737, #813c2796);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
@@ -234,10 +234,17 @@ export default {
     border-radius: 5px;
 }
 
+#logout-button:hover {
+    background-color: rgb(233, 52, 52);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
 #chat-button,
 #user-button {
     color: white;
     background-color: rgb(96, 52, 177);
+    background-image: linear-gradient(120deg, #8637fd, #0f7074);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
@@ -246,6 +253,12 @@ export default {
     align-self: flex-end;
 }
 
+#chat-button:hover,
+#user-button:hover {
+    background-color: rgb(52, 124, 233);
+    opacity: 0.8;
+    cursor: pointer;
+}
 
 .h-text {
     padding-top: 20px;
@@ -274,10 +287,13 @@ export default {
 .title-admin {
     margin: 20px;
     margin-bottom: 20px;
-    color: white;
+    color: #fff;
     display: flex;
     justify-content: center;
     opacity: 0.8;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .container {

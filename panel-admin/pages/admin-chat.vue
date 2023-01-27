@@ -1,5 +1,6 @@
 <script>
 import CustomSpinner from '../components/spinner.vue'
+import Swal from 'sweetalert2'
 export default {
     components: { CustomSpinner },
     data() {
@@ -7,9 +8,9 @@ export default {
             showSpinner: false, //Spinner
             search: '', //Search user-
             setOneUser: {}, //GetOneUser
-            setAllUsers: [], //GetAllUser
             setAllPosts: [], //GetAllPost
-            totalUsers: 0, //Count nb user
+            content: '', //PUT Msge
+            setPostContent: '', // PostMsge
             errorMessage: '', //Text Err Msge
         }
     },
@@ -32,10 +33,33 @@ export default {
                 console.log("catch get one user");
             }
         },
-
-        async deleteUser(userId) {
+        // EDIT POST
+        async editPost(userId, content) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/posts/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                    })
+                });
+                const response = await data.json();
+                console.log("success edit post")
+                console.log(response);
+                this.getPosts();
+            } catch (error) {
+                console.log("catch edit post")
+                console.log(error);
+                this.errorMessage = error.message;
+            }
+        },
+
+        async deletePost(userId) {
+            try {
+                const data = await fetch(`http://localhost:3100/api/posts/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,11 +67,11 @@ export default {
                     }
                 })
                 const response = await data.json();
-                console.log("success delete user")
+                console.log("success delete posts")
                 console.log(response);
-                this.getUsers();
+                this.getPosts();
             } catch (error) {
-                console.log("catch delete user")
+                console.log("catch delete posts")
                 console.log(error);
                 this.errorMessage = error.message;
             }
@@ -60,7 +84,7 @@ export default {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
+                    },
                 });
                 const data = await response.json();
                 console.log(data);
@@ -69,6 +93,27 @@ export default {
             } catch (error) {
                 console.log(error);
                 console.log("catch get all posts");
+            }
+        },
+
+        async sendPosts() {
+            try {
+                const response = await fetch(`http://localhost:3100/api/posts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        content: this.setPostContent
+                    })
+                });
+                const data = await response.json();
+                console.log(data);
+                console.log("success POST MSGE");
+            } catch (error) {
+                console.log(error);
+                console.log("catch POST MSGE");
             }
         },
 
@@ -93,10 +138,108 @@ export default {
                 this.$router.push({ path: '/login' });
             }, 1000);
         },
-        confirmDelete(userId) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) {
 
+        // EDIT POST
+        confirmEdit(userId) {
+            Swal.fire({
+                title: 'Modifier un message !',
+                html: `
+                        <input id="swal-input1" class="swal2-input" placeholder="Message">
+                    `,
+                focusConfirm: false,
+                showCancelButton: true,
+                color: '#fff',
+                background: '#0F1828',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, modifier!',
+                cancelButtonText: 'Annuler',
+                icon: 'info',
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                    ]
+                }
+            }).then((result) => {
+                if (result.value) {
+                    if (result.value[0] === '') {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Vous ne pouvez pas envoyez un message vide!',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    } else {
+                        this.editPost(userId, result.value[0]);
+                    }
+                }
+            })
+        },
+        // DELETE POST
+        confirmDelete(userId) {
+            Swal.fire({
+                title: "Êtes-vous sûr de vouloir supprimer ce message?",
+                text: "Cette action est irréversible!",
+                icon: 'warning',
+                showCancelButton: true,
+                color: '#fff',
+                background: '#0F1828',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.value) {
+                    this.deletePost(userId);
+                }
+            })
+        },
+
+        // SEND POST
+        ModalSend() {
+            if (!this.setPostContent) {
+                Swal.fire({
+                    title: 'Erreur!',
+                    text: 'Le champ de message est vide, veuillez entrer un message avant de l\'envoyer.',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    background: '#0F1828',
+                    color: '#fff',
+                    confirmButtonText: 'Ok'
+                });
+                return;
             }
+            Swal.fire({
+                title: 'Message envoyé!',
+                text: 'Votre message a bien été envoyé',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                background: '#0F1828',
+                color: '#fff',
+                confirmButtonText: 'Ok'
+            })
+                .then((result) => {
+                    if (result.value) {
+                        this.sendPosts();
+                        setTimeout(function () {
+                            window.location.reload(true)
+                        }, 200)
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Une erreur est survenue lors l\'envoi de la requête!',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    }
+                })
         },
     },
     created() {
@@ -124,8 +267,8 @@ export default {
                 <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
-                <!-- chat button -->
-                <button id="chat-button" @click="userPanel(); showSpinner = true">User-panel</button>
+                <!-- user button -->
+                <button id="user-button" @click="userPanel(); showSpinner = true">User-panel</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
@@ -134,7 +277,7 @@ export default {
         </header>
         <!-- MAIN -->
         <div>
-            <div class="overflow-auto post-container" style="max-height: 800px">
+            <div class="overflow-auto post-container" style="max-height: 700px">
                 <h1 class="w-text title ">Chat Panel</h1>
                 <!-- TABLE USER -->
                 <table class="table">
@@ -163,9 +306,9 @@ export default {
                             <td class="w-text">{{ post.createdAt }}</td>
                             <td>
                                 <!-- EDIT USER -->
-                                <button class="btn btn-primary">Modifier</button>
+                                <button class="btn btn-primary" @click="confirmEdit(post.id)">Modifier</button>
                                 <!-- DELETE USER -->
-                                <button class="btn btn-danger">Supprimer</button>
+                                <button class="btn btn-danger" @click="confirmDelete(post.id)">Supprimer</button>
                                 <!-- MSGE ERROR -->
                                 <p class="error-text">{{ errorMessage }}</p>
                             </td>
@@ -174,6 +317,15 @@ export default {
                 </table>
             </div>
         </div>
+        <section>
+            <div>
+                <form class="send-message">
+                    <input v-model="setPostContent" type="text" class="input-send"
+                        placeholder="Envoyez votre message..." />
+                    <button class="btn-send" type="submit" @click.prevent="ModalSend()">Envoyer</button>
+                </form>
+            </div>
+        </section>
     </section>
 </template>
 
@@ -214,26 +366,42 @@ export default {
     margin-left: 45rem;
 }
 
+
 #logout-button {
     color: white;
     background-color: red;
+    background-image: linear-gradient(120deg, #fd3737, #813c2796);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
-
 }
 
-#chat-button {
+#logout-button:hover {
+    background-color: rgb(233, 52, 52);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+#chat-button,
+#user-button {
     color: white;
     background-color: rgb(96, 52, 177);
+    background-image: linear-gradient(120deg, #8637fd, #0f7074);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
     align-self: flex-end;
+}
+
+#chat-button:hover,
+#user-button:hover {
+    background-color: rgb(52, 124, 233);
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 #td-msge {
@@ -296,5 +464,42 @@ export default {
 .text-info {
     color: rgb(52, 124, 233);
     font-weight: 600;
+}
+
+.send-message {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    padding: 5px;
+    width: 20%;
+    height: 100%;
+}
+
+.input-send {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(96, 97, 97);
+    background-color: rgb(96, 97, 97);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 5px;
+}
+
+.btn-send {
+    color: white;
+    background-color: rgb(96, 52, 177);
+    background-image: linear-gradient(80deg, #3b1c6d, #2ca087);
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.btn-send:hover {
+    background-color: rgb(96, 52, 177);
+    opacity: 0.8;
 }
 </style>

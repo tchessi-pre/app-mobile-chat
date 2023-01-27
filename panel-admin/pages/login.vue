@@ -199,6 +199,23 @@ export default {
     width: 60%;
 }
 
+.button1:hover {
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 100px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    justify-content: center;
+    text-shadow: 2px 2px 3px #7c7c7c;
+    width: 60%;
+    opacity: 0.8;
+}
+
 .error-text {
     color: red;
     font-size: 0.8rem;

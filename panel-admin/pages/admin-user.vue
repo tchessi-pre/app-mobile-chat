@@ -200,7 +200,7 @@ export default {
                     } else if (!emailRegex.test(result.value[0])) {
                         Swal.fire({
                             title: 'Erreur!',
-                            text: 'Veuillez entrer un email valide.' + 'example@example.fr',
+                            text: 'Veuillez entrer un email valide.' + ' example@example.fr',
                             icon: 'error',
                             color: '#fff',
                             background: '#0F1828',
@@ -240,6 +240,17 @@ export default {
             }).then((result) => {
                 if (result.value) {
                     this.deleteUser(userId);
+                }
+                else {
+                    Swal.fire({
+                        title: 'Erreur!',
+                        text: 'Une erreur est survenue lors l\'envoi de la requête!',
+                        icon: 'error',
+                        color: '#fff',
+                        background: '#0F1828',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    })
                 }
             })
         },
@@ -282,8 +293,8 @@ export default {
         <div>
             <div class="form-group">
                 <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
-                <input v-model="search" type="text" class="form-control" id="search"
-                    placeholder="Entrer un nom d'utilisateur" @input.prevent="getUsers" />
+                <input v-model="search" type="text" class="input-search" id="search"
+                    placeholder="Entrer un nom d'utilisateur..." @input.prevent="getUsers" />
                 <label class="w-text" for="totalUsers">Nombre d'utilisateurs total : {{ totalUsers }}</label>
             </div>
             <div class="overflow-auto user-container" style="max-height: 600px">
@@ -366,27 +377,55 @@ export default {
     margin-left: 45rem;
 }
 
+
 #logout-button {
     color: white;
     background-color: red;
+    background-image: linear-gradient(120deg, #fd3737, #813c2796);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
-
 }
 
-#chat-button {
+#logout-button:hover {
+    background-color: rgb(233, 52, 52);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+#chat-button,
+#user-button {
     color: white;
     background-color: rgb(96, 52, 177);
+    background-image: linear-gradient(120deg, #8637fd, #0f7074);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
-
     border-radius: 5px;
     align-self: flex-end;
+}
+
+#chat-button:hover,
+#user-button:hover {
+    background-color: rgb(52, 124, 233);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.input-search {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgb(96, 97, 97);
+    background-color: rgb(96, 97, 97);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 5px;
 }
 
 .title {
