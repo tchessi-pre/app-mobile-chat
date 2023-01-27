@@ -319,7 +319,7 @@ export default {
     opacity: 0.9;
     margin: 2px;
     padding: 5px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: #fff;
 }

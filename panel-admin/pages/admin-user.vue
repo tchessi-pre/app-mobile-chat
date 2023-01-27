@@ -42,25 +42,6 @@ export default {
             }
         },
 
-        async getOneUser(userId) {
-            try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                const response = await data.json();
-                this.setOneUser = response.user;
-                console.log(response);
-                console.log("success get one user");
-            } catch (error) {
-                console.log(error);
-                console.log("catch get one user");
-            }
-        },
-
         // REQUEST GET ALL USER
         async getUsers() {
             try {
@@ -85,7 +66,7 @@ export default {
         // REQUEST PUT USER
         async editUser(userId, email, firstName, lastName) {
             try {
-                const data = await fetch(`http://localhost:3100/api/auth/edit${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/edit-admin/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -95,7 +76,6 @@ export default {
                         email: email,
                         firstName: firstName,
                         lastName: lastName,
-                        userId: userId,
                     })
                 });
                 const response = await data.json();
@@ -238,7 +218,7 @@ export default {
                             confirmButtonText: 'Ok'
                         })
                     } else {
-                        this.editUser(result.value[0], result.value[1], result.value[2]);
+                        this.editUser(userId, result.value[0], result.value[1], result.value[2]);
                     }
                 }
             })
@@ -335,7 +315,7 @@ export default {
                             <td class="w-text">{{ user.createdAt }}</td>
                             <td v-if="user.admin === false">
                                 <!-- EDIT USER -->
-                                <button class="btn btn-primary" @click="confirmEdit()">Modifier</button>
+                                <button class="btn btn-primary" @click="confirmEdit(user.id)">Modifier</button>
                                 <!-- DELETE USER -->
                                 <button class="btn btn-danger" @click="confirmDelete(user.id)">Supprimer</button>
                                 <!-- MSGE ERROR -->
