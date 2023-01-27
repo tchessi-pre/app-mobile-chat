@@ -8,8 +8,11 @@ export default {
     data() {
         return {
             showSpinner: false, //Spinner
-            showModal: false, //
+            showModal: false, // modal
             search: '', //Search user
+            firstName: '', //PUT USER
+            lastName: '', //PUT USER
+            email: '',  //PUT USER
             setOneUser: {}, //GetOneUser
             setAllUsers: [], //GetAllUser
             setAllPosts: [], //GetAllPost
@@ -20,6 +23,25 @@ export default {
     methods: {
 
         // REQUEST GET ONE USER
+        async getOneUser(userId) {
+            try {
+                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const response = await data.json();
+                this.setOneUser = response.user;
+                console.log(response);
+                console.log("success get one user");
+            } catch (error) {
+                console.log(error);
+                console.log("catch get one user");
+            }
+        },
+
         async getOneUser(userId) {
             try {
                 const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
@@ -57,6 +79,33 @@ export default {
             } catch (error) {
                 console.log(error);
                 console.log("catch get all user");
+            }
+        },
+
+        // REQUEST PUT USER
+        async editUser(userId, email, firstName, lastName) {
+            try {
+                const data = await fetch(`http://localhost:3100/api/auth/edit${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        userId: userId,
+                    })
+                });
+                const response = await data.json();
+                console.log("success edit user")
+                console.log(response);
+                this.getUsers();
+            } catch (error) {
+                console.log("catch edit user")
+                console.log(error);
+                this.errorMessage = error.message;
             }
         },
 
@@ -153,14 +202,46 @@ export default {
                     ]
                 }
             }).then((result) => {
+                // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
+                const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
+                //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
+                const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
                 if (result.value) {
-                    const email = result.value[0]
-                    const firstName = result.value[1]
-                    const lastName = result.value[2]
-                    // faire quelque chose avec ces valeurs
+                    if (result.value[0] === '' || result.value[1] === '' || result.value[2] === '') {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Veuillez remplir tous les champs',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    } else if (!emailRegex.test(result.value[0])) {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Veuillez entrer un email valide.' + 'example@example.fr',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    } else if (!nameRegex.test(result.value[1]) || !nameRegex.test(result.value[2])) {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Veuillez entrer un nom ou un prénom valide',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    } else {
+                        this.editUser(result.value[0], result.value[1], result.value[2]);
+                    }
                 }
             })
-
         },
 
         // DELETE USER

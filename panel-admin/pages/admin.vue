@@ -9,16 +9,17 @@ export default {
         return {
             showSpinner: false, //Spinner
             showModal: false, //
-            search: '', //Search user
             setOneUser: {}, //GetOneUser
             setAllUsers: [], //GetAllUser
+            lastFourUsers: [],// Get 4 last users
             setAllPosts: [], //GetAllPost
-            totalUsers: 0, //Count nb user
+            lastFourPosts: [],// Get 4 last messages
+            totalUsers: 0, //Count nb users
+            totalPosts: 0, //Count nb Posts
             errorMessage: '', //Text Err Msge
         }
     },
     methods: {
-
         // REQUEST GET ONE USER
         async getOneUser(userId) {
             try {
@@ -42,7 +43,7 @@ export default {
         // REQUEST GET ALL USER
         async getUsers() {
             try {
-                const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
+                const data = await fetch(`http://localhost:3100/api/users?search=`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -52,32 +53,12 @@ export default {
                 const response = await data.json();
                 this.setAllUsers = response.users;
                 this.totalUsers = this.setAllUsers.length;
+                this.lastFourUsers = this.setAllUsers.slice(-4);
                 console.log(response);
                 console.log("success get all user");
             } catch (error) {
                 console.log(error);
                 console.log("catch get all user");
-            }
-        },
-
-        // REQUEST DELETE USER
-        async deleteUser(userId) {
-            try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                const response = await data.json();
-                console.log("success delete user")
-                console.log(response);
-                this.getUsers();
-            } catch (error) {
-                console.log("catch delete user")
-                console.log(error);
-                this.errorMessage = error.message;
             }
         },
 
@@ -94,6 +75,8 @@ export default {
                 const data = await response.json();
                 console.log(data);
                 this.setAllPosts = data.posts;
+                this.totalPosts = this.setAllPosts.length;
+                this.lastFourPosts = this.setAllPosts.slice(-4);
                 console.log("success get all posts");
             } catch (error) {
                 console.log(error);
@@ -108,7 +91,6 @@ export default {
                 this.$router.push({ path: '/admin-user' });
             }, 1000);
         },
-
 
         // CHAT PANEL
         chatPanel() {
@@ -127,66 +109,11 @@ export default {
                 this.$router.push({ path: '/login' });
             }, 1000);
         },
-
-        // EDIT USER
-        confirmEdit(userId) {
-            Swal.fire({
-                title: 'Modifier un utilisateur !',
-                html: `
-                        <input id="swal-input1" class="swal2-input" placeholder="Email">
-                        <input id="swal-input2" class="swal2-input" placeholder="Prénom">
-                        <input id="swal-input3" class="swal2-input" placeholder="Nom">
-                    `,
-                focusConfirm: false,
-                showCancelButton: true,
-                color: '#fff',
-                background: '#0F1828',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Oui, modifier!',
-                cancelButtonText: 'Annuler',
-                icon: 'info',
-                preConfirm: () => {
-                    return [
-                        document.getElementById('swal-input1').value,
-                        document.getElementById('swal-input2').value,
-                        document.getElementById('swal-input3').value
-                    ]
-                }
-            }).then((result) => {
-                if (result.value) {
-                    const email = result.value[0]
-                    const firstName = result.value[1]
-                    const lastName = result.value[2]
-                    // faire quelque chose avec ces valeurs
-                }
-            })
-
-        },
-
-        // DELETE USER
-        confirmDelete(userId) {
-            Swal.fire({
-                title: "Êtes-vous sûr de vouloir supprimer cet utilisateur?",
-                text: "Cette action est irréversible!",
-                icon: 'warning',
-                showCancelButton: true,
-                color: '#fff',
-                background: '#0F1828',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Oui, supprimer!',
-                cancelButtonText: 'Annuler'
-            }).then((result) => {
-                if (result.value) {
-                    this.deleteUser(userId);
-                }
-            })
-        },
     },
 
     // CREATED
     created() {
+        this.getPosts()
         this.getUsers()
         //Decode token and get user connected
         if (typeof (Storage) !== "undefined") {
@@ -195,8 +122,6 @@ export default {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const userId = decodedToken.userId;
             this.getOneUser(userId);
-        } else {
-            console.log("Sorry, your browser does not support Web Storage...");
         }
     },
 }
@@ -220,6 +145,45 @@ export default {
                 <custom-spinner v-if="showSpinner"></custom-spinner>
             </div>
         </header>
+        <!-- -->
+        <div>
+            <h2 class="title-admin">Bonjour {{ setOneUser.firstName }} {{ setOneUser.lastName }}!</h2>
+        </div>
+        <!-- first square -->
+        <div class="container">
+            <div class="container-square-left">
+                <div class="square">
+                    <h4 class="w-text">Nombre d'utilisateurs: {{ totalUsers }}</h4>
+                </div>
+            </div>
+            <div class="container-square">
+                <div class="square">
+                    <h4 class="context">Dernier utilisateur: </h4>
+                    <div class="context" v-for="users in lastFourUsers" :key="users._id">
+                        {{ users.email }} -
+                        {{ users.firstName }}
+                        {{ users.lastName }}
+                    </div>
+                </div>
+            </div>
+            <div class="container-square-left">
+                <div class="square">
+                    <h4 class="w-text">Nombre de messages: {{ totalPosts }}</h4>
+                </div>
+            </div>
+            <div class="container-square">
+                <div class="square">
+                    <h4 class="context">Dernier messages:</h4>
+                    <div class="context" v-for="post in lastFourPosts" :key="post._id">
+                        {{ post.User.email }} -
+                        {{ post.User.firstName }}
+                        {{ post.User.lastName }}
+                        <br>
+                        {{ post.content }}
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
 </template>
@@ -232,9 +196,9 @@ export default {
     background-color: #0F1828;
     background-image: linear-gradient(360deg, #0F1828, #272929);
     height: 100vh;
-
 }
 
+/* HEADER */
 .header {
     display: flex;
     align-items: center;
@@ -268,7 +232,6 @@ export default {
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
-
 }
 
 #chat-button,
@@ -279,31 +242,15 @@ export default {
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
-
     border-radius: 5px;
     align-self: flex-end;
 }
 
-.title {
-    font-size: 2rem;
-    font-weight: 600;
-    justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
-    padding: 15px;
-}
 
 .h-text {
     padding-top: 20px;
     font-size: 1.5rem;
     font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
-}
-
-.label-search {
-    float: left;
-    font-size: 1rem;
-    font-weight: 600;
-    justify-content: center;
     text-shadow: 2px 2px 3px #7c7c7c;
 }
 
@@ -321,5 +268,59 @@ export default {
 .text-info {
     color: rgb(52, 124, 233);
     font-weight: 600;
+}
+
+/* BODY */
+.title-admin {
+    margin: 20px;
+    margin-bottom: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    opacity: 0.8;
+}
+
+.container {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(2, 2fr);
+    max-width: 50%;
+}
+
+.container-square {
+    max-width: 100%;
+}
+
+.container-square-left {
+    max-width: 55%;
+}
+
+
+.square {
+    background-color: #242323;
+    background-image: linear-gradient(360deg, #202f49, #245050);
+    border: 1px solid rgb(46, 42, 42);
+    border-radius: 5%;
+    opacity: 0.9;
+    box-shadow: 10px 10px #0F1828;
+    padding: 1rem;
+    margin: 10px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 35vh;
+    min-height: 10vh;
+    transition: all 0.5s;
+}
+
+.context {
+    border-bottom: 1px solid rgb(134, 133, 133);
+    opacity: 0.9;
+    margin: 2px;
+    padding: 5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fff;
 }
 </style>

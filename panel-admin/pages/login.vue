@@ -9,6 +9,7 @@ export default {
             email: '',
             password: '',
             errorMessage: '',
+            isPasswordVisible: false,
             mounted() {
                 this.getUsers()
             },
@@ -49,6 +50,12 @@ export default {
                     console.log(err);
                 });
         },
+
+        togglePasswordVisibility() {
+            this.isPasswordVisible = !this.isPasswordVisible;
+            const input = document.getElementById("password");
+            input.type = this.isPasswordVisible ? "text" : "password";
+        },
     }
 }
 </script>
@@ -70,6 +77,10 @@ export default {
                     <label class="w-text label-text" for="password">Mot de passe :</label>
                     <input class="input-text" id="password" type="password" v-model="password"
                         placeholder="Entrez votre mot de passe" />
+                    <button class="toggle-password" @click="togglePasswordVisibility" type="button">
+                        <i class="fas fa-eye"></i>
+                    </button>
+
                     <!-- Login Button -->
                     <button class="button1" @click.prevent="submitLogin(); showSpinner = true">Connexion</button>
                     <!-- spinner -->

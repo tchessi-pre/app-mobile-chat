@@ -5,7 +5,7 @@ export default {
     data() {
         return {
             showSpinner: false, //Spinner
-            search: '', //Search user
+            search: '', //Search user-
             setOneUser: {}, //GetOneUser
             setAllUsers: [], //GetAllUser
             setAllPosts: [], //GetAllPost
@@ -159,7 +159,7 @@ export default {
                             </td>
                             <td class="w-text">{{ post.imageUrl }}
                             </td>
-                            <td class="w-text">{{ post.content }}</td>
+                            <td class="w-text" id="td-msge">{{ post.content }}</td>
                             <td class="w-text">{{ post.createdAt }}</td>
                             <td>
                                 <!-- EDIT USER -->
@@ -236,6 +236,11 @@ export default {
     align-self: flex-end;
 }
 
+#td-msge {
+    max-width: 250px;
+    overflow-x: auto;
+    word-wrap: break-word;
+}
 
 .form-group {
     display: flex;
