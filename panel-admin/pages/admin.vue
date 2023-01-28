@@ -302,6 +302,7 @@ export default {
     justify-content: center;
     grid-template-columns: repeat(2, 2fr);
     max-width: 50%;
+    opacity: 0.8;
 }
 
 .container-square {
