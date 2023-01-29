@@ -18,6 +18,7 @@ export default {
             setAllPosts: [], //GetAllPost
             totalUsers: 0, //Count nb user
             errorMessage: '', //Text Err Msge
+            isOnline: false // Status online
         }
     },
     methods: {
@@ -149,13 +150,30 @@ export default {
         // LOGOUT
         logout() {
             this.showSpinner = true;
-            localStorage.removeItem('token');
-            setTimeout(() => {
-                this.showSpinner = false;
-                this.$router.push({ path: '/login' });
-            }, 1000);
-        },
 
+            fetch(`http://localhost:3100/api/auth/edit`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    isOnline: false
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success logout:", data);
+                    localStorage.removeItem('token');
+                    setTimeout(() => {
+                        this.showSpinner = false;
+                        this.$router.push({ path: "/login" });
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        },
         // EDIT USER
         confirmEdit(userId) {
             Swal.fire({
@@ -309,6 +327,7 @@ export default {
                             <th class="w-text">Email</th>
                             <th class="w-text">Rôle</th>
                             <th class="w-text">Date de création</th>
+                            <th class="w-text">Status</th>
                             <th class="w-text">Actions</th>
                         </tr>
                     </thead>
@@ -324,6 +343,10 @@ export default {
                                 <p class="text-info" v-if="user.admin === false">Utilisateur</p>
                             </td>
                             <td class="w-text">{{ user.createdAt }}</td>
+                            <td>
+                                <p class="text-sucess" v-if="user.isOnline === true">En-ligne</p>
+                                <p class="text-danger" v-if="user.isOnline === false">Hors-ligne</p>
+                            </td>
                             <td v-if="user.admin === false">
                                 <!-- EDIT USER -->
                                 <button class="btn btn-primary" @click="confirmEdit(user.id)">Modifier</button>

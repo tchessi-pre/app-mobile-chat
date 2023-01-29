@@ -130,13 +130,33 @@ export default {
                 this.$router.push({ path: '/admin-user' });
             }, 1000);
         },
+
+        // LOGOUT
         logout() {
             this.showSpinner = true;
-            localStorage.removeItem('token');
-            setTimeout(() => {
-                this.showSpinner = false;
-                this.$router.push({ path: '/login' });
-            }, 1000);
+
+            fetch(`http://localhost:3100/api/auth/edit`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    isOnline: false
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success logout:", data);
+                    localStorage.removeItem('token');
+                    setTimeout(() => {
+                        this.showSpinner = false;
+                        this.$router.push({ path: "/login" });
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
         },
 
         // EDIT POST

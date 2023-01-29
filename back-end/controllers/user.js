@@ -41,14 +41,24 @@ exports.login = async (req, res, next) => {
     const response = await User.authenticate(req.body.email, req.body.password);
 
     if (response.valid) {
+      await User.update({ isOnline: true }, { where: { id: response.user.id } });
+      const updatedUser = await User.findByPk(response.user.id);
+      console.log('User updated: ', updatedUser);
+      console.log(updatedUser);
+      console.log(updatedUser.isOnline);
+      console.log(updatedUser.id);
+      console.log(updatedUser.firstName);
+      console.log(response.valid)
       res.status(201).json(newToken(response.user));
     } else {
       res.status(401).json({ error: response.message });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.editUser = (req, res, next) => {
   try {
@@ -147,3 +157,5 @@ exports.editUserAdmin = async (req, res, next) => {
     console.log(response.error);
   }
 };
+
+
