@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity, Image, Button, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import SearchBar from '../components/SearchBar';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
@@ -13,6 +14,8 @@ const ChannelScreen = ({ navigation }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
 	const [status, setStatus] = useState('');
+	const [visible, setVisible] = useState(false);
+
 	const handleSearch = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
@@ -46,12 +49,20 @@ const ChannelScreen = ({ navigation }) => {
 		<View style={styles.container}>
 			<View style={styles.top}>
 				<Text style={styles.textTop}>Utilisateurs</Text>
-				<Avatar
+				<Pressable onPress={() => setVisible(true)}>
+				<Icon
+					name='add'
+						color='#F7F7FC'
+					size={25}
+					activeOpacity={0.7}
+				/>
+				</Pressable>
+				{/* <Avatar
 					rounded
 					source={require('../assets/tuấn-kiệt.jpg')}
 					onPress={() => console.log("Works!")}
 					activeOpacity={0.7}
-				/>
+				/> */}
 			</View>
 
 			<View style={styles.searchBar}>
@@ -81,6 +92,7 @@ const ChannelScreen = ({ navigation }) => {
 						</TouchableOpacity>
 					)}
 				/>
+				{visible ? <Modal setVisible={setVisible} /> : ""}	
 				<Footer/>
 		</View>
 	);

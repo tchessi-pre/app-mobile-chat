@@ -16,7 +16,7 @@ const ChatScreen = () => {
 	const [newMessage, setNewMessage] = useState('');
 	const [newImageUrl, setNewImageUrl] = useState('');
 	const [currentDate, setCurrentDate] = useState('');
-
+	
 	const fetchMessages = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
