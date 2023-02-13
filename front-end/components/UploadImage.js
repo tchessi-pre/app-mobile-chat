@@ -2,28 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-
+import ProfilImage from '../components/ProfilImage';
+const PlaceholderImage = require('../assets/usericonplus.png');
 
 export default function UploadImage() {
-	const [image, setImage] = useState(null);
+	const [selectedImage, setSelectedImage] = useState(null);
 
 	const addImage = async () => { 
-		let _image = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+		let result = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
-			aspect: [4, 3],
 			quality: 1,
 		});
-		console.log(JSON.stringify(_image));
-		if (!_image.canceled) {
-			setImage(_image.assets[0].uri);
+
+		if (!result.canceled) {
+			setSelectedImage(result.assets[0].uri);
+		} else {
+			alert("You did not select any image.");
 		}
 	};
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
 				{
-					image && <Image  source={{ uri: image }} style={{ width: 100, height: 100 }} />
+					selectedImage && <ProfilImage source={{ uri: selectedImage }} placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} style={{ width: 100, height: 100 }} />
 				}
 			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>

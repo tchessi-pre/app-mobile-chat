@@ -4,6 +4,7 @@ import Styles from '../css/Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
+import LogoutButton from '../components/LogoutButton'
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 
@@ -68,7 +69,7 @@ const ProfilScreen = ({ navigation }) => {
 					alert('Modification réussie !');
 					try {
 						useEffect(() => {
-							handleEdit();
+							// handleEdit();
 						}, [getUser()]);
 					} catch (error) {
 						console.log(error);
@@ -85,38 +86,6 @@ const ProfilScreen = ({ navigation }) => {
 		}
 	}
 
-	const handleLogout = async () => {
-		
-		try {
-			// Clear the token from storage
-			await AsyncStorage.removeItem('token');
-			// Redirect the user to the Home screen
-			Alert.alert(
-				'Déconnexion',
-				'Êtes-vous sûr? Vous voulez vous déconnecter ?',
-				[
-					{
-						text: 'Annuler',
-						onPress: () => {
-							return null;
-						},
-					},
-					{
-						text: 'Confirmer',
-						onPress: () => {
-							AsyncStorage.clear();
-							navigation.navigate('Home');
-						},
-					},
-				],
-				{ cancelable: false },
-			);
-			navigation.navigate('Home'); 
-		} catch (error) {
-			console.log(error);
-		}
-	}
-	
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
@@ -155,12 +124,7 @@ const ProfilScreen = ({ navigation }) => {
 				>
 					<Text style={Styles.submitText}>Modifier</Text>
 				</TouchableHighlight>
-				<TouchableHighlight
-					style={Styles.inscriptionBack}
-					onPress={handleLogout}
-				>
-					<Text style={Styles.submitText}>Se déconnecter</Text>
-				</TouchableHighlight>
+				<LogoutButton />
 			</View>
 		</View>
 	);
