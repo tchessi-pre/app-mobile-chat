@@ -41,14 +41,10 @@ exports.login = async (req, res, next) => {
     const response = await User.authenticate(req.body.email, req.body.password);
 
     if (response.valid) {
+      // Logique de isOnline lors d'une connexion celui passe en true, (lors d'une deconnexion penser à rajouter la methode PUT isOnline False)
       await User.update({ isOnline: true }, { where: { id: response.user.id } });
       const updatedUser = await User.findByPk(response.user.id);
       console.log('User updated: ', updatedUser);
-      console.log(updatedUser);
-      console.log(updatedUser.isOnline);
-      console.log(updatedUser.id);
-      console.log(updatedUser.firstName);
-      console.log(response.valid)
       res.status(201).json(newToken(response.user));
     } else {
       res.status(401).json({ error: response.message });
@@ -123,6 +119,8 @@ exports.FindAllUsers = (req, res, next) => {
     });
 };
 
+// ROUTE ADMIN
+
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin
@@ -157,5 +155,6 @@ exports.editUserAdmin = async (req, res, next) => {
     console.log(response.error);
   }
 };
+
 
 
