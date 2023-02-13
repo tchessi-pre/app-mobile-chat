@@ -26,7 +26,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.60.75:3100/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.20.106:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -35,7 +35,6 @@ const Profil = ({ navigation }) => {
                 setUserfirstName(response.data.user.firstName);
                 setUserlastName(response.data.user.lastName);
                 setUserEmail(response.data.user.email);
-                // console.log('SUCCESS GETONE REQUEST');
                 // console.log('🪙 Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
             }
         } catch (error) {
@@ -59,7 +58,7 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.60.75:3100/api/auth/edit', {
+                let response = await axios.put('http://10.10.20.106:3100/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -101,18 +100,32 @@ const Profil = ({ navigation }) => {
     // Logout Button 
     const handleLogout = async () => {
         try {
-            // Clear the token from storage
-            await AsyncStorage.removeItem('token');
-            // Redirect the user to the Home screen
-            console.log('Déconnexion réussie, 🪙 jetons supprimés 🪙 !');
-            alert('Déconnexion réussie, jetons supprimés !');
-            navigation.navigate('Home');
-            useEffect(() => {
-                handleLogout();
-            }, []);
+            const token = await AsyncStorage.getItem('token');
+            let response = await axios.put('http://10.10.20.106:3100/api/auth/edit', {
+                isOnline: false
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                console.log('SUCCESS PUT REQUEST');
+                // Clear the token from storage
+                await AsyncStorage.removeItem('token');
+                // Redirect the user to the Home screen
+                console.log('Déconnexion réussie !');
+                navigation.navigate('Home');
+            }
+            else {
+                console.log('error PUT REQUEST');
+            }
         } catch (error) {
             console.log(error);
         }
+        useEffect(() => {
+            handleLogout();
+        }, []);
+
     }
 
     const LogoutButton = () => (
