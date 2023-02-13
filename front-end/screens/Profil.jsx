@@ -32,7 +32,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.60.123:3000/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.21.7:3000/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -51,6 +51,40 @@ const Profil = ({ navigation }) => {
         }
     };
 
+    // Function to handle the image upload
+    const handleImageUpload = async (uri) => {
+        try {
+            // Get the authentication token
+            const token = await AsyncStorage.getItem('token');
+
+            // Create FormData to send the image file
+            const formData = new FormData();
+            formData.append('image', {
+                uri,
+                type: 'image/jpg',
+                name: 'image.jpg'
+            });
+
+            // Send the PUT request to the server to update the image
+            const response = await axios.put('http://10.10.21.7:3000/api/auth/edit-image', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // Check if the request was successful
+            if (response.status === 200) {
+                console.log('Successful image update');
+            } else {
+                console.log('Error updating image');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     // Edit profil Request
     const handleEdit = async () => {
         if (firstName === "" || lastName === "") {
@@ -60,42 +94,31 @@ const Profil = ({ navigation }) => {
         } else if (!nameRegex.test(lastName)) {
             alert('Le nom n\'est pas valide');
         } else {
-            // requête axios here localhost3000/edit
             try {
-                const formData = new FormData();
-                formData.append('imageUrl', { assets: image });
-                if (image) {
-                    const uri = image.uri;
-                    const type = image.type;
-                    const name = image.uri.split('/').pop();
-                    const formData = new FormData();
-                    formData.append('imageUrl', {
-                        uri,
-                        type,
-                        name,
-                    });
-                }
+
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.60.123:3000/api/auth/edit', {
-                    formData,
-                    firstName: firstName, lastName: lastName
-                }, {
+                let response = await axios.put('http://10.10.21.7:3000/api/auth/edit', {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`,
+
                     },
                 });
                 if (response.status === 200) {
                     console.log('SUCCESS PUT REQUEST');
                     alert('Modification réussie !');
 
-                    try {
-                        useEffect(() => {
-                            handleEdit();
-                        }, [getUser()]);
-                    } catch (error) {
-                        console.log(error);
-                    }
+                    // try {
+                    //     useEffect(() => {
+                    //         handleEdit();
+                    //     }, [getUser()]);
+                    // } catch (error) {
+                    //     console.log(error);
+                    // }
+                }
+
+                // Call the function to handle the image upload
+                if (image && !image.cancelled) {
+                    handleImageUpload(image.uri);
                 }
                 else {
                     console.log('error PUT REQUEST');
@@ -168,7 +191,7 @@ const Profil = ({ navigation }) => {
             if (!result.canceled) {
                 setImage(result.uri);
             }
-            // await uploadImage(result.assets[0].uri);
+            // await uploadImage(result.images[0].uri);
 
 
         } catch (error) {

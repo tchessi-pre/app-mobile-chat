@@ -12,4 +12,6 @@ router.post('/login', userCtrl.login);
 
 router.put('/edit', auth, multer, userCtrl.editUser);
 
+router.put('/edit-image', auth, multer, userCtrl.editImage);
+
 module.exports = router;

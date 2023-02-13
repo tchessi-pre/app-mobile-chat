@@ -4,8 +4,8 @@ import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-export default function UploadImage(props) {
-    const [image, setImage] = useState(props.imageUser);
+export default function UploadImage() {
+    const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -16,7 +16,7 @@ export default function UploadImage(props) {
             alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
         }
     };
-    console.log(props);
+    // console.log(props);
     const addImage = async () => {
 
         let image = await ImagePicker.launchImageLibraryAsync({
@@ -25,10 +25,13 @@ export default function UploadImage(props) {
             aspect: [4, 3],
             quality: 1,
         });
+
         console.log(JSON.stringify(image));
+
         if (!image.canceled) {
-            console.log(image.uri);
-            setImage(image.uri);
+            setImage(image.assets[0].uri);
+            console.log(image.assets[0].uri);
+
         }
     };
     const takePicture = async () => {
@@ -41,7 +44,9 @@ export default function UploadImage(props) {
         });
 
         if (!image.canceled) {
-            setImage(image.uri);
+            setImage(image.assets[0].uri);
+            console.log(image.assets[0].uri);
+
         }
     };
 

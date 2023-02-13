@@ -25,10 +25,10 @@ exports.signup = async (req, res, next) => {
       res.status(201).json(newToken(user))
     } catch (error) {
       // Vérification de l'email unique d'un utilisateur
-      if(error.name === 'SequelizeValidationError' && error.errors[0].path === 'email'){
+      if (error.name === 'SequelizeValidationError' && error.errors[0].path === 'email') {
         res.status(409).json({ error: 'Email déjà utilisé' });
         console.log("Email déjà utilisé")
-      }else{
+      } else {
         res.status(400).json({ error });
         console.log(error)
       }
@@ -39,7 +39,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const response = await User.authenticate(req.body.email, req.body.password);
-
+    console.log(response);
     if (response.valid) {
       res.status(201).json(newToken(response.user));
     } else {
@@ -52,20 +52,22 @@ exports.login = async (req, res, next) => {
 
 exports.editUser = (req, res, next) => {
   try {
-    const userObject = req.file
-      ? {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename
-          }`,
-      }
-      : { ...req.body };
+    const userObject = { ...req.body };
 
-    console.log(userObject);
     req.user.update(userObject).then((user) => res.status(200).json({ user }));
   } catch (error) {
     res.status(400).json({ error });
-    console.log(error);
-    console.log(response.error);
+  }
+};
+exports.editImage = (req, res, next) => {
+  try {
+    const userObject = {
+      imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
+    };
+
+    req.user.update(userObject).then((user) => res.status(200).json({ user }));
+  } catch (error) {
+    res.status(400).json({ error });
   }
 };
 
