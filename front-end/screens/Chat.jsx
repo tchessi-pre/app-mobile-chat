@@ -53,6 +53,7 @@ const Chat = () => {
                     setNewMessage('');
                     setNewImageUrl('');
                     console.log('request POST message, success !');
+
                 }
                 else {
                     console.log('error');

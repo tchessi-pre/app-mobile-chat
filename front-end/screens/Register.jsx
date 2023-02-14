@@ -164,8 +164,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: '#0F1828',
-    paddingLeft: 10,
-    paddingRight: 10,
+
     paddingBottom: 70,
   },
   input: {
