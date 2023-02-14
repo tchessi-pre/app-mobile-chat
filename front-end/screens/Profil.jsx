@@ -2,29 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import UploadImage from '../components/UploadImage';// import { ImagePicker, Permissions } from 'expo';
-// import * as MediaLibrary from 'expo-media-library';
-// import * as ImagePicker from 'expo-image-picker';
-
-
+import UploadImage from '../components/imageUpload';
 import axios from 'axios';
-
 
 const Profil = ({ navigation }) => {
     // Récupération state du Pseudo et du Prénom et l'email
     const [userfirstName, setUserfirstName] = useState('');
     const [userlastName, setUserlastName] = useState('');
-    const [userimageUrl, setUserImageUrl] = useState(null);
     const [userEmail, setUserEmail] = useState('');
     // Modification state FirnstName et LastName
-    const [image, setImage] = useState();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+
+    // Check textError
+    const [firstNameError, setFirstNameError] = useState('');
+    const [lastNameError, setLastNameError] = useState('');
+    const [editUserError, setEditUserError] = useState('');
+    const [editUserSuccess, setEditUserSuccess] = useState('');
+
     // Regex for user
     const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
-    // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
+    // Le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
 
-
+    // Get user Request
     const getUser = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
@@ -32,7 +32,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.21.7:3000/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -41,95 +41,66 @@ const Profil = ({ navigation }) => {
                 setUserfirstName(response.data.user.firstName);
                 setUserlastName(response.data.user.lastName);
                 setUserEmail(response.data.user.email);
-                setUserImageUrl(response.data.user.imageUrl);
-                // console.log('SUCCESS GETONE REQUEST');
-                // console.log('🪙 Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
             }
         } catch (error) {
             // console.log('catch GET REQUEST');
-            // console.log(JSON.stringify(error.response)); // Log the entire response object
+            setEditUserError("Erreur lors de la récupération de l'utilisateur");
         }
     };
 
-    // Function to handle the image upload
-    const handleImageUpload = async (uri) => {
-        try {
-            // Get the authentication token
-            const token = await AsyncStorage.getItem('token');
-
-            // Create FormData to send the image file
-            const formData = new FormData();
-            formData.append('image', {
-                uri,
-                type: 'image/jpg',
-                name: 'image.jpg'
-            });
-
-            // Send the PUT request to the server to update the image
-            const response = await axios.put('http://10.10.21.7:3000/api/auth/edit-image', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            // Check if the request was successful
-            if (response.status === 200) {
-                console.log('Successful image update');
-            } else {
-                console.log('Error updating image');
+    // Edit profil Request
+    const handleEdit = async () => {
+        if (firstName === "" || lastName === "") {
+            setEditUserError("Les champs prénoms et noms ne doivent pas être vide");
+        } else if (!nameRegex.test(firstName)) {
+            setFirstNameError("Le prénom n'est pas valide");
+        } else if (!nameRegex.test(lastName)) {
+            setLastNameError("Le nom n'est pas valide");
+        } else {
+            // requête axios here localhost3000/edit
+            try {
+                const token = await AsyncStorage.getItem('token');
+                let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
+                    firstName: firstName, lastName: lastName
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                if (response.status === 200) {
+                    setEditUserSuccess("Modification validé");
+                    try {
+                        useEffect(() => {
+                            handleEdit();
+                        }, [getUser()]);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+                else {
+                    // console.log('error PUT REQUEST');
+                    setEditUserError("Modification non valide");
+                }
+            } catch (error) {
+                // console.log(error.AsyncStorage);
+                setEditUserError("Modification non valide, erreur network");
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-
-    // Edit profil Request
-    const handleEdit = async () => {
-        if (firstName === "" || lastName === "") {
-            alert('Les champs nom ou prénom ne peuvent pas être vide');
-        } else if (!nameRegex.test(firstName)) {
-            alert('Le prénom n\'est pas valide');
-        } else if (!nameRegex.test(lastName)) {
-            alert('Le nom n\'est pas valide');
-        } else {
-            try {
-
-                const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.21.7:3000/api/auth/edit', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-
-                    },
-                });
-                if (response.status === 200) {
-                    console.log('SUCCESS PUT REQUEST');
-                    alert('Modification réussie !');
-
-                    // try {
-                    //     useEffect(() => {
-                    //         handleEdit();
-                    //     }, [getUser()]);
-                    // } catch (error) {
-                    //     console.log(error);
-                    // }
-                }
-
-                // Call the function to handle the image upload
-                if (image && !image.cancelled) {
-                    handleImageUpload(image.uri);
-                }
-                else {
-                    console.log('error PUT REQUEST');
-                }
-            } catch (error) {
-                console.log('Catch PUT REQUEST');
-                console.log(error.AsyncStorage);
-                console.log(JSON.stringify(error.response));
-            }
+    useEffect(() => {
+        getUser()
+        if (editUserError !== '' || editUserSuccess !== '' || firstNameError !== '' || lastNameError !== '') {
+            setTimeout(() => {
+                setEditUserSuccess('');
+                setEditUserError('');
+                setFirstNameError('');
+                setLastNameError('');
+            }, 2000);
         }
-    }
+    }, [editUserError, editUserSuccess, firstNameError, lastNameError]);
 
     const EditButton = () => (
         <TouchableOpacity style={styles.button}
@@ -140,21 +111,35 @@ const Profil = ({ navigation }) => {
         </TouchableOpacity >
     );
 
-    // Logout Button 
+    // Logout Button
     const handleLogout = async () => {
         try {
-            // Clear the token from storage
-            await AsyncStorage.removeItem('token');
-            // Redirect the user to the Home screen
-            console.log('Déconnexion réussie, 🪙 jetons supprimés 🪙 !');
-            alert('Déconnexion réussie, jetons supprimés !');
-            navigation.navigate('Home');
-            useEffect(() => {
-                handleLogout();
-            }, []);
+            const token = await AsyncStorage.getItem('token');
+            let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
+                isOnline: false
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                console.log('SUCCESS PUT REQUEST');
+                // Clear the token from storage
+                await AsyncStorage.removeItem('token');
+                // Redirect the user to the Home screen
+                console.log('Déconnexion réussie !');
+                navigation.navigate('Home');
+            }
+            else {
+                console.log('error Logout REQUEST');
+            }
         } catch (error) {
             console.log(error);
+            console.log('error Logout REQUEST');
         }
+        useEffect(() => {
+            handleLogout();
+        }, []);
     }
 
     const LogoutButton = () => (
@@ -166,52 +151,10 @@ const Profil = ({ navigation }) => {
         </TouchableOpacity >
     );
 
-    // Demande les permissions pour accéder à la caméra et à la galerie
-    const getPermissionsAsync = async () => {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
-        if (status !== 'granted') {
-            alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
-        }
-    };
-
-    // Sélectionne une image depuis la galerie de l'utilisateur
-    const pickImage = async () => {
-        console.log('testbtry');
-        try {
-            console.log('test');
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
-
-            console.log(JSON.stringify(result));
-
-            if (!result.canceled) {
-                setImage(result.uri);
-            }
-            // await uploadImage(result.images[0].uri);
-
-
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        getUser();
-        getPermissionsAsync();
-
-    }, []);
-
-
-    // Get user Request
-
     return (
         <SafeAreaView style={styles.container}>
             {/* ADD IMAGE USER */}
-            <View style={styles.ImageArea}>
+            <View>
                 <UploadImage />
             </View>
             {/* ID User */}
@@ -229,6 +172,8 @@ const Profil = ({ navigation }) => {
                 onChange={text => setFirstName(text)}
                 onChangeText={text => setFirstName(text)}
             />
+            {firstNameError !== '' && <Text style={styles.errorText}>{firstNameError}</Text>}
+
             {/* Lastname */}
             <TextInput
                 style={styles.input}
@@ -239,9 +184,12 @@ const Profil = ({ navigation }) => {
                 onChange={text => setLastName(text)}
                 onChangeText={text => setLastName(text)}
             />
+            {lastNameError !== '' && <Text style={styles.errorText}>{lastNameError}</Text>}
             <View>
                 {/* Button Edit & logout */}
                 <EditButton />
+                {editUserError !== '' && <Text style={styles.errorText}>{editUserError}</Text>}
+                {editUserSuccess !== '' && <Text style={styles.successText}>{editUserSuccess}</Text>}
                 <LogoutButton />
             </View>
         </SafeAreaView>
@@ -288,9 +236,12 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     imageArea: {
-        display: 'flex',
+        flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
-        justifyContent: 'center'
+        maxWidth: 100,
+        alignSelf: "center",
+        margin: 15,
     },
     nameUser: {
         color: 'white',
@@ -310,13 +261,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         opacity: 0.8,
     },
-
-    ImageArea: {
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-
-
-    }
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        textAlign: 'center',
+    },
+    successText: {
+        color: 'green',
+        fontSize: 12,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        textAlign: 'center',
+    },
 })
 export default Profil;

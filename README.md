@@ -1,4 +1,6 @@
-# app-mobile-chat name: 
+![alt text](TissApp_Readme.png)
+
+# app-mobile-chat name: TISSAPP
 
 # TRELLO 
 

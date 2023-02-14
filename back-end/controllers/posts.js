@@ -3,7 +3,7 @@ const db = require('../models');
 const { Post } = db.sequelize.models;
 const io = require('../app');
 
-io.on('connection', socket => console.log('user connected socket io')); 
+
 
 exports.createPost = async (req, res, next) => {
   let postObject = req.body;
@@ -20,7 +20,18 @@ exports.createPost = async (req, res, next) => {
       ...postObject,
       userId: req.user.id,
     });
-    io.emit('NewPost', post);
+    
+    const msg = {
+
+      id: post.id,
+      content: post.content,
+      createAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      imageUrl: post.imageUrl
+    }
+    console.log(msg)
+
+    io.emit('newPost', msg);
 
     post = await Post.findOne({ where: { id: post.id }, include: db.User });
 
@@ -70,6 +81,28 @@ exports.getAllPosts = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
+// exports.modifyPost = (req, res, next) => {
+//   const postObject = req.file
+//     ? {
+//         ...JSON.parse(req.body.post),
+//         imageUrl: `${req.protocol}://${req.get('host')}/public/${
+//           req.file.filename
+//         }`,
+//       }
+//     : { ...req.body };
+
+//   Post.findOne({
+//     where: { id: req.params.id, userId: req.user.id },
+//     include: db.User,
+//   }).then((post) => {
+//     if (!post) {
+//       res.status(400).json({ error: "Vous n'avez pas l'autorisation" });
+//     } else {
+//       post.update(postObject).then((post) => res.status(200).json({ post }));
+//     }
+//   });
+// };
+
 exports.modifyPost = (req, res, next) => {
   const postObject = req.file
     ? {
@@ -80,16 +113,29 @@ exports.modifyPost = (req, res, next) => {
       }
     : { ...req.body };
 
-  Post.findOne({
-    where: { id: req.params.id, userId: req.user.id },
-    include: db.User,
-  }).then((post) => {
-    if (!post) {
-      res.status(400).json({ error: "Vous n'avez pas l'autorisation" });
-    } else {
-      post.update(postObject).then((post) => res.status(200).json({ post }));
-    }
-  });
+  if(req.user.isAdmin) {
+    Post.findOne({
+      where: { id: req.params.id },
+      include: db.User,
+    }).then((post) => {
+      if (!post) {
+        res.status(400).json({ error: "Post introuvable" });
+      } else {
+        post.update(postObject).then((post) => res.status(200).json({ post }));
+      }
+    });
+  } else {
+    Post.findOne({
+      where: { id: req.params.id, userId: req.user.id },
+      include: db.User,
+    }).then((post) => {
+      if (!post) {
+        res.status(400).json({ error: "Vous n'avez pas l'autorisation" });
+      } else {
+        post.update(postObject).then((post) => res.status(200).json({ post }));
+      }
+    });
+  }
 };
 
 exports.deletePost = (req, res, next) => {

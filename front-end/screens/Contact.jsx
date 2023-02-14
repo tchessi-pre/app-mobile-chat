@@ -8,12 +8,11 @@ let timeoutId = null;
 const Contact = () => {
     const [search, setSearch] = useState('');
     const [usersSearch, setSearchUsers] = useState([]);
-    const [status, setStatus] = useState('');
 
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.21.7:3000/api/users/', {
+            const response = await axios.get('http://10.10.22.199:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -21,14 +20,14 @@ const Contact = () => {
             });
             if (response.status === 200) {
                 setSearchUsers(response.data);
-                setStatus(response.data.status);
                 // console.log(JSON.stringify(response));
             }
         } catch (error) {
             // console.log('request GETALL users, error !');
-            // console.log(error);
+            console.log(error);
         }
     }
+
     useEffect(() => {
         handleSearch();
     }, []);
@@ -46,8 +45,9 @@ const Contact = () => {
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
-                    placeholder="🔍 Rechercher un utilisateur"
+                    placeholder="Rechercher un utilisateur..."
                     placeholderTextColor={'white'}
+                    color={'white'}
                     onChangeText={onSearchChange}
                     value={search}
                 />
@@ -58,12 +58,12 @@ const Contact = () => {
                 onEndReachedThreshold={0.5}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
+                    <TouchableOpacity style={styles.userContainer} >
                         {/* mettre l'image de l'utilisateur */}
-                        <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
+                        <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
                         {/* mettre le status hors ligne ou en ligne */}
-                        <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
+                        <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
                         <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
                     </TouchableOpacity>
                 )}
@@ -144,10 +144,10 @@ const styles = StyleSheet.create({
     userName: {
         color: 'white',
         marginRight: 10,
-        fontSize: 16,
+        fontSize: 13,
         flex: 1,
         alignSelf: 'flex-start',
-        marginTop: 20,
+        marginTop: 15,
     },
     userStatus: {
         color: 'white',

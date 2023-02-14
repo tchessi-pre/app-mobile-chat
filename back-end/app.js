@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+io.on('connection', socket => console.log('user connected socket io ✅')); 
 module.exports = io;
 
 const path = require('path');
-
 const auth = require('./middleware/auth');
 
 const userCtrl = require('./controllers/user');
@@ -44,7 +44,12 @@ app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
 app.get('/api/notifications',auth,notificationsCtrl.getNotificationsOfOneUser);
 app.delete('/api/notifications/:id',auth,notificationsCtrl.deleteNotification);
 
-
-
-http.listen(3000);
-// console.log('listening on http://localhost' + http.listen);
+http.listen(3100, () => {
+  console.log('Serveur Node en route sur le port:', 3100, '✅ ');
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log('Port 3000 is already in use, please select a different port ❌.');
+  } else {
+    console.log(`An error occurred: ${err}`, '❌');
+  }
+});
