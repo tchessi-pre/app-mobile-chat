@@ -12,7 +12,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.20.106:3100/api/users/', {
+            const response = await axios.get('http://10.10.22.199:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -20,7 +20,6 @@ const Contact = () => {
             });
             if (response.status === 200) {
                 setSearchUsers(response.data);
-
                 // console.log(JSON.stringify(response));
             }
         } catch (error) {
@@ -28,6 +27,7 @@ const Contact = () => {
             console.log(error);
         }
     }
+
     useEffect(() => {
         handleSearch();
     }, []);
@@ -60,7 +60,7 @@ const Contact = () => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.userContainer} >
                         {/* mettre l'image de l'utilisateur */}
-                        <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
+                        <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
                         {/* mettre le status hors ligne ou en ligne */}
                         <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>

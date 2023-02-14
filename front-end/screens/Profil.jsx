@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import { ImagePicker, Permissions } from 'expo';
+import UploadImage from '../components/imageUpload';
 import axios from 'axios';
 
 const Profil = ({ navigation }) => {
     // Récupération state du Pseudo et du Prénom et l'email
     const [userfirstName, setUserfirstName] = useState('');
     const [userlastName, setUserlastName] = useState('');
-    const [image, setImage] = useState();
     const [userEmail, setUserEmail] = useState('');
     // Modification state FirnstName et LastName
     const [firstName, setFirstName] = useState('');
@@ -33,7 +32,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.20.106:3100/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -45,7 +44,7 @@ const Profil = ({ navigation }) => {
             }
         } catch (error) {
             // console.log('catch GET REQUEST');
-            setEditUserError("Récupération de l'utilisateur");
+            setEditUserError("Erreur lors de la récupération de l'utilisateur");
         }
     };
 
@@ -61,7 +60,7 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.20.106:3100/api/auth/edit', {
+                let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -114,7 +113,7 @@ const Profil = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            let response = await axios.put('http://10.10.20.106:3100/api/auth/edit', {
+            let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
                 isOnline: false
             }, {
                 headers: {
@@ -130,10 +129,11 @@ const Profil = ({ navigation }) => {
                 navigation.navigate('Home');
             }
             else {
-                console.log('error PUT REQUEST');
+                console.log('error Logout REQUEST');
             }
         } catch (error) {
             console.log(error);
+            console.log('error Logout REQUEST');
         }
         useEffect(() => {
             handleLogout();
@@ -149,34 +149,11 @@ const Profil = ({ navigation }) => {
         </TouchableOpacity >
     );
 
-    // Image function here
-    const handleImagePicker = async () => {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status === 'granted') {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [4, 3],
-            });
-            if (!result.cancelled) {
-                setImage(result.uri);
-            }
-        }
-    };
-
     return (
         <SafeAreaView style={styles.container}>
             {/* ADD IMAGE USER */}
             <View>
-                <TouchableOpacity style={styles.imageArea} onPress={handleImagePicker}>
-                    {image ? (
-                        <Image source={{ uri: image }} style={styles.image} />
-                    ) : (
-                        <Image
-                            source={require('../assets/avatar.png')}
-                            style={styles.image}
-                        />
-                    )}
-                </TouchableOpacity>
+                <UploadImage />
             </View>
             {/* ID User */}
             <View>

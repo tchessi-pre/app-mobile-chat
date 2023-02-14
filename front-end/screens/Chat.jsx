@@ -11,11 +11,14 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [newImageUrl, setNewImageUrl] = useState('');
+    // Check Text error
+    const [postMessageError, setPostMessageError] = useState('');
+
 
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.20.106:3100/api/posts/`, {
+            const response = await axios.get(`http://10.10.22.199:3100/api/posts/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -31,18 +34,16 @@ const Chat = () => {
         }
     };
 
-
-
     const handleSendMessage = async () => {
         if (newMessage === '') {
-            alert('Vous ne pouvez pas envoyez un message vide !')
+            setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
         } else {
             try {
                 const data = {};
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.20.106:3100/api/posts', data, {
+                const response = await axios.post('http://10.10.22.199:3100/api/posts', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -65,7 +66,6 @@ const Chat = () => {
         }
     };
     useEffect(() => {
-
         fetchMessages();
         const socket = io('http://110.10.57.143.3:2000');
         setTimeout(() => {
@@ -75,7 +75,13 @@ const Chat = () => {
             setMessages(messages => [...messages, msg]);
             console.warn(msg);
         });
-    }, []);
+        if (postMessageError !== '') {
+            setTimeout(() => {
+                setPostMessageError('');
+            }, 2000);
+        }
+    }, [postMessageError]);
+
     return (
         // Message view
         <View style={styles.container}>
@@ -89,7 +95,7 @@ const Chat = () => {
                 renderItem={({ item }) =>
                     <View style={styles.messageContainer}>
                         <View style={styles.messageContent}>
-                            <Image style={styles.messageAvatar} source={item.imageUrl ? { uri: item.imageUrl } : require('../assets/DefaultUser.png')} />
+                            <Image style={styles.messageAvatar} source={item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
                                 <Text style={styles.messageText}>{item.content}</Text>
@@ -100,6 +106,7 @@ const Chat = () => {
             />
 
             {/* Input & Button views */}
+            {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
                 <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
                     <Ionicons name="add-outline" size={24} color="white" />
@@ -163,7 +170,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#7452B7',
         boxShadow: '0 0 5px black',
-        backgroundColor: 'black',
         opacity: 0.8,
     },
     messageTextContainer: {
@@ -217,6 +223,11 @@ const styles = StyleSheet.create({
         padding: 2,
         margin: 5,
         borderRadius: 8,
+    },
+    errorText: {
+        color: 'red',
+        alignSelf: 'center',
+        fontSize: 10,
     },
 });
 
