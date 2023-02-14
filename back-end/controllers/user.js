@@ -65,7 +65,7 @@ exports.editUser = async (req, res, next) => {
     res.status(400).json({ error });
   }
 };
-exports.editImage = (req, res, next) => {
+exports.editImage = async (req, res, next) => {
   try {
     const userObject = {
       imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
