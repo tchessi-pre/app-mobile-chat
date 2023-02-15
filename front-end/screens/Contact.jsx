@@ -12,7 +12,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.22.199:3100/api/users/', {
+            const response = await axios.get('http://10.10.26.40:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
