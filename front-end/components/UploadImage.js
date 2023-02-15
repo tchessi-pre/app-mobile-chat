@@ -1,38 +1,129 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, Platform, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Image, View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import ProfilImage from '../components/ProfilImage';
-const PlaceholderImage = require('../assets/usericonplus.png');
+import * as Permissions from 'expo-permissions';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseUrl from '../services/BaseUrl';
+
+const API_URL = BaseUrl;
 
 export default function UploadImage() {
-	const [selectedImage, setSelectedImage] = useState(null);
+	const [image, setImage] = useState(null);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [takeImage, setTakeImage] = useState('');
 
-	const addImage = async () => { 
-		let result = await ImagePicker.launchImageLibraryAsync({
-			allowsEditing: true,
-			quality: 1,
-		});
+	// Check textError
+	const [editImageUserError, setEditImageUserError] = useState('');
+	const [editImageUserSuccess, setEditImageUserSuccess] = useState('');
 
-		if (!result.canceled) {
-			setSelectedImage(result.assets[0].uri);
-		} else {
-			alert("You did not select any image.");
+	// Demande les permissions pour accéder à la caméra et à la galerie
+	const getPermissionsAsync = async () => {
+		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+		if (status !== 'granted') {
+			alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
 		}
 	};
+	// console.log(props);
+	const addPicture = async () => {
+		let image = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: false,
+			quality: 1,
+		});
+		if (!image.canceled) {
+			setImage(image.assets[0].uri);
+		}
+	};
+	const takePicture = async () => {
+		await getPermissionsAsync();
+		let image = await ImagePicker.launchCameraAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: false,
+			quality: 1,
+		});
+		if (!image.canceled) {
+			setImage(image.assets[0].uri);
+		}
+	};
+
+		
+	// Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
+	const savePicture = async () => {
+		try {
+			const formData = new FormData();
+			formData.append('upload', {
+				uri: image,
+				type: 'image/jpeg',
+				name: 'image.jpg',
+			});
+			const fileName = `${Date.now()}_${image.split('/').pop()}`;
+			formData.append('user', JSON.stringify({ imageUrl: fileName }));
+			const token = await AsyncStorage.getItem('token');
+			const response = await axios.put(`${API_URL}api/auth/edit`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			console.log(response.data);
+			if (response.status === 200) {
+				setEditImageUserSuccess('Votre image a bien été modifiée');
+				setTimeout(() => {
+					setEditImageUserSuccess('');
+				}, 3000);
+			} else {
+				setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+				setTimeout(() => {
+					setEditImageUserError('');
+				}, 3000);
+			}
+		} catch (error) {
+			console.log(error);
+			setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+			setTimeout(() => {
+				setEditImageUserError('');
+			}, 3000);
+		}
+	};
+	
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				{
-					selectedImage && <ProfilImage source={{ uri: selectedImage }} placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} style={{ width: 100, height: 100 }} />
-				}
+				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
 			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>
-				<TouchableOpacity  onPress={addImage} style={imageUploaderStyles.uploadBtn} >
+				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
 					
 				<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
 				</TouchableOpacity>
 			</View>
+			{/* MODAL */}
+			<Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
+				<View style={modalStyles.ModalContainer}>
+					<TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
+						<AntDesign style={imageUploaderStyles.iconplus} name="closecircle" size={40} color="gray" />
+					</TouchableOpacity>
+					<View style={modalStyles.modalContent}>
+						{/* IMAGE USER */}
+						<TouchableOpacity onPress={addPicture} >
+						<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
+						</TouchableOpacity>
+						{/* BTN MODAL */}
+						<View style={modalStyles.btnPicture}>
+							<TouchableOpacity onPress={takePicture} style={modalStyles.btnCamera} >
+							<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="gray" />
+						</TouchableOpacity>
+						</View>
+						<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
+							<Text style={modalStyles.modalBtnTextSave}>Enrégistre</Text>
+						</TouchableOpacity>
+						{editImageUserError !== '' && <Text style={modalStyles.errorText}>{editImageUserError}</Text>}
+						{editImageUserSuccess !== '' && <Text style={modalStyles.successText}>{editImageUserSuccess}</Text>}
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 }
@@ -68,4 +159,102 @@ const imageUploaderStyles = StyleSheet.create({
 		right: 0,
 	}
 	
+})
+const modalStyles = StyleSheet.create({
+	Modal: {
+		backgroundColor: '#fff',
+		padding: 20,
+		borderRadius: 10,
+		width: '100%',
+		height: '50%',
+		display: 'flex',
+		alignItems: 'center',
+	},
+	ModalContainer: {
+		flex: 1,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginLeft: 10,
+		marginRight: 10,
+		opacity: 1,
+		color: 'black',
+		backgroundColor: 'rgba(0,0,0,0.5)',
+	},
+	btnPicture: {
+		width: "100%",
+		display: "flex",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	closeBtn: {
+		padding: 10,
+		borderRadius: 5,
+		zIndex: 1,
+		display: 'flex',
+		position: 'absolute',
+		right: 10,
+		top: 170,
+	},
+	btnCamera: {
+		position: 'absolute',
+		top:-80,
+		right: 90,
+	},
+
+	modalContent: {
+		backgroundColor: 'white',
+		padding: 10,
+		borderWidth: 1,
+		borderColor: 'white',
+		borderRadius: 10,
+		width: '100%',
+		height: '50%',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+	},
+	modalBtn: {
+		backgroundColor: '#152033',
+		padding: 10,
+		borderRadius: 5,
+		width: 40,
+		height: 40,
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-start'
+	},
+	modalBtnText: {
+		color: 'white',
+		fontSize: 20,
+	},
+	modalBtnSave: {
+		backgroundColor: 'black',
+		opacity: 0.8,
+		padding: 10,
+		borderWidth: 1,
+		borderColor: '#FF6B6B',
+		borderRadius: 30,
+		width: '100%',
+		display: 'flex',
+		alignItems: 'center',
+	},
+	modalBtnTextSave: {
+		color: '#ffffff',
+		fontWeight: 'bold',
+		fontSize: 20,
+		textTransform: "uppercase",
+	},
+	errorText: {
+		color: 'red',
+		fontSize: 10,
+		fontWeight: 'bold',
+	},
+	successText: {
+		color: 'green',
+		fontSize: 10,
+		fontWeight: 'bold',
+	},
 })
