@@ -5,14 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
-<<<<<<< HEAD
-import UploadImageMessage from '../components/imageUpload';
-
-=======
-import ImageUploadMessage from '../components/ImageUploadMessage';
+import ImageMessageUpload from '../components/ImageMessageUpload';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
->>>>>>> samir-dev-b
 
 const Chat = () => {
     const navigation = useNavigation();
@@ -26,11 +21,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-<<<<<<< HEAD
-            const response = await axios.get(`http://10.10.26.40:3100/api/posts/`, {
-=======
             const response = await axios.get(`${API_URL}/api/posts`, {
->>>>>>> samir-dev-b
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -55,11 +46,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-<<<<<<< HEAD
-                const response = await axios.post('http://10.10.26.40:3100/api/posts', data, {
-=======
                 const response = await axios.post(`${API_URL}/api/posts`, data, {
->>>>>>> samir-dev-b
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -128,13 +115,8 @@ const Chat = () => {
             {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
                 <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-<<<<<<< HEAD
-                    <Ionicons name="add-outline" size={24} color="white" />
-                    <UploadImageMessage />
-=======
-                    <ImageUploadMessage />
->>>>>>> samir-dev-b
-                </TouchableOpacity>
+                    <ImageMessageUpload />
+                </TouchableOpacity >
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
@@ -145,8 +127,8 @@ const Chat = () => {
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
                     <Ionicons style={styles.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
                 </TouchableOpacity>
-            </View>
-        </View>
+            </View >
+        </View >
     );
 };
 
