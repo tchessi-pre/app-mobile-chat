@@ -53,6 +53,7 @@ const InscriptionScreen = ({ navigation }) => {
       // requête axios here localhost3000/signup
       try {
 <<<<<<< HEAD
+<<<<<<< HEAD
         const response = await axios.post(`${API_URL}/api/auth/signup`, {
 =======
 <<<<<<< HEAD
@@ -60,6 +61,9 @@ const InscriptionScreen = ({ navigation }) => {
 =======
         const response = await axios.post(`${API_URL}/api/auth/signup`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+        const response = await axios.post(`${API_URL}/api/auth/signup`, {
 >>>>>>> dev
           firstName: firstName,
           lastName: lastName,

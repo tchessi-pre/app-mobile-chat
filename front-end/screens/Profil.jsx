@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import UploadImage from '../components/ImageUpload';
+import ImageUserUpload from '../components/ImageUserUpload';
 import axios from 'axios';
 <<<<<<< HEAD
 import BaseUrl from '../services/baseUrl';
@@ -40,6 +40,7 @@ const Profil = ({ navigation }) => {
             const userId = decodedToken.userId;
             // console.log(userId);
 <<<<<<< HEAD
+<<<<<<< HEAD
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 =======
 <<<<<<< HEAD
@@ -47,6 +48,9 @@ const Profil = ({ navigation }) => {
 =======
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 >>>>>>> dev
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -76,6 +80,7 @@ const Profil = ({ navigation }) => {
             try {
                 const token = await AsyncStorage.getItem('token');
 <<<<<<< HEAD
+<<<<<<< HEAD
                 let response = await axios.put(`${API_URL}/api/auth/edit`, {
 =======
 <<<<<<< HEAD
@@ -83,6 +88,9 @@ const Profil = ({ navigation }) => {
 =======
                 let response = await axios.put(`${API_URL}/api/auth/edit`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+                let response = await axios.put(`${API_URL}/api/auth/edit`, {
 >>>>>>> dev
                     firstName: firstName, lastName: lastName
                 }, {
@@ -176,7 +184,7 @@ const Profil = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             {/* ADD IMAGE USER */}
             <View>
-                <UploadImage />
+                <ImageUserUpload />
             </View>
             {/* ID User */}
             <View>

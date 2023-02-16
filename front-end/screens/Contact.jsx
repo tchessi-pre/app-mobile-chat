@@ -22,6 +22,7 @@ const Contact = () => {
         try {
             const token = await AsyncStorage.getItem('token');
 <<<<<<< HEAD
+<<<<<<< HEAD
             const response = await axios.get(`${API_URL}/api/users/`, {
 =======
 <<<<<<< HEAD
@@ -29,6 +30,9 @@ const Contact = () => {
 =======
             const response = await axios.get(`${API_URL}/api/users/`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+            const response = await axios.get(`${API_URL}/api/users/`, {
 >>>>>>> dev
                 params: { search: search },
                 headers: {

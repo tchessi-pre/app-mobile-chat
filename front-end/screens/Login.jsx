@@ -40,6 +40,7 @@ const Login = ({ navigation }) => {
             // requête axios here localhost3000/login
             try {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 const response = await axios.post(`${API_URL}/api/auth/login`, {
 =======
 <<<<<<< HEAD
@@ -47,6 +48,9 @@ const Login = ({ navigation }) => {
 =======
                 const response = await axios.post(`${API_URL}/api/auth/login`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+                const response = await axios.post(`${API_URL}/api/auth/login`, {
 >>>>>>> dev
                     email: email,
                     password: password,

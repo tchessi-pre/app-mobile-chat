@@ -6,14 +6,8 @@ import * as Permissions from 'expo-permissions';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-<<<<<<< HEAD
-import BaseUrl from '../services/baseUrl';
-
-const API_URL = BaseUrl;
-=======
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
->>>>>>> dev
 
 export default function UploadImage() {
     const [image, setImage] = useState(null);
@@ -66,6 +60,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD:front-end/components/imageUpload.jsx
 <<<<<<< HEAD
             const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
 =======
@@ -75,6 +70,9 @@ export default function UploadImage() {
             const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+            const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
+>>>>>>> dev:front-end/components/ImageUserUpload.jsx
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -109,6 +107,7 @@ export default function UploadImage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
+<<<<<<< HEAD:front-end/components/imageUpload.jsx
 <<<<<<< HEAD
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 =======
@@ -118,6 +117,9 @@ export default function UploadImage() {
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
+>>>>>>> dev:front-end/components/ImageUserUpload.jsx
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

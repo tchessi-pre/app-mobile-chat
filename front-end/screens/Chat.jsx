@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ImageUploadMessage from '../components/ImageUploadMessage';
 import BaseUrl from '../services/baseUrl';
 
@@ -19,6 +20,11 @@ import ImageUploadMessage from '../components/ImageUploadMessage';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+import ImageMessageUpload from '../components/ImageMessageUpload';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 >>>>>>> dev
 
 const Chat = () => {
@@ -34,6 +40,7 @@ const Chat = () => {
         try {
             const token = await AsyncStorage.getItem('token');
 <<<<<<< HEAD
+<<<<<<< HEAD
             const response = await axios.get(`${API_URL}/api/posts/`, {
 =======
 <<<<<<< HEAD
@@ -41,6 +48,9 @@ const Chat = () => {
 =======
             const response = await axios.get(`${API_URL}/api/posts`, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+            const response = await axios.get(`${API_URL}/api/posts`, {
 >>>>>>> dev
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -67,6 +77,7 @@ const Chat = () => {
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
 <<<<<<< HEAD
+<<<<<<< HEAD
                 const response = await axios.post(`${API_URL}/api/posts`, data, {
 =======
 <<<<<<< HEAD
@@ -74,6 +85,9 @@ const Chat = () => {
 =======
                 const response = await axios.post(`${API_URL}/api/posts`, data, {
 >>>>>>> samir-dev-b
+>>>>>>> dev
+=======
+                const response = await axios.post(`${API_URL}/api/posts`, data, {
 >>>>>>> dev
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -146,12 +160,17 @@ const Chat = () => {
 =======
                 <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <Ionicons name="add-outline" size={24} color="white" />
                     <UploadImageMessage />
 =======
                     <ImageUploadMessage />
 >>>>>>> samir-dev-b
                 </TouchableOpacity>
+>>>>>>> dev
+=======
+                    <ImageMessageUpload />
+                </TouchableOpacity >
 >>>>>>> dev
                 <TextInput
                     value={newMessage}
@@ -163,8 +182,8 @@ const Chat = () => {
                 <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
                     <Ionicons style={styles.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
                 </TouchableOpacity>
-            </View>
-        </View>
+            </View >
+        </View >
     );
 };
 

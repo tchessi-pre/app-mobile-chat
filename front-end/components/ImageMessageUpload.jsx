@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,6 +22,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function UploadImageMessage() {
 =======
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,12 +34,14 @@ import BaseUrl from '../services/BaseUrl';
 >>>>>>> dev
 const API_URL = BaseUrl;
 
-
 export default function ImageUploadMessage() {
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [takeImage, setTakeImage] = useState('');
@@ -87,6 +92,7 @@ export default function ImageUploadMessage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
             const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
 =======
@@ -96,6 +102,9 @@ export default function ImageUploadMessage() {
             const response = await axios.put(`${API_URL}/api/posts`, data, {
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+            const response = await axios.put(`${API_URL}/api/posts`, data, {
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -130,6 +139,7 @@ export default function ImageUploadMessage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
 =======
@@ -139,6 +149,9 @@ export default function ImageUploadMessage() {
             let response = await axios.get(`${API_URL}/api/posts/`, {
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+            let response = await axios.get(`${API_URL}/api/posts/`, {
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -153,6 +166,7 @@ export default function ImageUploadMessage() {
         } catch (error) {
             // console.log('catch GET REQUEST');
         }
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 
 =======
@@ -161,11 +175,14 @@ export default function ImageUploadMessage() {
 
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
     };
 
     useEffect(() => {
         getUser()
     }, []);
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -184,6 +201,8 @@ export default function ImageUploadMessage() {
             </View>
 =======
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
 
     return (
         <View style={imageUploaderStyles.imageContainer}>
@@ -194,10 +213,13 @@ export default function ImageUploadMessage() {
                 <Ionicons name="add-outline" size={24} color="white" />
 
             </TouchableOpacity>
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
 
             {/* MODAL */}
             <Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
@@ -231,6 +253,7 @@ const imageUploaderStyles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -247,27 +270,38 @@ const imageUploaderStyles = StyleSheet.create({
     uploadBtn: {
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+
+    },
+    uploadBtn: {
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
         bottom: 0,
         right: 0,
         opacity: 0.8,
         borderRadius: 100,
         zIndex: 1,
     },
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
 
     selectImageButton: {
         padding: 2,
         margin: 5,
         borderRadius: 8,
     },
+<<<<<<< HEAD:front-end/components/imageUploadMessage.jsx
 <<<<<<< HEAD
 =======
 >>>>>>> samir-dev-b
 >>>>>>> dev
+=======
+>>>>>>> dev:front-end/components/ImageMessageUpload.jsx
 })
 const modalStyles = StyleSheet.create({
     Modal: {
