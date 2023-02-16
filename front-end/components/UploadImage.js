@@ -12,7 +12,7 @@ const API_URL = BaseUrl;
 export default function UploadImage() {
 	const [image, setImage] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
-	const [takeImage, setTakeImage] = useState('');
+	const [prorilImage, setProfilImage] = useState('');
 
 	// Check textError
 	const [editImageUserError, setEditImageUserError] = useState('');
@@ -53,11 +53,11 @@ export default function UploadImage() {
 	const savePicture = async () => {
 		try {
 			const formData = new FormData();
-			formData.append('upload', {
+			formData.append('image', {
 				uri: image,
 				type: 'image/jpeg',
-				name: 'image.jpg',
-			});
+				name: 'avatar',
+			}, 'image');
 			const fileName = `${Date.now()}_${image.split('/').pop()}`;
 			formData.append('user', JSON.stringify({ imageUrl: fileName }));
 			const token = await AsyncStorage.getItem('token');
@@ -87,11 +87,41 @@ export default function UploadImage() {
 			}, 3000);
 		}
 	};
+
+	// Get user Request
+	const getUser = async () => {
+		try {
+			const token = await AsyncStorage.getItem('token');
+			//Retrieve the userId with the token
+			const decodedToken = jwt_decode(token);
+			const userId = decodedToken.userId;
+			// console.log(userId);
+			let response = await axios.get(`${API_URL}api/users/${userId}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			if (response.status === 200) {
+				// console.log(response.data);
+				setProfilImage(response.data.user.imageUrl);
+				console.log(response.data.user.imageUrl);
+				console.log('sucess GET REQUEST');
+
+			}
+		} catch (error) {
+			// console.log('catch GET REQUEST');
+		}
+
+	};
+
+	useEffect(() => {
+		getUser()
+	}, []);
 	
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
+				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image } : require('../assets/avatarplaceholder.png')} />
 			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>
 				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
@@ -254,7 +284,7 @@ const modalStyles = StyleSheet.create({
 	},
 	successText: {
 		color: 'green',
-		fontSize: 10,
+		fontSize: 14,
 		fontWeight: 'bold',
 	},
 })
