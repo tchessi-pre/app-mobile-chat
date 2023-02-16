@@ -10,16 +10,16 @@ import BaseUrl from '../services/BaseUrl';
 
 const API_URL = BaseUrl;
 
-const ProfilScreen = ({ navigation }) => { 
-	
+const ProfilScreen = ({ navigation }) => {
+
 	const [userfirstName, setUserfirstName] = useState('');
 	const [userlastName, setUserlastName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
-	
+
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	// Get firstName, lastName and email of one user
-	
+
 	const getUser = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
@@ -44,7 +44,7 @@ const ProfilScreen = ({ navigation }) => {
 		getUser();
 	}, []);
 
-  // Edit user firstName and lastName
+	// Edit user firstName and lastName
 	const handleEdit = async () => {
 		if (firstName == '') {
 			alert('Merci de remplir le prénom');
@@ -89,32 +89,31 @@ const ProfilScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
-				<TouchableOpacity onPress={() => console.log("Upload")}
-					activeOpacity={0.7} >
-					<UploadImage />
-				</TouchableOpacity>
+
+				<UploadImage />
+
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
 			<View style={styles.textInputContainer}>
-			<TextInput
-				style={Styles.input}
-				placeholder="Nom"
-				placeholderTextColor="#F7F7FC"
-				keyboardType="name"
-				value={firstName}
-				onChange={text => setFirstName(text)}
-				onChangeText={text => setFirstName(text)}
-			/>
-			<TextInput
-				style={Styles.input}
-				placeholder="Prénom"
-				placeholderTextColor="#F7F7FC"
-				keyboardType="name"
-				value={lastName}
-				onChange={text => setLastName(text)}
-				onChangeText={text => setLastName(text)}
-			/>
+				<TextInput
+					style={Styles.input}
+					placeholder="Nom"
+					placeholderTextColor="#F7F7FC"
+					keyboardType="name"
+					value={firstName}
+					onChange={text => setFirstName(text)}
+					onChangeText={text => setFirstName(text)}
+				/>
+				<TextInput
+					style={Styles.input}
+					placeholder="Prénom"
+					placeholderTextColor="#F7F7FC"
+					keyboardType="name"
+					value={lastName}
+					onChange={text => setLastName(text)}
+					onChangeText={text => setLastName(text)}
+				/>
 			</View>
 			<View>
 				<TouchableHighlight

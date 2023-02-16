@@ -6,13 +6,15 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
+import jwt_decode from "jwt-decode";
+
 
 const API_URL = BaseUrl;
 
 export default function UploadImage() {
 	const [image, setImage] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
-	const [prorilImage, setProfilImage] = useState('');
+	const [profilImage, setProfilImage] = useState('');
 
 	// Check textError
 	const [editImageUserError, setEditImageUserError] = useState('');
@@ -48,7 +50,7 @@ export default function UploadImage() {
 		}
 	};
 
-		
+
 	// Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
 	const savePicture = async () => {
 		try {
@@ -94,39 +96,39 @@ export default function UploadImage() {
 			const token = await AsyncStorage.getItem('token');
 			//Retrieve the userId with the token
 			const decodedToken = jwt_decode(token);
+			console.log("decode le token ici -", decodedToken)
 			const userId = decodedToken.userId;
-			// console.log(userId);
 			let response = await axios.get(`${API_URL}api/users/${userId}`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
 				},
 			});
 			if (response.status === 200) {
-				// console.log(response.data);
+				console.log(response.data);
 				setProfilImage(response.data.user.imageUrl);
 				console.log(response.data.user.imageUrl);
 				console.log('sucess GET REQUEST');
-
 			}
 		} catch (error) {
-			// console.log('catch GET REQUEST');
+			console.log('catch GET REQUEST');
 		}
 
 	};
 
+
 	useEffect(() => {
-		getUser()
-	}, []);
-	
+		getUser();
+	}, [getUser()]);
+
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image } : require('../assets/avatarplaceholder.png')} />
+				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={profilImage ? { uri: profilImage } : require('../assets/avatarplaceholder.png')} />
 			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>
 				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
-					
-				<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
+
+					<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
 				</TouchableOpacity>
 			</View>
 			{/* MODAL */}
@@ -138,13 +140,13 @@ export default function UploadImage() {
 					<View style={modalStyles.modalContent}>
 						{/* IMAGE USER */}
 						<TouchableOpacity onPress={addPicture} >
-						<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
+							<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
 						</TouchableOpacity>
 						{/* BTN MODAL */}
 						<View style={modalStyles.btnPicture}>
 							<TouchableOpacity onPress={takePicture} style={modalStyles.btnCamera} >
-							<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="gray" />
-						</TouchableOpacity>
+								<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="gray" />
+							</TouchableOpacity>
 						</View>
 						<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
 							<Text style={modalStyles.modalBtnTextSave}>Enrégistre</Text>
@@ -184,11 +186,10 @@ const imageUploaderStyles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	iconplus: {
-		position: 'absolute',
-		zIndex: 999,
-		right: 0,
+		right: 60,
+		bottom: 10,
 	}
-	
+
 })
 const modalStyles = StyleSheet.create({
 	Modal: {
@@ -224,13 +225,13 @@ const modalStyles = StyleSheet.create({
 		zIndex: 1,
 		display: 'flex',
 		position: 'absolute',
-		right: 10,
+		right: -55,
 		top: 170,
 	},
 	btnCamera: {
 		position: 'absolute',
-		top:-80,
-		right: 90,
+		top: -39,
+		right: 63,
 	},
 
 	modalContent: {
