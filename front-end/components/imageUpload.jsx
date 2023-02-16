@@ -60,11 +60,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-<<<<<<< HEAD
-            const response = await axios.put('http://10.10.26.40:3100/api/auth/edit', data, {
-=======
             const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
->>>>>>> samir-dev-b
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
