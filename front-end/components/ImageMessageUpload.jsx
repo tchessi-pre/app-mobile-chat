@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl;
 
-
 export default function ImageUploadMessage() {
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
