@@ -2,10 +2,15 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import BaseUrl from '../services/baseUrl';
 
 
 const API_URL = BaseUrl;
+=======
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
+>>>>>>> dev
 
 
 let timeoutId = null;
@@ -16,7 +21,15 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD
             const response = await axios.get(`${API_URL}/api/users/`, {
+=======
+<<<<<<< HEAD
+            const response = await axios.get('http://10.10.26.40:3100/api/users/', {
+=======
+            const response = await axios.get(`${API_URL}/api/users/`, {
+>>>>>>> samir-dev-b
+>>>>>>> dev
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -34,6 +47,7 @@ const Contact = () => {
 
     useEffect(() => {
         handleSearch();
+        Contact;
     }, []);
 
     const onSearchChange = (text) => {

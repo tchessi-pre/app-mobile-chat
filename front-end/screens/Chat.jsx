@@ -5,10 +5,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
+<<<<<<< HEAD
 import ImageUploadMessage from '../components/ImageUploadMessage';
 import BaseUrl from '../services/baseUrl';
 
 const API_URL = BaseUrl;
+=======
+<<<<<<< HEAD
+import UploadImageMessage from '../components/imageUpload';
+
+=======
+import ImageUploadMessage from '../components/ImageUploadMessage';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
+>>>>>>> samir-dev-b
+>>>>>>> dev
 
 const Chat = () => {
     const navigation = useNavigation();
@@ -22,7 +33,15 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD
             const response = await axios.get(`${API_URL}/api/posts/`, {
+=======
+<<<<<<< HEAD
+            const response = await axios.get(`http://10.10.26.40:3100/api/posts/`, {
+=======
+            const response = await axios.get(`${API_URL}/api/posts`, {
+>>>>>>> samir-dev-b
+>>>>>>> dev
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -47,7 +66,15 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD
                 const response = await axios.post(`${API_URL}/api/posts`, data, {
+=======
+<<<<<<< HEAD
+                const response = await axios.post('http://10.10.26.40:3100/api/posts', data, {
+=======
+                const response = await axios.post(`${API_URL}/api/posts`, data, {
+>>>>>>> samir-dev-b
+>>>>>>> dev
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -61,11 +88,13 @@ const Chat = () => {
                 else {
                     console.log('error');
                     console.log(response.status);
+                    setPostMessageError("Erreur lors de l'envoi du message");
                 }
             } catch (error) {
                 console.error(error);
                 console.log(error.response);
                 console.log('request POST message, error !');
+                setPostMessageError("Erreur réseau, impossible d'envoyer le message !");
             }
         }
     };
@@ -112,7 +141,18 @@ const Chat = () => {
             {/* Input & Button views */}
             {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
+<<<<<<< HEAD
                 <ImageUploadMessage />
+=======
+                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
+<<<<<<< HEAD
+                    <Ionicons name="add-outline" size={24} color="white" />
+                    <UploadImageMessage />
+=======
+                    <ImageUploadMessage />
+>>>>>>> samir-dev-b
+                </TouchableOpacity>
+>>>>>>> dev
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
