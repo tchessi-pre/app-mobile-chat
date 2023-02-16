@@ -6,6 +6,8 @@ import * as Permissions from 'expo-permissions';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 export default function UploadImage() {
     const [image, setImage] = useState(null);
@@ -58,7 +60,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.put('http://10.10.22.199:3100/api/auth/edit', data, {
+            const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -93,7 +95,7 @@ export default function UploadImage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
+            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -112,8 +114,8 @@ export default function UploadImage() {
     };
 
     useEffect(() => {
-        getUser()
-    }, []);
+        getUser();
+    }, [getUser()]);
 
     return (
         <View style={imageUploaderStyles.imageContainer}>

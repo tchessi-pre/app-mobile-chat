@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
+import ImageUploadMessage from '../components/ImageUploadMessage';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 const Chat = () => {
     const navigation = useNavigation();
@@ -18,7 +21,7 @@ const Chat = () => {
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.22.199:3100/api/posts/`, {
+            const response = await axios.get(`${API_URL}/api/posts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -43,7 +46,7 @@ const Chat = () => {
                 if (newMessage) data.content = newMessage;
                 if (newImageUrl) data.imageUrl = newImageUrl;
                 const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.22.199:3100/api/posts', data, {
+                const response = await axios.post(`${API_URL}/api/posts`, data, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -110,7 +113,7 @@ const Chat = () => {
             {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
                 <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-                    <Ionicons name="add-outline" size={24} color="white" />
+                    <ImageUploadMessage />
                 </TouchableOpacity>
                 <TextInput
                     value={newMessage}

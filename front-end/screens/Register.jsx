@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Icon } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
+
 
 const InscriptionScreen = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
@@ -42,7 +45,7 @@ const InscriptionScreen = ({ navigation }) => {
     } else {
       // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.22.199:3100/api/auth/signup', {
+        const response = await axios.post(`${API_URL}/api/auth/signup`, {
           firstName: firstName,
           lastName: lastName,
           email: email,
