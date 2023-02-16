@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import UploadImage from '../components/imageUpload';
+import UploadImage from '../components/ImageUpload';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 const Profil = ({ navigation }) => {
     // Récupération state du Pseudo et du Prénom et l'email
@@ -32,7 +34,11 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
+<<<<<<< HEAD
             let response = await axios.get(`http://10.10.26.40:3100/api/users/${userId}`, {
+=======
+            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
+>>>>>>> samir-dev-b
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -60,7 +66,11 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD
                 let response = await axios.put('http://10.10.26.40:3100/api/auth/edit', {
+=======
+                let response = await axios.put(`${API_URL}/api/auth/edit`, {
+>>>>>>> samir-dev-b
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -113,7 +123,7 @@ const Profil = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
+            let response = await axios.put(`${API_URL}/api/auth/edit`, {
                 isOnline: false
             }, {
                 headers: {

@@ -3,6 +3,8 @@ import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHi
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
@@ -32,7 +34,11 @@ const Login = ({ navigation }) => {
         } else {
             // requête axios here localhost3000/login
             try {
+<<<<<<< HEAD
                 const response = await axios.post('http://10.10.26.40:3100/api/auth/login', {
+=======
+                const response = await axios.post(`${API_URL}/api/auth/login`, {
+>>>>>>> samir-dev-b
                     email: email,
                     password: password,
                 });

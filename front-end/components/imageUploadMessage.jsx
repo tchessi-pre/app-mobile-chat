@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
+<<<<<<< HEAD
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -8,6 +9,19 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function UploadImageMessage() {
+=======
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import { Ionicons } from '@expo/vector-icons';
+import jwt_decode from 'jwt-decode';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl;
+
+
+export default function ImageUploadMessage() {
+>>>>>>> samir-dev-b
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [takeImage, setTakeImage] = useState('');
@@ -58,7 +72,11 @@ export default function UploadImageMessage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
+<<<<<<< HEAD
             const response = await axios.put('http://10.10.22.199:3100/api/auth/edit', data, {
+=======
+            const response = await axios.put(`${API_URL}/api/posts`, data, {
+>>>>>>> samir-dev-b
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -93,7 +111,11 @@ export default function UploadImageMessage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
+<<<<<<< HEAD
             let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
+=======
+            let response = await axios.get(`${API_URL}/api/posts/`, {
+>>>>>>> samir-dev-b
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -108,11 +130,16 @@ export default function UploadImageMessage() {
         } catch (error) {
             // console.log('catch GET REQUEST');
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> samir-dev-b
     };
 
     useEffect(() => {
         getUser()
     }, []);
+<<<<<<< HEAD
     useEffect(() => {
         savePicture()
     }, [getUser()]);
@@ -126,6 +153,18 @@ export default function UploadImageMessage() {
                     <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             </View>
+=======
+
+    return (
+        <View style={imageUploaderStyles.imageContainer}>
+            {/* IMAGE USER */}
+            {/* <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/DefaultUser.png')} /> */}
+            {/* BTN UPLOAD IMAGE */}
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.selectImageButton}>
+                <Ionicons name="add-outline" size={24} color="white" />
+
+            </TouchableOpacity>
+>>>>>>> samir-dev-b
 
             {/* MODAL */}
             <Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
@@ -159,16 +198,31 @@ const imageUploaderStyles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+<<<<<<< HEAD
         margin: 30,
     },
     uploadBtn: {
         position: 'absolute',
+=======
+
+    },
+    uploadBtn: {
+>>>>>>> samir-dev-b
         bottom: 0,
         right: 0,
         opacity: 0.8,
         borderRadius: 100,
         zIndex: 1,
     },
+<<<<<<< HEAD
+=======
+
+    selectImageButton: {
+        padding: 2,
+        margin: 5,
+        borderRadius: 8,
+    },
+>>>>>>> samir-dev-b
 })
 const modalStyles = StyleSheet.create({
     Modal: {
