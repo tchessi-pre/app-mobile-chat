@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from "jwt-decode";
 
-
 const API_URL = BaseUrl;
 
 export default function UploadImage() {
@@ -96,7 +95,7 @@ export default function UploadImage() {
 			const token = await AsyncStorage.getItem('token');
 			//Retrieve the userId with the token
 			const decodedToken = jwt_decode(token);
-			console.log("decode le token ici -", decodedToken)
+			// console.log("decode le token ici -", decodedToken)
 			const userId = decodedToken.userId;
 			let response = await axios.get(`${API_URL}api/users/${userId}`, {
 				headers: {
@@ -123,7 +122,9 @@ export default function UploadImage() {
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={profilImage ? { uri: profilImage } : require('../assets/avatarplaceholder.png')} />
+				<TouchableOpacity onPress={() => setModalVisible(true)}>
+					<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={profilImage ? { uri: profilImage } : require('../assets/avatarplaceholder.png')} />
+				</TouchableOpacity>
 			</View>
 			<View style={imageUploaderStyles.uploadBtnContainer}>
 				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
@@ -145,12 +146,12 @@ export default function UploadImage() {
 						{/* BTN MODAL */}
 						<View style={modalStyles.btnPicture}>
 							<TouchableOpacity onPress={takePicture} style={modalStyles.btnCamera} >
-								<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="gray" />
+								<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="#FF6B6B" />
+							</TouchableOpacity>
+							<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
+								<Text style={modalStyles.modalBtnTextSave}>Enregistrer</Text>
 							</TouchableOpacity>
 						</View>
-						<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
-							<Text style={modalStyles.modalBtnTextSave}>Enrégistre</Text>
-						</TouchableOpacity>
 						{editImageUserError !== '' && <Text style={modalStyles.errorText}>{editImageUserError}</Text>}
 						{editImageUserSuccess !== '' && <Text style={modalStyles.successText}>{editImageUserSuccess}</Text>}
 					</View>
@@ -186,7 +187,7 @@ const imageUploaderStyles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	iconplus: {
-		right: 60,
+		right: 70,
 		bottom: 10,
 	}
 
@@ -208,6 +209,7 @@ const modalStyles = StyleSheet.create({
 		justifyContent: 'center',
 		marginLeft: 10,
 		marginRight: 10,
+		position: 'relative',
 		opacity: 1,
 		color: 'black',
 		backgroundColor: 'rgba(0,0,0,0.5)',
@@ -225,13 +227,13 @@ const modalStyles = StyleSheet.create({
 		zIndex: 1,
 		display: 'flex',
 		position: 'absolute',
-		right: -55,
+		right: -70,
 		top: 170,
 	},
 	btnCamera: {
 		position: 'absolute',
-		top: -39,
-		right: 63,
+		bottom: 120,
+		right: 15,
 	},
 
 	modalContent: {
@@ -262,18 +264,18 @@ const modalStyles = StyleSheet.create({
 		fontSize: 20,
 	},
 	modalBtnSave: {
-		backgroundColor: 'black',
+		backgroundColor: 'white',
 		opacity: 0.8,
 		padding: 10,
 		borderWidth: 1,
 		borderColor: '#FF6B6B',
-		borderRadius: 30,
+		borderRadius: 10,
 		width: '100%',
 		display: 'flex',
 		alignItems: 'center',
 	},
 	modalBtnTextSave: {
-		color: '#ffffff',
+		color: 'black',
 		fontWeight: 'bold',
 		fontSize: 20,
 		textTransform: "uppercase",

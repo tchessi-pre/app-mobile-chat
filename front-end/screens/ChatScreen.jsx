@@ -139,7 +139,6 @@ const ChatScreen = () => {
 							<Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
 						<Text style={styles.date}>{currentDate}</Text>
 					</View>
-					
 					</ScrollView>
 				}
 			/>
