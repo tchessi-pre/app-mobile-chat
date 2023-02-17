@@ -21,7 +21,7 @@ const Login = ({ navigation }) => {
     // Permission to show the password
     const [hidePass, setHidePass] = useState(true);
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    //L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
+    // L'email doit contenir au moins un caractère, un @, un point, et au moins 2 caractères après le point.
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
@@ -47,7 +47,6 @@ const Login = ({ navigation }) => {
                 } else {
                     console.log("status: " + response.status + ", request unsuccessful");
                     setLoginError("Vérifier vos identifiants")
-
                 }
             } catch (error) {
                 // alert('Erreur requête lors de la Connexion impossible.');
@@ -56,6 +55,7 @@ const Login = ({ navigation }) => {
             }
         }
     };
+
     useEffect(() => {
         if (emailError !== '' || passwordError !== '' || loginError != '') {
             setTimeout(() => {
@@ -145,18 +145,19 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     input: {
-        width: 300,
+        width: "80%",
         borderColor: 'none',
         padding: 10,
         margin: 10,
         backgroundColor: '#152033',
         color: 'white',
+        borderRadius: 20,
     },
     button: {
         backgroundColor: '#FF6B6B',
         padding: 10,
         margin: 10,
-        width: 300,
+        width: "80%",
         borderRadius: 30,
         alignItems: 'center',
     },
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'gray',
         padding: 10,
         margin: 10,
-        width: 300,
+        width: "80%",
         borderRadius: 30,
         alignItems: 'center',
     },

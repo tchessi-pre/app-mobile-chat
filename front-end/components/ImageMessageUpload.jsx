@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
+import { Image, View, TouchableOpacity, Text, StyleSheet, Modal, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
-import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
@@ -11,12 +10,15 @@ const API_URL = BaseUrl;
 
 export default function ImageUploadMessage() {
     const [image, setImage] = useState(null);
+    const [newMessage, setNewMessage] = useState('');
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [takeImage, setTakeImage] = useState('');
 
     // Check textError
-    const [editImageUserError, setEditImageUserError] = useState('');
-    const [editImageUserSuccess, setEditImageUserSuccess] = useState('');
+    const [postImageError, setPostImageError] = useState('');
+    const [postMessageSuccess, setPostMessageSuccess] = useState('');
+    const [postMessageError, setPostMessageError] = useState('');
+
 
     // Demande les permissions pour accéder à la caméra et à la galerie
     const getPermissionsAsync = async () => {
@@ -34,6 +36,7 @@ export default function ImageUploadMessage() {
         });
         if (!image.canceled) {
             setImage(image.assets[0].uri);
+            setModalVisible(false)
         }
     };
     const takePicture = async () => {
@@ -45,96 +48,151 @@ export default function ImageUploadMessage() {
         });
         if (!image.canceled) {
             setImage(image.assets[0].uri);
+            setModalVisible(false)
         }
     };
 
-    // Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
-    async function savePicture() {
-        try {
-            const data = new FormData();
-            data.append('upload', {
-                uri: image,
-                type: 'image/jpeg',
-                name: 'image.jpg',
-            }, 'upload');
-            const fileName = `${Date.now()}_${image.split('/').pop()}`;
-            data.append('user', JSON.stringify({ imageUrl: fileName }));
-            const token = await AsyncStorage.getItem('token');
-            const response = await axios.put(`${API_URL}/api/posts`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            console.log(response.data);
-            if (response.status === 200) {
-                setEditImageUserSuccess('Votre image a bien été modifiée');
-                setTimeout(() => {
-                    setEditImageUserSuccess('');
-                }, 3000);
-            } else {
-                setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
-                setTimeout(() => {
-                    setEditImageUserError('');
-                }, 3000);
+    const removePicture = () => {
+        setImage(null);
+    };
+    // async function handleMessage() {
+    //     if (newMessage === '') {
+    //         setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
+    //     } else {
+    //         try {
+    //             const dataMessage = {}
+    //             dataMessage.content = newMessage;
+    //             const token = await AsyncStorage.getItem('token');
+    //             const dataImage = new FormData();
+    //             if (image) {
+    //                 dataImage.append('upload', {
+    //                     uri: image,
+    //                     type: 'image/jpeg',
+    //                     name: 'image.jpg',
+    //                 }, 'upload');
+    //                 const fileName = `${Date.now()}_${image.split('/').pop()}`;
+    //                 dataImage.append('post', JSON.stringify({ imageUrl: fileName }));
+    //             }
+    //             console.log({ ...dataMessage, ...dataImage });
+    //             const response = await axios.post(`${API_URL}/api/posts`, dataMessage, dataImage, {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data',
+    //                     'Authorization': `Bearer ${token}`,
+    //                 },
+    //             });
+    //             if (response.status === 201) {
+    //                 setNewMessage('');
+    //                 setPostMessageSuccess("Message envoyé avec succès");
+    //             } else {
+    //                 console.log("error posting message");
+    //                 setPostMessageError("Erreur lors de l'envoi du message");
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //             setPostMessageError("Erreur network lors de l'envoi du message");
+    //         }
+    //     }
+    // }
+
+    async function handleMessage() {
+        if (newMessage === '') {
+            setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
+        } else {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                const postMessage = new FormData();
+                if (image) {
+                    postMessage.append('upload', {
+                        uri: image,
+                        type: 'image/jpeg',
+                        name: 'image.jpg',
+                    }, 'upload');
+                }
+
+                const postData = {
+                    content: newMessage,
+                };
+                if (image) {
+                    postData.imageUrl = `${Date.now()}_${image.split('/').pop()}`;
+                    postMessage.append('post', JSON.stringify(postData));
+                } else {
+                    postMessage.append('content', newMessage);
+                }
+
+                console.log(postData);
+
+                const response = await axios.post(`${API_URL}/api/posts`, postMessage, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                if (response.status === 201) {
+                    setNewMessage('');
+                    setPostMessageSuccess("Message envoyé avec succès");
+                } else {
+                    console.log("error posting message");
+                    setPostMessageError("Erreur lors de l'envoi du message");
+                }
+            } catch (error) {
+                console.log(error);
+                setPostMessageError("Erreur network lors de l'envoi du message");
             }
-        } catch (error) {
-            console.log(error);
-            setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
-            setTimeout(() => {
-                setEditImageUserError('');
-            }, 3000);
         }
     }
 
-    // Get user Request
-    const getUser = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            //Retrieve the userId with the token
-            const decodedToken = jwt_decode(token);
-            const userId = decodedToken.userId;
-            // console.log(userId);
-            let response = await axios.get(`${API_URL}/api/posts/`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (response.status === 200) {
-                // console.log(response.data);
-                setTakeImage(response.data.user.imageUrl);
-                console.log(response.data.user.imageUrl);
-                console.log('sucess GET REQUEST');
-
-            }
-        } catch (error) {
-            // console.log('catch GET REQUEST');
-        }
-    };
 
     useEffect(() => {
-        getUser()
-    }, []);
+        if (postImageError !== '' || postMessageSuccess !== '' || postMessageError != '') {
+            setTimeout(() => {
+                setPostImageError('');
+                setPostMessageSuccess('');
+                setPostMessageError('');
+            }, 2000);
+        }
+    }, [postImageError, postMessageSuccess, postMessageError]);
 
     return (
-        <View style={imageUploaderStyles.imageContainer}>
-            {/* IMAGE USER */}
-            {/* <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/DefaultUser.png')} /> */}
-            {/* BTN UPLOAD IMAGE */}
-            <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.selectImageButton}>
-                <Ionicons name="add-outline" size={24} color="white" />
 
-            </TouchableOpacity>
+        <View style={PostStyle.postContainer}>
+            <View>
+                {/* Input & Button views */}
+                {postMessageError !== '' && <Text style={PostStyle.errorText}>{postMessageError}</Text>}
+                {postMessageSuccess !== '' && <Text style={PostStyle.SucessText}>{postMessageSuccess}</Text>}
+            </View>
+            {/* BTN UPLOAD IMAGE */}
+            <View style={PostStyle.inputContainer}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={PostStyle.selectImageButton}>
+                    <Ionicons name="add-outline" size={24} color="white" />
+                </TouchableOpacity>
+                {image ? (
+                    <TouchableOpacity onPress={removePicture} style={PostStyle.selectImageButton} >
+                        <Text style={PostStyle.closeBtnImg}>❌</Text>
+                        <Image style={PostStyle.imageSet} source={image ? { uri: image, } : null} />
+                    </TouchableOpacity>
+                ) : null}
+                < TextInput
+                    value={newMessage}
+                    onChangeText={setNewMessage}
+                    placeholder="Entrez votre message..."
+                    placeholderTextColor={'white'}
+                    style={PostStyle.input}
+                />
+                <TouchableOpacity onPress={handleMessage} style={PostStyle.sendButton}>
+                    <Ionicons style={PostStyle.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
+                </TouchableOpacity>
+            </View>
 
             {/* MODAL */}
             <Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
                 <View style={modalStyles.ModalContainer}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
-                        <Text style={modalStyles.closeBtnText}>❌</Text>
+                        <Text style={modalStyles.closeBtnModal}>❌</Text>
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/DefaultUser.png')} />
+                        <Image style={{ width: 120, height: 120, borderRadius: 15, }} source={image ? { uri: image, } : require('../assets/PictureTake.png')} />
                         {/* BTN MODAL */}
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Choisir une image</Text>
@@ -142,45 +200,89 @@ export default function ImageUploadMessage() {
                         <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Prendre une photo</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
-                            <Text style={modalStyles.modalBtnTextSave}>Enregistrer votre avatar</Text>
-                        </TouchableOpacity>
-                        {editImageUserError !== '' && <Text style={modalStyles.errorText}>{editImageUserError}</Text>}
-                        {editImageUserSuccess !== '' && <Text style={modalStyles.successText}>{editImageUserSuccess}</Text>}
+                        {postImageError !== '' && <Text style={modalStyles.errorText}>{postImageError}</Text>}
                     </View>
                 </View>
             </Modal>
         </View >
     );
 }
-const imageUploaderStyles = StyleSheet.create({
-    imageContainer: {
+
+const PostStyle = StyleSheet.create({
+    postContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-
     },
-    uploadBtn: {
-        bottom: 0,
-        right: 0,
-        opacity: 0.8,
-        borderRadius: 100,
-        zIndex: 1,
+    imageSet: {
+        width: 50,
+        height: 50,
+        borderRadius: 15,
     },
 
     selectImageButton: {
         padding: 2,
         margin: 5,
         borderRadius: 8,
+        marginLeft: 10,
     },
+
+    // Input 
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        bottom: 5,
+        width: '100%',
+        justifyContent: 'space-between',
+    },
+
+    input: {
+        flex: 1,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#152033',
+        borderRadius: 8,
+        backgroundColor: '#152033',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 10,
+        opacity: 0.7,
+        color: 'white',
+    },
+    // Button
+    sendButton: {
+        padding: 5,
+        borderRadius: 8,
+    },
+    errorText: {
+        color: 'red',
+        alignSelf: 'center',
+        fontSize: 10,
+    },
+    textAddImg: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 10,
+    },
+    SucessText: {
+        color: 'green',
+        alignSelf: 'center',
+        fontSize: 10,
+    },
+    closeBtnImg: {
+        alignSelf: 'flex-end',
+        fontSize: 8,
+        zIndex: 1,
+    }
 })
 const modalStyles = StyleSheet.create({
     Modal: {
         backgroundColor: '#fff',
-        padding: 20,
+        padding: 10,
         borderRadius: 10,
-        width: '100%',
-        height: '50%',
+        width: '50%',
+        height: '20%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -199,12 +301,9 @@ const modalStyles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         zIndex: 1,
-        display: 'flex',
-        position: 'absolute',
-        right: 20,
-        top: 210,
+        alignSelf: 'flex-end',
     },
-    closeBtnText: {
+    closeBtnModal: {
         fontSize: 20,
         color: 'white',
     },
@@ -228,20 +327,6 @@ const modalStyles = StyleSheet.create({
     },
     modalBtnText: {
         color: 'white',
-        fontSize: 20,
-    },
-    modalBtnSave: {
-        backgroundColor: 'green',
-        opacity: 0.8,
-        padding: 10,
-        borderRadius: 5,
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    modalBtnTextSave: {
-        color: 'white',
-        fontWeight: 'bold',
         fontSize: 20,
     },
     errorText: {

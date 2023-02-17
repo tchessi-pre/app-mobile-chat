@@ -1,6 +1,7 @@
 <script>
 import CustomSpinner from '../components/spinner.vue'
 import Swal from 'sweetalert2'
+import moment from 'moment'
 export default {
     components: { CustomSpinner },
     data() {
@@ -261,6 +262,10 @@ export default {
                     }
                 })
         },
+        // Formatage de la date
+        formatDate(date) {
+            return moment(date).locale('fr').format('dddd D MMMM, HH:mm:ss');
+        },
     },
     created() {
         this.getPosts()
@@ -274,7 +279,6 @@ export default {
         } else {
             console.log("Sorry, your browser does not support Web Storage...");
         }
-
     },
 }
 </script>
@@ -320,10 +324,11 @@ export default {
                                 post.User.email
                             }}</p>
                             </td>
-                            <td class="w-text">{{ post.imageUrl }}
+                            <td class="w-text">
+                                <img class="img-post" :src="post.imageUrl">
                             </td>
                             <td class="w-text" id="td-msge">{{ post.content }}</td>
-                            <td class="w-text">{{ post.createdAt }}</td>
+                            <td class="w-text">{{ formatDate(post.createdAt) }}</td>
                             <td>
                                 <!-- EDIT USER -->
                                 <button class="btn btn-primary" @click="confirmEdit(post.id)">Modifier</button>
@@ -340,8 +345,7 @@ export default {
         <section>
             <div>
                 <form class="send-message">
-                    <input v-model="setPostContent" type="text" class="input-send"
-                        placeholder="Envoyez votre message..." />
+                    <input v-model="setPostContent" type="text" class="input-send" placeholder="Envoyez votre message..." />
                     <button class="btn-send" type="submit" @click.prevent="ModalSend()">Envoyer</button>
                 </form>
             </div>
@@ -386,6 +390,15 @@ export default {
     margin-left: 45rem;
 }
 
+.img-post {
+    width: 100px;
+    max-height: 100px;
+    margin: 10px;
+    opacity: 1;
+    display: block;
+    cursor: pointer;
+    border-radius: 20%;
+}
 
 #logout-button {
     color: white;

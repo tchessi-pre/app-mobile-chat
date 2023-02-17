@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
+import { format } from 'date-fns';
+import frLocale from 'date-fns/locale/fr';
 import ImageMessageUpload from '../components/ImageMessageUpload';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
@@ -12,11 +13,7 @@ const API_URL = BaseUrl
 const Chat = () => {
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
-    const [newImageUrl, setNewImageUrl] = useState('');
     // Check Text error
-    const [postMessageError, setPostMessageError] = useState('');
-
 
     const fetchMessages = async () => {
         try {
@@ -37,56 +34,33 @@ const Chat = () => {
         }
     };
 
-    const handleSendMessage = async () => {
-        if (newMessage === '') {
-            setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
-        } else {
-            try {
-                const data = {};
-                if (newMessage) data.content = newMessage;
-                if (newImageUrl) data.imageUrl = newImageUrl;
-                const token = await AsyncStorage.getItem('token');
-                const response = await axios.post(`${API_URL}/api/posts`, data, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                if (response.status === 201) {
-                    fetchMessages();
-                    setNewMessage('');
-                    setNewImageUrl('');
-                    console.log('request POST message, success !');
+    // ADD Socket 
+    // useEffect(() => {
+    //     fetchMessages();
+    //     // const socket = io('http://110.10.57.143.3:2000');
+    //     // setTimeout(() => {
+    //     //     console.log(socket.connected)
+    //     // }, 2000);
+    //     // socket.on('newPost', (msg) => {
+    //     //     setMessages(messages => [...messages, msg]);
+    //     //     console.warn(msg);
+    //     // });
+    // }, []);
 
-                }
-                else {
-                    console.log('error');
-                    console.log(response.status);
-                    setPostMessageError("Erreur lors de l'envoi du message");
-                }
-            } catch (error) {
-                console.error(error);
-                console.log(error.response);
-                console.log('request POST message, error !');
-                setPostMessageError("Erreur réseau, impossible d'envoyer le message !");
-            }
-        }
-    };
     useEffect(() => {
         fetchMessages();
-        const socket = io('http://110.10.57.143.3:2000');
-        setTimeout(() => {
-            console.log(socket.connected)
-        }, 2000);
-        socket.on('newPost', (msg) => {
-            setMessages(messages => [...messages, msg]);
-            console.warn(msg);
-        });
-        if (postMessageError !== '') {
-            setTimeout(() => {
-                setPostMessageError('');
-            }, 2000);
-        }
-    }, [postMessageError]);
+        const intervalId = setInterval(() => {
+            fetchMessages();
+        }, 1000); // exécute fetchMessages toutes les 5 secondes
+
+        return () => clearInterval(intervalId); // nettoie le minuteur lorsque le composant est démonté
+    }, []);
+
+    // Formatage de la date
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
+    };
 
     return (
         // Message view
@@ -105,28 +79,16 @@ const Chat = () => {
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
                                 <Text style={styles.messageText}>{item.content}</Text>
-                                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
+                                {item.imageUrl ? (
+                                    <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
+                                ) : null}
+                                <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
                             </View>
                         </View>
                     </View>}
             />
-
-            {/* Input & Button views */}
-            {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
-                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-                    <ImageMessageUpload />
-                </TouchableOpacity >
-                <TextInput
-                    value={newMessage}
-                    onChangeText={setNewMessage}
-                    placeholder="Entrez votre message..."
-                    placeholderTextColor={'white'}
-                    style={styles.input}
-                />
-                <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Ionicons style={styles.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
-                </TouchableOpacity>
+                <ImageMessageUpload />
             </View >
         </View >
     );
@@ -166,7 +128,6 @@ const styles = StyleSheet.create({
         opacity: 0.8,
         borderRadius: 20,
         padding: 10,
-        alignItems: 'center',
     },
     messageAvatar: {
         width: 50,
@@ -192,43 +153,18 @@ const styles = StyleSheet.create({
         fontSize: 13,
         padding: 5,
         color: 'white',
-
+    },
+    messageImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 20,
+        alignSelf: 'center',
     },
     messageCreatedAt: {
+        margin: 2,
         fontSize: 8,
         color: 'white',
         alignSelf: 'flex-end',
-    },
-    // Input 
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        bottom: 5,
-        width: '100%',
-    },
-    input: {
-        flex: 1,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#152033',
-        borderRadius: 8,
-        backgroundColor: '#152033',
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 10,
-        opacity: 0.7,
-        color: 'white',
-    },
-    // Button
-    sendButton: {
-        padding: 5,
-        borderRadius: 8,
-    },
-    selectImageButton: {
-        padding: 2,
-        margin: 5,
-        borderRadius: 8,
     },
     errorText: {
         color: 'red',
