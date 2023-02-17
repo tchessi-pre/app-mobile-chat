@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     messageContent: {
         flexDirection: 'row',
         backgroundColor: '#152033',
-        opacity: 0.8,
         borderRadius: 20,
         padding: 10,
     },
@@ -137,7 +136,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#7452B7',
         boxShadow: '0 0 5px black',
-        opacity: 0.8,
     },
     messageTextContainer: {
         width: '80%',
