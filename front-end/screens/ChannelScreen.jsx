@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, FlatList, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, FlatList, TextInput, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import SearchBar from '../components/SearchBar';
+import { Feather, Entypo } from "@expo/vector-icons";
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
+import SearchStyle from '../css/SearchStyle'
 
 const API_URL = BaseUrl;
-
-const ChannelScreen = ({ navigation }) => {
+let timeoutId = null;
+const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
 	const [status, setStatus] = useState('');
@@ -36,6 +38,7 @@ const ChannelScreen = ({ navigation }) => {
 	}
 	useEffect(() => {
 		handleSearch();
+		ChannelScreen;
 	}, []);
 
 	const onSearchChange = (text) => {
@@ -66,8 +69,47 @@ const ChannelScreen = ({ navigation }) => {
 			</View>
 
 			<View style={styles.searchBar}>
-				<SearchBar onChangeText={onSearchChange}
-					value={search} />
+				<View
+					style={
+						clicked
+							? SearchStyle.searchBar__clicked
+							: SearchStyle.searchBar__unclicked
+					}
+				>
+					{/* search Icon */}
+					<Feather
+						name="search"
+						size={20}
+						color="#ADB5BD"
+						style={{ marginLeft: 1 }}
+					/>
+					{/* Input field */}
+					<TextInput
+						style={SearchStyle.input}
+						placeholder="Recherche"
+						placeholderTextColor={"#ADB5BD"}
+						onChangeText={onSearchChange}
+						value={search}
+					/>
+					{/* cross Icon, depending on whether the search bar is clicked or not */}
+					{clicked && (
+						<Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
+							setSearchPhrase("")
+						}} />
+					)}
+				</View>
+				{/* cancel button, depending on whether the search bar is clicked or not */}
+				{clicked && (
+					<View>
+						<Button
+							title="Cancel"
+							onPress={() => {
+								Keyboard.dismiss();
+								setCLicked(false);
+							}}
+						></Button>
+					</View>
+				)}
 			</View>		
 				<FlatList
 					data={usersSearch.users}
@@ -79,7 +121,7 @@ const ChannelScreen = ({ navigation }) => {
 							<View>
 								<TouchableOpacity activeOpacity={.5} onPress={() =>
 									navigation.navigate('Profil')} >
-									<Image style={styles.profilImage} source={item.imageUrl || require('../assets/vinicius-wiesehofer.jpg')} />
+									<Image style={styles.profilImage} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/avatarplaceholder.png')} />
 								</TouchableOpacity>
 								<Text
 									style={styles.status}

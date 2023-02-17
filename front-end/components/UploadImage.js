@@ -30,7 +30,8 @@ export default function UploadImage() {
 	const addPicture = async () => {
 		let image = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: false,
+			allowsEditing: true,
+			aspect: [4, 3],
 			quality: 1,
 		});
 		if (!image.canceled) {
