@@ -131,6 +131,7 @@ export default function ImageUploadMessage() {
                 if (response.status === 201) {
                     setNewMessage('');
                     setPostMessageSuccess("Message envoyé avec succès");
+                    removePicture();
                 } else {
                     console.log("error posting message");
                     setPostMessageError("Erreur lors de l'envoi du message");
@@ -163,9 +164,11 @@ export default function ImageUploadMessage() {
             </View>
             {/* BTN UPLOAD IMAGE */}
             <View style={PostStyle.inputContainer}>
-                <TouchableOpacity onPress={() => setModalVisible(true)} style={PostStyle.selectImageButton}>
-                    <Ionicons name="add-outline" size={24} color="white" />
-                </TouchableOpacity>
+                {!image ? (
+                    <TouchableOpacity onPress={() => setModalVisible(true)} style={PostStyle.selectImageButton}>
+                        <Ionicons name="add-outline" size={24} color="white" />
+                    </TouchableOpacity>
+                ) : null}
                 {image ? (
                     <TouchableOpacity onPress={removePicture} style={PostStyle.selectImageButton} >
                         <Text style={PostStyle.closeBtnImg}>❌</Text>
@@ -192,7 +195,7 @@ export default function ImageUploadMessage() {
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 120, height: 120, borderRadius: 15, }} source={image ? { uri: image, } : require('../assets/PictureTake.png')} />
+                        <Image style={{ width: 120, height: 120, borderRadius: 15, }} source={image ? { uri: image, } : require('../assets/Add_Image_icon.png')} />
                         {/* BTN MODAL */}
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Choisir une image</Text>

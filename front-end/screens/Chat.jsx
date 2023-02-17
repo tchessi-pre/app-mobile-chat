@@ -78,10 +78,10 @@ const Chat = () => {
                             <Image style={styles.messageAvatar} source={item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
-                                <Text style={styles.messageText}>{item.content}</Text>
                                 {item.imageUrl ? (
                                     <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
                                 ) : null}
+                                <Text style={styles.messageText}>{item.content}</Text>
                                 <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
                             </View>
                         </View>
