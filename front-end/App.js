@@ -5,6 +5,7 @@ import Chat from "./screens/Chat";
 import Login from "./screens/Login";
 import Register from './screens/Register';
 import Contact from './screens/Contact';
+import Chanel from './screens/Chanel';
 import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -28,7 +29,10 @@ const TabNavigate = () => {
             iconName = focused ? 'ios-chatbubbles' : 'ios-chatbubbles';
           }
           else if (route.name === 'Contact') {
-            iconName = focused ? 'ios-people-outline' : 'ios-people-outline';
+            iconName = focused ? 'ios-people' : 'ios-people';
+          }
+          else if (route.name === 'Chanel') {
+            iconName = focused ? 'ios-chatbox-ellipses-sharp' : 'ios-chatbox-ellipses-sharp';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -38,6 +42,7 @@ const TabNavigate = () => {
         tabBarIndicatorStyle: { backgroundColor: 'white' },
       })}>
       <Tab.Screen name="Chat" component={Chat}/>
+      {/* <Tab.Screen name="Chanel" component={Chanel}/> */}
       <Tab.Screen name="Contact" component={Contact} />
       <Tab.Screen name="Profil" component={Profil} />
     </Tab.Navigator>

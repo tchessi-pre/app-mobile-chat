@@ -35,12 +35,10 @@ const Contact = () => {
         handleSearch();
     }, []);
 
+    // search
     const onSearchChange = (text) => {
         setSearch(text);
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            handleSearch(text);
-        }, 200);
+        handleSearch(text);
     };
 
     // Formatage de la date
