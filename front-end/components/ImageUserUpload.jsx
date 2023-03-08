@@ -60,19 +60,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-<<<<<<< HEAD:front-end/components/imageUpload.jsx
-<<<<<<< HEAD
             const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
-=======
-<<<<<<< HEAD
-            const response = await axios.put('http://10.10.26.40:3100/api/auth/edit', data, {
-=======
-            const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
->>>>>>> samir-dev-b
->>>>>>> dev
-=======
-            const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
->>>>>>> dev:front-end/components/ImageUserUpload.jsx
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -107,19 +95,7 @@ export default function UploadImage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-<<<<<<< HEAD:front-end/components/imageUpload.jsx
-<<<<<<< HEAD
             let response = await axios.get(`${API_URL}/api/users/${userId}`, {
-=======
-<<<<<<< HEAD
-            let response = await axios.get(`http://10.10.26.40:3100/api/users/${userId}`, {
-=======
-            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
->>>>>>> samir-dev-b
->>>>>>> dev
-=======
-            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
->>>>>>> dev:front-end/components/ImageUserUpload.jsx
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
