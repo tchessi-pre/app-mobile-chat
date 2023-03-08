@@ -60,7 +60,7 @@ export default function ImageUploadMessage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.put(`${API_URL}/api/posts`, data, {
+            const response = await axios.post(`${API_URL}/api/posts`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -88,33 +88,33 @@ export default function ImageUploadMessage() {
     }
 
     // Get user Request
-    const getUser = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            //Retrieve the userId with the token
-            const decodedToken = jwt_decode(token);
-            const userId = decodedToken.userId;
-            // console.log(userId);
-            let response = await axios.get(`${API_URL}/api/posts/`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (response.status === 200) {
-                // console.log(response.data);
-                setTakeImage(response.data.user.imageUrl);
-                console.log(response.data.user.imageUrl);
-                console.log('sucess GET REQUEST');
+    // const getUser = async () => {
+    //     try {
+    //         const token = await AsyncStorage.getItem('token');
+    //         //Retrieve the userId with the token
+    //         const decodedToken = jwt_decode(token);
+    //         const userId = decodedToken.userId;
+    //         // console.log(userId);
+    //         let response = await axios.get(`${API_URL}/api/posts/`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //             },
+    //         });
+    //         if (response.status === 200) {
+    //             // console.log(response.data);
+    //             setTakeImage(response.data.user.imageUrl);
+    //             console.log(response.data.user.imageUrl);
+    //             console.log('sucess GET REQUEST');
 
-            }
-        } catch (error) {
-            // console.log('catch GET REQUEST');
-        }
-    };
+    //         }
+    //     } catch (error) {
+    //         // console.log('catch GET REQUEST');
+    //     }
+    // };
 
-    useEffect(() => {
-        getUser()
-    }, []);
+    // useEffect(() => {
+    //     getUser()
+    // }, []);
 
     return (
         <View style={imageUploaderStyles.imageContainer}>
