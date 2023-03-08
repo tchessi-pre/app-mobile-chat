@@ -19,6 +19,9 @@ export default function ImageUploadMessage() {
     const [postMessageSuccess, setPostMessageSuccess] = useState('');
     const [postMessageError, setPostMessageError] = useState('');
 
+    const [isSending, setIsSending] = useState(false);
+    const [messageQueue, setMessageQueue] = useState([]);
+
 
     // Demande les permissions pour accéder à la caméra et à la galerie
     const getPermissionsAsync = async () => {
@@ -57,10 +60,15 @@ export default function ImageUploadMessage() {
     };
 
     async function handleMessage() {
+        if (isSending) {
+            setMessageQueue([...messageQueue, newMessage]);
+            return;
+        }
         if (newMessage === '') {
             setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
         } else {
             try {
+                setIsSending(true);
                 const token = await AsyncStorage.getItem('token');
                 const postMessage = new FormData();
                 if (image) {
@@ -88,6 +96,7 @@ export default function ImageUploadMessage() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+
                 if (response.status === 201) {
                     setNewMessage('');
                     setPostMessageSuccess("Message envoyé avec succès");
@@ -99,9 +108,16 @@ export default function ImageUploadMessage() {
             } catch (error) {
                 console.log(error);
                 setPostMessageError("Erreur network lors de l'envoi du message");
+            } finally {
+                setIsSending(false);
+                if (messageQueue.length > 0) {
+                    const nextMessage = messageQueue.shift();
+                    handleMessage(nextMessage);
+                }
             }
         }
     }
+
 
 
     useEffect(() => {
@@ -142,9 +158,10 @@ export default function ImageUploadMessage() {
                     placeholderTextColor={'white'}
                     style={PostStyle.input}
                 />
-                <TouchableOpacity onPress={handleMessage} style={PostStyle.sendButton}>
+                <TouchableOpacity onPress={handleMessage} disabled={isSending} style={PostStyle.sendButton}>
                     <Ionicons style={PostStyle.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
                 </TouchableOpacity>
+                {isSending && <Text style={modalStyles.sendWaitsText}>Envoi en cours...</Text>}
             </View>
 
             {/* MODAL */}
@@ -164,6 +181,7 @@ export default function ImageUploadMessage() {
                             <Text style={modalStyles.modalBtnText}>Prendre une photo</Text>
                         </TouchableOpacity>
                         {postImageError !== '' && <Text style={modalStyles.errorText}>{postImageError}</Text>}
+                        {isSending && <Text style={modalStyles.sendWaitsText}>Veuillez patientez...</Text>}
                     </View>
                 </View>
             </Modal>
@@ -297,6 +315,12 @@ const modalStyles = StyleSheet.create({
         fontSize: 10,
         fontWeight: 'bold',
     },
+    sendWaitsText: {
+        color: 'white',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+
     successText: {
         color: 'green',
         fontSize: 10,

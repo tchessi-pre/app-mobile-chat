@@ -12,23 +12,26 @@ exports.createPost = async (req, res, next) => {
     postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${
       req.file.filename
     }`;
-    console.log(req.file.filename)
   }
   try {
     let post = await Post.create({
       ...postObject,
       userId: req.user.id,
     });
+    post = await Post.findOne({ where: { id: post.id }, include: db.User });
     const msg = {
       id: post.id,
       content: post.content,
-      createAt: post.createdAt,
+      createdAt: post.createdAt,
       updatedAt: post.updatedAt,
-      imageUrl: post.imageUrl
-    }
-    console.log(msg)
+      imageUrl: post.imageUrl,
+      userImageUrl: post.User.imageUrl,
+      userFirstName: post.User.firstName,
+      userLastName: post.User.lastName,
+    };
+    
     io.emit('newPost', msg);
-    post = await Post.findOne({ where: { id: post.id }, include: db.User });
+    console.log('io emit log here :', msg);
     res.status(201).json({ post });
   } catch (error) {
     console.log(error);

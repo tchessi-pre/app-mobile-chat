@@ -24,11 +24,7 @@ const Chat = () => {
                 },
             });
             if (response.status === 200) {
-                const posts = response.data.posts.map(post => ({
-                    ...post,
-                    userImageUrl: post.User?.imageUrl
-                }));
-                setMessages(posts);
+                setMessages(response.data.posts);
             } else {
                 console.log('error');
             }
@@ -36,15 +32,15 @@ const Chat = () => {
             console.error(error);
         }
     };
-
     // ADD Socket 
     useEffect(() => {
-        const socket = io('http://10.10.0.13:3100');
+        fetchMessages();
+        const socket = io(`${API_URL}`);
         setTimeout(() => {
-            fetchMessages();
             console.log("socket connecté", socket.connected)
         }, 2000);
         socket.on('newPost', (msg) => {
+            fetchMessages();
             setMessages(messages => [...messages, msg]);
             console.log(msg);
         });
@@ -149,6 +145,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white',
+        paddingBottom: 15,
+        border: "black"
     },
     messageText: {
         fontSize: 13,

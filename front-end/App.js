@@ -56,12 +56,12 @@ const StackNavigate = () => {
 
   const checkToken = async() => {
     const token = await AsyncStorage.getItem('token');
-    if (token) {
+    if (!token) {
       setIsLoggedIn(true);
-      console.log('Status :',isLoggedIn);
+      console.log('Status : user connecté');
     } else {
       setIsLoggedIn(false);
-      console.log('Status :',isLoggedIn);
+      console.log('Status : user non connecté');
     }
   }
   useEffect(() => {
