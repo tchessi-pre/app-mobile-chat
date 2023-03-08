@@ -127,8 +127,8 @@ export default function UploadImage() {
             if (response.status === 200) {
                 // console.log(response.data);
                 setTakeImage(response.data.user.imageUrl);
-                console.log(response.data.user.imageUrl);
-                console.log('sucess GET REQUEST');
+                // console.log(response.data.user.imageUrl);
+                // console.log('sucess GET REQUEST');
 
             }
         } catch (error) {
@@ -147,7 +147,7 @@ export default function UploadImage() {
             <View>
                 <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/DefaultUser.png')} />
                 {/* BTN UPLOAD IMAGE */}
-                <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.UploadAvatar}>
                     <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             </View>
@@ -156,7 +156,7 @@ export default function UploadImage() {
             <Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
                 <View style={modalStyles.ModalContainer}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
-                        <Text style={modalStyles.closeBtnText}>❌</Text>
+                        <Text style={modalStyles.closeBtnModal}>❌</Text>
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
@@ -186,14 +186,12 @@ const imageUploaderStyles = StyleSheet.create({
         justifyContent: 'center',
         margin: 30,
     },
-    uploadBtn: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        opacity: 0.8,
-        borderRadius: 100,
-        zIndex: 1,
+    UploadAvatar: {
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
     },
+
 })
 const modalStyles = StyleSheet.create({
     Modal: {
@@ -220,14 +218,10 @@ const modalStyles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         zIndex: 1,
-        display: 'flex',
-        position: 'absolute',
-        right: 20,
-        top: 210,
+        alignSelf: 'flex-end',
     },
-    closeBtnText: {
+    closeBtnModal: {
         fontSize: 20,
-        color: 'white',
     },
     modalContent: {
         backgroundColor: 'white',
