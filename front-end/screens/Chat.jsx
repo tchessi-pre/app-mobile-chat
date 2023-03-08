@@ -24,8 +24,11 @@ const Chat = () => {
                 },
             });
             if (response.status === 200) {
-                setMessages(response.data.posts);
-
+                const posts = response.data.posts.map(post => ({
+                    ...post,
+                    userImageUrl: post.User?.imageUrl
+                }));
+                setMessages(posts);
             } else {
                 console.log('error');
             }
@@ -35,26 +38,26 @@ const Chat = () => {
     };
 
     // ADD Socket 
+    useEffect(() => {
+        const socket = io('http://10.10.0.13:3100');
+        setTimeout(() => {
+            fetchMessages();
+            console.log("socket connecté", socket.connected)
+        }, 2000);
+        socket.on('newPost', (msg) => {
+            setMessages(messages => [...messages, msg]);
+            console.log(msg);
+        });
+    }, []);
+
     // useEffect(() => {
     //     fetchMessages();
-    //     // const socket = io('http://110.10.57.143.3:2000');
-    //     // setTimeout(() => {
-    //     //     console.log(socket.connected)
-    //     // }, 2000);
-    //     // socket.on('newPost', (msg) => {
-    //     //     setMessages(messages => [...messages, msg]);
-    //     //     console.warn(msg);
-    //     // });
+    //     const intervalId = setInterval(() => {
+    //         fetchMessages();
+    //     }, 1000); // exécute fetchMessages toutes les 5 secondes
+
+    //     return () => clearInterval(intervalId); // nettoie le minuteur lorsque le composant est démonté
     // }, []);
-
-    useEffect(() => {
-        fetchMessages();
-        const intervalId = setInterval(() => {
-            fetchMessages();
-        }, 1000); // exécute fetchMessages toutes les 5 secondes
-
-        return () => clearInterval(intervalId); // nettoie le minuteur lorsque le composant est démonté
-    }, []);
 
     // Formatage de la date
     const formatDate = (dateString) => {

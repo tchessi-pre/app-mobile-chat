@@ -4,7 +4,13 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
-io.on('connection', socket => console.log('user connected socket io ✅')); 
+io.on('connection', socket => {
+  console.log('user connected socket io ✅')
+  socket.on("disconnect", () => {
+  console.log('user disconnected socket ❌')
+  } )
+}); 
+
 module.exports = io;
 
 const path = require('path');
@@ -48,7 +54,7 @@ http.listen(3100, () => {
   console.log('Serveur Node en route sur le port:', 3100, '✅ ');
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
-    console.log('Port 3000 is already in use, please select a different port ❌.');
+    console.log('Port 3100 is already in use, please select a different port ❌.');
   } else {
     console.log(`An error occurred: ${err}`, '❌');
   }

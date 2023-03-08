@@ -55,44 +55,6 @@ export default function ImageUploadMessage() {
     const removePicture = () => {
         setImage(null);
     };
-    // async function handleMessage() {
-    //     if (newMessage === '') {
-    //         setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
-    //     } else {
-    //         try {
-    //             const dataMessage = {}
-    //             dataMessage.content = newMessage;
-    //             const token = await AsyncStorage.getItem('token');
-    //             const dataImage = new FormData();
-    //             if (image) {
-    //                 dataImage.append('upload', {
-    //                     uri: image,
-    //                     type: 'image/jpeg',
-    //                     name: 'image.jpg',
-    //                 }, 'upload');
-    //                 const fileName = `${Date.now()}_${image.split('/').pop()}`;
-    //                 dataImage.append('post', JSON.stringify({ imageUrl: fileName }));
-    //             }
-    //             console.log({ ...dataMessage, ...dataImage });
-    //             const response = await axios.post(`${API_URL}/api/posts`, dataMessage, dataImage, {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data',
-    //                     'Authorization': `Bearer ${token}`,
-    //                 },
-    //             });
-    //             if (response.status === 201) {
-    //                 setNewMessage('');
-    //                 setPostMessageSuccess("Message envoyé avec succès");
-    //             } else {
-    //                 console.log("error posting message");
-    //                 setPostMessageError("Erreur lors de l'envoi du message");
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //             setPostMessageError("Erreur network lors de l'envoi du message");
-    //         }
-    //     }
-    // }
 
     async function handleMessage() {
         if (newMessage === '') {
@@ -118,7 +80,6 @@ export default function ImageUploadMessage() {
                 } else {
                     postMessage.append('content', newMessage);
                 }
-
                 console.log(postData);
 
                 const response = await axios.post(`${API_URL}/api/posts`, postMessage, {
@@ -127,7 +88,6 @@ export default function ImageUploadMessage() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
                 if (response.status === 201) {
                     setNewMessage('');
                     setPostMessageSuccess("Message envoyé avec succès");
