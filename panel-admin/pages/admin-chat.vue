@@ -331,7 +331,7 @@ export default {
                             <td class="w-text">{{ formatDate(post.createdAt) }}</td>
                             <td>
                                 <!-- EDIT USER -->
-                                <button class="btn btn-primary" @click="confirmEdit(post.id)">Modifier</button>
+                                <!-- <button class="btn btn-primary" @click="confirmEdit(post.id)">Modifier</button> -->
                                 <!-- DELETE USER -->
                                 <button class="btn btn-danger" @click="confirmDelete(post.id)">Supprimer</button>
                                 <!-- MSGE ERROR -->

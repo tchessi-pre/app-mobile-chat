@@ -88,7 +88,7 @@ export default function ImageUploadMessage() {
                 } else {
                     postMessage.append('content', newMessage);
                 }
-                console.log(postData);
+                // console.log(postData);
 
                 const response = await axios.post(`${API_URL}/api/posts`, postMessage, {
                     headers: {
@@ -118,8 +118,6 @@ export default function ImageUploadMessage() {
         }
     }
 
-
-
     useEffect(() => {
         if (postImageError !== '' || postMessageSuccess !== '' || postMessageError != '') {
             setTimeout(() => {
@@ -131,7 +129,6 @@ export default function ImageUploadMessage() {
     }, [postImageError, postMessageSuccess, postMessageError]);
 
     return (
-
         <View style={PostStyle.postContainer}>
             <View>
                 {/* Input & Button views */}

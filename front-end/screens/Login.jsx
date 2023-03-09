@@ -41,8 +41,8 @@ const Login = ({ navigation }) => {
                 if (response.status === 201) {
                     // Stocker le token
                     await AsyncStorage.setItem('token', response.data.token);
-                    console.log('Voici le token de l\'utilisateur', response.data.token)
-                    console.log("status: 201, request login successful");
+                    console.log('Token utilisateur: ', response.data.token, " login successful")
+                    // console.log("status: 201, request login successful");
                     navigation.navigate('Profil');
                 } else {
                     console.log("status: " + response.status + ", request unsuccessful");

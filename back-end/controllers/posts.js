@@ -31,7 +31,7 @@ exports.createPost = async (req, res, next) => {
       userLastName: post.User.lastName
     };
     io.emit('socketPost', msgSocket);
-    console.log('io emit log here :', msgSocket);
+    // console.log('io emit log here :', msgSocket);
     res.status(201).json({ post });
   } catch (error) {
     console.log(error);

@@ -8,12 +8,15 @@ import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ImageMessageUpload from '../components/ImageMessageUpload';
 import BaseUrl from '../services/BaseUrl';
+import jwt_decode from 'jwt-decode';
+
 const API_URL = BaseUrl
 
 const Chat = () => {
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
     // Check Text error
+    const [currentUser, setCurrentUser] = useState(null);
 
     const fetchMessages = async () => {
         try {
@@ -23,9 +26,13 @@ const Chat = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+
             if (response.status === 200) {
                 setMessages(response.data.posts);
-                console.log(response.data.posts[0])
+
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken.userId;
+                setCurrentUser(userId);
             } else {
                 console.log('error');
             }
@@ -33,17 +40,18 @@ const Chat = () => {
             console.error(error);
         }
     };
+
     // ADD Socket 
     useEffect(() => {
         fetchMessages();
         const socket = io(`${API_URL}`);
-        setTimeout(() => {
-            console.log("socket connecté", socket.connected)
-        }, 2000);
+        // setTimeout(() => {
+        //     console.log("socket connecté", socket.connected)
+        // }, 2000);
         socket.on('socketPost', (msgSocket) => {
             fetchMessages();
             setMessages(messages => [...messages, msgSocket]);
-            console.log(msgSocket);
+            // console.log(msgSocket);
         });
     }, []);
 
@@ -63,9 +71,9 @@ const Chat = () => {
                 onEndReachedThreshold={0.5}
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
-                renderItem={({ item }) =>
-                    <View style={styles.messageContainer}>
-                        <View style={styles.messageContent}>
+                renderItem={({ item }) => (
+                    <View style={[styles.messageContainer, item.User.id === currentUser ? styles.currentUserMessageContainer : null]}>
+                        <View style={[styles.messageContent]}>
                             <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
@@ -76,7 +84,8 @@ const Chat = () => {
                                 <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
                             </View>
                         </View>
-                    </View>}
+                    </View>
+                )}
             />
             <View style={styles.inputContainer}>
                 <ImageMessageUpload />
@@ -98,24 +107,39 @@ const styles = StyleSheet.create({
         backgroundColor: '#0F1828',
         bottom: '1%',
         alignSelf: 'center',
+        margin: 10,
+        padding: 10,
+
     },
     messageContainer: {
         flex: 1,
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         marginRight: 10,
         maxWidth: '90%',
         marginTop: 5,
-        borderWidth: 1,
-        borderColor: 'gray',
+        // borderWidth: 2,
+        backgroundColor: 'rgb(130, 175, 207)',
+        borderColor: 'grey',
         borderTopRightRadius: 20,
-        paddingTopleft: -20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
+        paddingTopleft: -20,
         marginBottom: 5,
+    },
+
+    currentUserMessageContainer: {
+        backgroundColor: '#152033',
+        alignSelf: 'flex-end',
+        marginRight: 0,
+        marginLeft: 10,
+        borderWidth: 2,
+        borderColor: 'gray',
+        borderBottomRightRadius: -20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     messageContent: {
         flexDirection: 'row',
-        backgroundColor: '#152033',
         borderRadius: 20,
         padding: 10,
     },

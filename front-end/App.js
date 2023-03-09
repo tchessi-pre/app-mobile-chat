@@ -42,7 +42,7 @@ const TabNavigate = () => {
         tabBarIndicatorStyle: { backgroundColor: 'white' },
       })}>
       <Tab.Screen name="Chat" component={Chat}/>
-      {/* <Tab.Screen name="Chanel" component={Chanel}/> */}
+      <Tab.Screen name="Chanel" component={Chanel}/>
       <Tab.Screen name="Contact" component={Contact} />
       <Tab.Screen name="Profil" component={Profil} />
     </Tab.Navigator>
