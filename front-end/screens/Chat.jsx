@@ -25,6 +25,7 @@ const Chat = () => {
             });
             if (response.status === 200) {
                 setMessages(response.data.posts);
+                console.log(response.data.posts[0])
             } else {
                 console.log('error');
             }
@@ -39,21 +40,12 @@ const Chat = () => {
         setTimeout(() => {
             console.log("socket connecté", socket.connected)
         }, 2000);
-        socket.on('newPost', (msg) => {
+        socket.on('socketPost', (msgSocket) => {
             fetchMessages();
-            setMessages(messages => [...messages, msg]);
-            console.log(msg);
+            setMessages(messages => [...messages, msgSocket]);
+            console.log(msgSocket);
         });
     }, []);
-
-    // useEffect(() => {
-    //     fetchMessages();
-    //     const intervalId = setInterval(() => {
-    //         fetchMessages();
-    //     }, 1000); // exécute fetchMessages toutes les 5 secondes
-
-    //     return () => clearInterval(intervalId); // nettoie le minuteur lorsque le composant est démonté
-    // }, []);
 
     // Formatage de la date
     const formatDate = (dateString) => {
@@ -74,9 +66,9 @@ const Chat = () => {
                 renderItem={({ item }) =>
                     <View style={styles.messageContainer}>
                         <View style={styles.messageContent}>
-                            <Image style={styles.messageAvatar} source={item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
+                            <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>
-                                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+                                <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
                                 {item.imageUrl ? (
                                     <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
                                 ) : null}

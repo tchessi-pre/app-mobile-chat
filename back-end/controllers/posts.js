@@ -19,19 +19,19 @@ exports.createPost = async (req, res, next) => {
       userId: req.user.id,
     });
     post = await Post.findOne({ where: { id: post.id }, include: db.User });
-    const msg = {
+    const msgSocket = {
       id: post.id,
+      userId: post.userId,
       content: post.content,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       imageUrl: post.imageUrl,
       userImageUrl: post.User.imageUrl,
       userFirstName: post.User.firstName,
-      userLastName: post.User.lastName,
+      userLastName: post.User.lastName
     };
-    
-    io.emit('newPost', msg);
-    console.log('io emit log here :', msg);
+    io.emit('socketPost', msgSocket);
+    console.log('io emit log here :', msgSocket);
     res.status(201).json({ post });
   } catch (error) {
     console.log(error);
