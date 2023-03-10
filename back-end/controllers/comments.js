@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../database/db');
 const { Comments } = db.sequelize.models;
 
 exports.createComment = async (req, res, next) => {

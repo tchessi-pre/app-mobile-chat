@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../database/db');
 const Sequelize = db.Sequelize;
 const jwt = require('jsonwebtoken');
 const { User } = db.sequelize.models;
@@ -109,19 +109,7 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
-exports.FindAllUsers = (req, res, next) => {
-  User.findAll({ where: { deleted: false } })
-    .then((users) => {
-      res.status(200).json({ users });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({ error });
-    });
-};
-
 // ROUTE ADMIN
-
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin

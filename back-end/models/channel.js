@@ -7,15 +7,9 @@ const { deleteFile } = require('../services/file-removal');
 
 module.exports = (sequelize, DataTypes) => {
   class Chanel extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.²
-     */
     static associate(models) {
-      Chanel.belongsTo(models.User, { foreignKey: 'userId' });
-      Chanel.hasMany(models.Comments);
-      Chanel.hasMany(models.Likes);
+      Chanel.belongsTo(models.User, { foreignKey: 'channelId' });
+      Chanel.hasMany(models.Post, { foreignKey: 'channelId' });
     }
 
     readableCreatedAt() {
@@ -24,10 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Chanel.init(
     {
-      userId: DataTypes.INTEGER,
-      title: DataTypes.TEXT,
+      channelId: DataTypes.INTEGER,
+      title: {
+        type: DataTypes.TEXT,
+        unique: true
+      },
       imageUrl: DataTypes.STRING,
-      likesCount: DataTypes.INTEGER,
     },
     {
       sequelize,

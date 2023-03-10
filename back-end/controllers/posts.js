@@ -1,5 +1,5 @@
 const fs = require('fs');
-const db = require('../models');
+const db = require('../database/db');
 const { Post } = db.sequelize.models;
 const io = require('../app');
 
