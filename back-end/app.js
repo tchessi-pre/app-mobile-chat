@@ -57,3 +57,4 @@ app.use('/api/channel', channelRoutes);
 app.use('/api/like', likeRoute);
 app.use('/api/comment', commentRoute);
 
+console.trace()

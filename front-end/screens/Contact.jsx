@@ -32,8 +32,8 @@ const Contact = () => {
     }
 
     useEffect(() => {
-        handleSearch();
-    }, []);
+        handleSearch(search);
+    }, [search]);
 
     // search
     const onSearchChange = (text) => {
