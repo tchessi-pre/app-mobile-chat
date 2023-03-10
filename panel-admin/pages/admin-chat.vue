@@ -18,7 +18,7 @@ export default {
     methods: {
         async getOneUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

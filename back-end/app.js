@@ -53,7 +53,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', userRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/channel', channelRoutes);
-//Non utilisé
+// Non utilisé
 app.use('/api/like', likeRoute);
 app.use('/api/comment', commentRoute);
 

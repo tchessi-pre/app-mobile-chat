@@ -1,5 +1,5 @@
 const fs = require('fs');
-const db = require('../database/db');
+const db = require('../database');
 const { Channel } = db.sequelize.models;
 
 

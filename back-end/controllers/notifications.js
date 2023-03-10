@@ -1,4 +1,4 @@
-const db = require('../database/db');
+const db = require('../database');
 const { Notification } = db.sequelize.models;
 
 exports.getNotificationsOfOneUser = (req, res, next) => {

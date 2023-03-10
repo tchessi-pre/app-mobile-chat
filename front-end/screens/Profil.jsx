@@ -34,7 +34,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`${API_URL}/api/users/${userId}`, {
+            let response = await axios.get(`${API_URL}/api/auth/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

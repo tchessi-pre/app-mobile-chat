@@ -27,7 +27,7 @@ export default {
         // REQUEST GET ONE USER
         async getOneUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default {
         // REQUEST GET ALL USER
         async getUsers() {
             try {
-                const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users?search=${this.search}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default {
         // REQUEST DELETE USER
         async deleteUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users-delete/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

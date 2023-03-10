@@ -72,7 +72,7 @@ const Chat = () => {
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
                 renderItem={({ item }) => (
-                    <View style={[styles.messageContainer, item.User.id === currentUser ? styles.currentUserMessageContainer : null]}>
+                    <View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
                         <View style={[styles.messageContent]}>
                             <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>

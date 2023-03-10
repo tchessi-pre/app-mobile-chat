@@ -8,8 +8,8 @@ const { deleteFile } = require('../services/file-removal');
 module.exports = (sequelize, DataTypes) => {
   class Chanel extends Model {
     static associate(models) {
-      Chanel.belongsTo(models.User, { foreignKey: 'channelId' });
-      Chanel.hasMany(models.Post, { foreignKey: 'channelId' });
+      // Chanel.belongsTo(models.User, { foreignKey: 'channelId' });
+      // Chanel.hasMany(models.Post, { foreignKey: 'channelId' });
     }
 
     readableCreatedAt() {

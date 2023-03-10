@@ -15,7 +15,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/users/`, {
+            const response = await axios.get(`${API_URL}/api/auth/users/`, {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
