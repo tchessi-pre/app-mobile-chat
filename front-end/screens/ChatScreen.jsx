@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import ChatFooter from '../components/ChatFooter';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 
@@ -143,32 +144,7 @@ const ChatScreen = () => {
 				}
 			/>
 			<View style={styles.Bottomcontainer}>
-				<Icon
-					name='add'
-					color='#adb5bd'
-					size={25}
-					onPress={pickImage}
-					activeOpacity={0.7}
-				/>
-				<TextInput
-					style={styles.chatInput}
-					placeholder="Message..."
-					placeholderTextColor="#adb5bd"
-					editable
-					multiline
-					numberOfLines={4}
-					maxLength={40}
-					value={newMessage}
-					onChangeText={setNewMessage}
-				/>
-				<Icon
-					name='sc-telegram'
-					type='evilicon'
-					color='#FF6B6B'
-					size={40}
-					onPress={handleSendMessage}
-					activeOpacity={0.7}
-				/>
+				<ChatFooter/>
 			</View>
 		</View>
 	);
@@ -191,12 +167,8 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 	},
 	Bottomcontainer: {
-		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		position: 'absolute',
-		bottom: 0,
-		height: 60,
 		backgroundColor: '#0F1828',
 	},
 	title: {

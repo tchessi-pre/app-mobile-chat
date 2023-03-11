@@ -33,7 +33,7 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 
 			}
 		} catch (error) {
-		
+
 		}
 	}
 	useEffect(() => {
@@ -53,19 +53,13 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 			<View style={styles.top}>
 				<Text style={styles.textTop}>Utilisateurs</Text>
 				<Pressable onPress={() => setVisible(true)}>
-				<Icon
-					name='add'
+					<Icon
+						name='add'
 						color='#F7F7FC'
-					size={25}
-					activeOpacity={0.7}
-				/>
+						size={25}
+						activeOpacity={0.7}
+					/>
 				</Pressable>
-				{/* <Avatar
-					rounded
-					source={require('../assets/tuấn-kiệt.jpg')}
-					onPress={() => console.log("Works!")}
-					activeOpacity={0.7}
-				/> */}
 			</View>
 
 			<View style={styles.searchBar}>
@@ -110,32 +104,38 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 						></Button>
 					</View>
 				)}
-			</View>		
-				<FlatList
-					data={usersSearch.users}
-					onEndReachedThreshold={0.5}
-					keyExtractor={item => item.id.toString()}
-					renderItem={({ item }) => (
-						<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() =>
-							console.log('Redirect to chatscreen')}>
-							<View>
+			</View>
+			<FlatList
+				data={usersSearch.users}
+				onEndReachedThreshold={0.5}
+				keyExtractor={item => item.id.toString()}
+				renderItem={({ item }) => (
+					<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() =>
+						console.log('Redirect to chatscreen')}>
+						<View>
+							{item.imageUrl ? (
 								<TouchableOpacity activeOpacity={.5} onPress={() =>
-									navigation.navigate('Profil')} >
-									<Image style={styles.profilImage} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/avatarplaceholder.png')} />
+									navigation.navigate('Profil')}>
+									<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
 								</TouchableOpacity>
-								<Text
-									style={styles.status}
-								>{status === 'online' ? '🟢' : '🔴'}</Text>
-							</View>
-							<View style={styles.profilName} >
-								<Text style={styles.fullName} >{item.firstName}  {item.lastName}</Text>
-								<Text style={styles.statut}>{status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
-							</View>
-						</TouchableOpacity>
-					)}
-				/>
-				{visible ? <Modal setVisible={setVisible} /> : ""}	
-				<Footer/>
+							) : (
+								<View style={styles.initialContainer}>
+									<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
+								</View>
+							)}
+							<Text
+								style={styles.status}
+							>{status === 'online' ? '🟢' : '🔴'}</Text>
+						</View>
+						<View style={styles.profilName} >
+							<Text style={styles.fullName} >{item.firstName}  {item.lastName}</Text>
+							<Text style={styles.statut}>{status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
+						</View>
+					</TouchableOpacity>
+				)}
+			/>
+			{visible ? <Modal setVisible={setVisible} /> : ""}
+			<Footer />
 		</View>
 	);
 }
@@ -171,12 +171,12 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 	},
 	status: {
-		position: 'absolute', 
-		top: -1, left: 45, 
-		borderWidth: 2, 
-		borderRadius: 100, 
-		width: 22, height: 22, 
-		borderColor: '#F7F7FC', 
+		position: 'absolute',
+		top: -1, left: 45,
+		borderWidth: 2,
+		borderRadius: 100,
+		width: 22, height: 22,
+		borderColor: '#F7F7FC',
 		textAlign: 'center',
 	},
 	profil__button: {
@@ -202,15 +202,33 @@ const styles = StyleSheet.create({
 	profilName: {
 		marginLeft: 20,
 	},
-	fullName: {
-		color: "#ffffff",
-		marginBottom: 5,
-		fontSize: 16
+	initialContainer: {
+		width: 60,
+		height: 60,
+		backgroundColor: ' #ccc',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginRight: 10,
+		backgroundColor: '#FF6B6B',
+		borderRadius: 16,
 	},
-	statut: {
-		color: "#adb5bd",
-		fontSize: 10
+	initialText: {
+		textTransform: 'uppercase',
+		color: '#ffffff',
+		textAlign: 'center',
+		fontSize: 16,
+		fontWeight: 'bold',
 	},
-})
+		fullName: {
+			color: "#ffffff",
+			marginBottom: 5,
+			fontSize: 16
+		},
+		statut: {
+			color: "#adb5bd",
+			fontSize: 10
+		},
+	})
 
 export default ChannelScreen;
