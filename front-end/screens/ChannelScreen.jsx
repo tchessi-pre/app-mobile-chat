@@ -125,7 +125,14 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 							)}
 							<Text
 								style={styles.status}
-							>{status === 'online' ? '🟢' : '🔴'}</Text>
+							>{status === 'online' ? <Badge
+								status="success"
+								containerStyle={{ position: 'absolute', top: -4, right: -4 }}
+								/> : <Badge
+									status="error"
+									size={30}
+									containerStyle={{ position: 'absolute', top: -4, right: -4}}
+								/>}</Text>
 						</View>
 						<View style={styles.profilName} >
 							<Text style={styles.fullName} >{item.firstName}  {item.lastName}</Text>
@@ -146,25 +153,28 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignContent: 'center',
-		backgroundColor: '#0F1828',
-		paddingHorizontal: 10,
+		backgroundColor: '#0F1828'
 	},
 	containeContact: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
-		width: 300,
+		width: "90%",
 		paddingBottom: 10,
+		marginLeft: 10,
 		paddingTop: 10,
+		paddingHorizontal: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#ffffff15'
 	},
 	top: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignContent: 'center',
-		marginTop: 40,
-		paddingHorizontal: 5,
-
+		marginTop: 50,
+		marginBottom: 5,
+		paddingHorizontal: 8,
 	},
 	textTop: {
 		color: '#ffffff',
@@ -172,11 +182,7 @@ const styles = StyleSheet.create({
 	},
 	status: {
 		position: 'absolute',
-		top: -1, left: 45,
-		borderWidth: 2,
-		borderRadius: 100,
-		width: 22, height: 22,
-		borderColor: '#F7F7FC',
+		top: 2, left: 50,
 		textAlign: 'center',
 	},
 	profil__button: {

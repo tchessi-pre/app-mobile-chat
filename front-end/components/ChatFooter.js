@@ -35,7 +35,8 @@ export default function ImageUploadMessage() {
 	const addPicture = async () => {
 		let image = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: false,
+			allowsEditing: true,
+			aspect: [4, 3],
 			quality: 1,
 		});
 		if (!image.canceled) {
@@ -73,11 +74,11 @@ export default function ImageUploadMessage() {
 				const token = await AsyncStorage.getItem('token');
 				const postMessage = new FormData();
 				if (image) {
-					postMessage.append('upload', {
+					postMessage.append('image', {
 						uri: image,
 						type: 'image/jpeg',
-						name: 'image.jpg',
-					}, 'upload');
+						name: 'postimage',
+					}, 'image');
 				}
 
 				const postData = {
@@ -140,7 +141,7 @@ export default function ImageUploadMessage() {
 			<View style={PostStyle.inputContainer}>
 				{!image ? (
 					<TouchableOpacity onPress={() => setModalVisible(true)} style={PostStyle.selectImageButton}>
-						<Ionicons name="add-outline" size={24} color="white" />
+						<Ionicons name="add-outline" size={25} color="white" />
 					</TouchableOpacity>
 				) : null}
 				{image ? (
@@ -219,8 +220,8 @@ const PostStyle = StyleSheet.create({
 	imageSet: {
 		width: 40,
 		height: 40,
-		borderRadius: 15,
-		marginLeft: 2,
+		borderRadius: 14,
+		marginLeft: 0,
 	},
 
 	selectImageButton: {
@@ -325,7 +326,7 @@ const modalStyles = StyleSheet.create({
 		height: '50%',
 	},
 	modalBtn: {
-		backgroundColor: '#0F1828',
+		backgroundColor: '#FF6B6B',
 		padding: 10,
 		borderRadius: 50,
 		width: 65,

@@ -125,7 +125,6 @@ export const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 0,
 		zIndex: 10,
-		marginLeft: 10
 	},
 	modalinput: {
 		borderWidth: 1,

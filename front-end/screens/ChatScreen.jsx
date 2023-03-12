@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import ChatFooter from '../components/ChatFooter';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import BaseUrl from '../services/BaseUrl';
 
 const API_URL = BaseUrl;
@@ -17,7 +18,8 @@ const ChatScreen = () => {
 	const [newMessage, setNewMessage] = useState('');
 	const [newImageUrl, setNewImageUrl] = useState('');
 	const [currentDate, setCurrentDate] = useState('');
-	
+	const [currentUser, setCurrentUser] = useState(null);
+
 	const fetchMessages = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
@@ -28,11 +30,14 @@ const ChatScreen = () => {
 			});
 			if (response.status === 200) {
 				setMessages(response.data.posts);
+				const decodedToken = jwt_decode(token);
+				const userId = decodedToken.userId;
+				setCurrentUser(userId);
 			} else {
 				console.log('error');
 			}
 		} catch (error) {
-	
+
 		}
 	};
 
@@ -45,58 +50,10 @@ const ChatScreen = () => {
 		var sec = new Date().getSeconds(); //Current Seconds
 		setCurrentDate(
 			date + '/' + month + '/' + year
-			+ ' ' + hours + ':' + min 
+			+ ' ' + hours + ':' + min
 		);
 		fetchMessages();
 	}, []);
-
-
-	const pickImage = async () => {
-		// No permissions request is necessary for launching the image library
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-
-		console.log(result);
-
-		if (!result.canceled) {
-			setImage(result.assets[0].uri);
-		}
-	};
-	const handleSendMessage = async () => {
-		if (newMessage === '') {
-			alert('Vous ne pouvez pas envoyez un message vide !')
-		} else {
-			try {
-				const data = {};
-				if (newMessage) data.content = newMessage;
-				if (newImageUrl) data.imageUrl = newImageUrl;
-				const token = await AsyncStorage.getItem('token');
-				const response = await axios.post(`${API_URL}api/posts`, data, {
-					headers: {
-						'Authorization': `Bearer ${token}`,
-					},
-				});
-				if (response.status === 201) {
-					fetchMessages();
-					setNewMessage('');
-					setNewImageUrl('');
-					console.log('request POST message, success !');
-				}
-				else {
-					console.log('error');
-					console.log(response.status);
-				}
-			} catch (error) {
-				console.error(error);
-				console.log(error.response);
-				console.log('request POST message, error !');
-			}
-		}
-	};
 
 	return (
 		<View style={styles.container}>
@@ -106,7 +63,7 @@ const ChatScreen = () => {
 				</View>
 				<View style={styles.right_icons}>
 					<Icon
-						name='search'
+						name='bell'
 						type='evilicon'
 						color='#ffffff'
 						size={30}
@@ -124,27 +81,31 @@ const ChatScreen = () => {
 				</View>
 			</View>
 			<FlatList
-				style={styles.chatContainer}
+				style={styles.messageListContainer}
 				inverted={true}
 				onEndReached={fetchMessages}
 				onEndReachedThreshold={0.5}
 				data={messages}
 				keyExtractor={item => `${item.id}-${item.createdAt}`}
-				renderItem={({ item }) =>
-					<ScrollView>
-					<View style={styles.msgContainer}>
-							{image && <Image source={{ uri: image }} style={styles.imageContent} />}
+				renderItem={({ item }) => (
+
+					<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
+						<View style={[styles.messageContent]}>
+							<Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
 							<View style={styles.messageTextContainer}>
-								<Text style={styles.contentText}>{item.content}</Text>
+								<Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
+								{item.imageUrl ? (
+									<Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
+								) : null}
+								<Text style={styles.messageText}>{item.content}</Text>
+								<Text style={styles.messageCreatedAt}>{currentDate}</Text>
 							</View>
-							<Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
-						<Text style={styles.date}>{currentDate}</Text>
+						</View>
 					</View>
-					</ScrollView>
-				}
+				)}
 			/>
 			<View style={styles.Bottomcontainer}>
-				<ChatFooter/>
+				<ChatFooter />
 			</View>
 		</View>
 	);
@@ -181,6 +142,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		position: 'absolute',
 		width: "100%",
+		zIndex: 999,
 		top: 30,
 		height: 50,
 		paddingHorizontal: 10,
@@ -188,7 +150,7 @@ const styles = StyleSheet.create({
 		// marginRight: 10,
 		backgroundColor: '#0F1828',
 	},
-	
+
 	right_icons: {
 		flexDirection: 'row',
 		paddingTop: 8,
@@ -203,7 +165,7 @@ const styles = StyleSheet.create({
 	chatContainer: {
 		top: 82,
 	},
-	
+
 	msgContainer: {
 		width: 226,
 		height: 208,
@@ -232,14 +194,86 @@ const styles = StyleSheet.create({
 	},
 	messageUsername: {
 		position: 'absolute',
-		bottom: 5,
+		top: 0,
 		left: 10,
 		fontSize: 10,
 		fontWeight: 'bold',
 		textTransform: 'uppercase',
 		color: 'white'
 	},
+	/// message chat
+	messageListContainer: {
+		flex: 1,
+		width: '95%',
+		alignSelf: 'center',
+	},
+	messageContainer: {
+		flex: 1,
+		alignSelf: 'flex-start',
+		marginRight: 5,
+		maxWidth: '90%',
+		marginTop: 5,
+		backgroundColor: '#FF6B6B',
+		borderTopRightRadius: 16,
+		borderTopLeftRadius: 16,
+		borderBottomRightRadius: 16,
+		marginBottom: 5,
+	},
 
+	currentUserMessageContainer: {
+		backgroundColor: '#0F1828',
+		alignSelf: 'flex-end',
+		marginRight: 0,
+		borderTopRightRadius: 16,
+		borderTopLeftRadius: 16,
+		borderBottomLeftRadius: 16,
+		borderBottomRightRadius: 0,
+	},
+	messageContent: {
+		flexDirection: 'row',
+		borderRadius: 16,
+		padding: 10,
+	},
+	messageAvatar: {
+		width: 50,
+		height: 50,
+		borderRadius: 16,
+		boxShadow: '0 0 5px black',
+		position: 'absolute',
+		top: 2,
+		right: 2
+	},
+	messageTextContainer: {
+		width: '70%',
+		paddingRight: 10,
+	},
+	messageUsername: {
+		fontWeight: 'bold',
+		fontSize: 14,
+		color: 'white',
+	},
+	messageText: {
+		fontSize: 13,
+		padding: 5,
+		color: 'white',
+	},
+	messageImage: {
+		width: "100%",
+		height: 100,
+		borderRadius: 20,
+		alignSelf: 'center',
+	},
+	messageCreatedAt: {
+		margin: 2,
+		fontSize: 8,
+		color: 'white',
+
+	},
+	errorText: {
+		color: 'red',
+		alignSelf: 'center',
+		fontSize: 10,
+	},
 })
 
 export default ChatScreen;

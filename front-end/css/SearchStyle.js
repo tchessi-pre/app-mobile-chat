@@ -3,22 +3,21 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
 	container: {
-		margin: 15,
 		justifyContent: "center",
 		alignItems: "center",
 		flexDirection: "row",
 		width: "90%",
-		marginHorizontal: 10,
+		marginHorizontal: 5,
 	},
 	searchBar__unclicked: {
 		padding: 6,
 		flexDirection: "row",
-		width: 290,
+		width: '90%',
 		borderRadius: 15,
 		alignItems: "center",
 		borderRadius: 4,
 		backgroundColor: '#152033',
-
+		marginHorizontal: 12,
 	},
 	searchBar__clicked: {
 		padding: 10,
