@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      status: {
+        type: DataTypes.STRING,
+        defaultValue: 'offline',
+      },
     },
     {
       sequelize,

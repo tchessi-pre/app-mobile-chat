@@ -26,7 +26,11 @@ exports.login = async (req, res, next) => {
     const response = await User.authenticate(req.body.email, req.body.password);
 
     if (response.valid) {
-      res.status(201).json(newToken(response.user));
+      const user = response.user;
+      user.status = 'online';
+      await user.save();
+
+      res.status(201).json(newToken(user));
     } else {
       res.status(401).json({ error: response.message });
     }
@@ -34,6 +38,7 @@ exports.login = async (req, res, next) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.editUser = async (req, res, next) => {
   console.log("Received request to edit user: ", req.body);

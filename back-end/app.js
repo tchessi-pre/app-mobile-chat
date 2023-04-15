@@ -28,8 +28,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`🔥: ${socket.username} s'est déconnecté.`);
-    socket.broadcast.emit('userLeft', `${socket.username} a quitté le chat.`);
+    if (socket.username) {
+      console.log(`🔥: ${socket.username} s'est déconnecté.`);
+      socket.broadcast.emit('userLeft', `${socket.username} a quitté le chat.`);
+      delete socket.username;
+    }
   });
 });
 

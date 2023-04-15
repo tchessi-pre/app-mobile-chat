@@ -28,27 +28,18 @@ const LogoutButton = () => {
 				await AsyncStorage.removeItem('token');
 				const cleared = await AsyncStorage.getItem('token');
 				if (cleared === null) {
-					Alert.alert(
-						'Déconnexion',
-						'Êtes-vous sûr? Vous voulez vous déconnecter ?',
-						[
-							{
-								text: 'Annuler',
-								onPress: () => {
-									return;
-								},
-							},
-							{
-								text: 'Confirmer',
-								onPress: () => {
-									// Envoyer un événement de déconnexion au serveur de sockets
-									socket.emit('disconnectUser', { token: value });
-									navigation.navigate('Home');
-								},
-							},
-						],
-						{ cancelable: false },
-					);
+					// Envoyer une requête PUT pour mettre à jour le statut de l'utilisateur à "offline"
+					await fetch(`${API_URL}api/auth/edit`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${value}`,
+						},
+						body: JSON.stringify({ status: 'offline' }),
+					});
+					// Envoyer un événement de déconnexion au serveur de sockets
+					socket.emit('disconnectUser', { token: value });
+					navigation.navigate('Home');
 				} else {
 					console.log("Token n'a pas été effacé");
 				}

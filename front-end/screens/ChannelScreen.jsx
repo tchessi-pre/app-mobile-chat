@@ -15,7 +15,6 @@ let timeoutId = null;
 const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
-	const [status, setStatus] = useState('');
 	const [visible, setVisible] = useState(false);
 
 	const handleSearch = async () => {
@@ -29,16 +28,14 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 			});
 			if (response.status === 200) {
 				setSearchUsers(response.data);
-				setStatus(response.data.status);
-
 			}
 		} catch (error) {
-
+			console.log(error);
 		}
 	}
+
 	useEffect(() => {
 		handleSearch();
-		ChannelScreen;
 	}, []);
 
 	const onSearchChange = (text) => {
@@ -48,6 +45,31 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 			handleSearch(text);
 		}, 200);
 	};
+
+	const renderItem = ({ item }) => (
+		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => console.log('Redirect to chatscreen')}>
+			<View>
+				{item.imageUrl ? (
+					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil')}>
+						<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
+					</TouchableOpacity>
+				) : (
+					<View style={styles.initialContainer}>
+						<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
+					</View>
+				)}
+				<Badge
+					status={item.status === 'online' ? 'success' : 'error'}
+					containerStyle={{ position: 'absolute', top: 0, right:2 }}
+				/>
+			</View>
+			<View style={styles.profilName}>
+				<Text style={styles.fullName}>{item.firstName} {item.lastName}</Text>
+				<Text style={styles.statut}>{item.status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
+			</View>
+		</TouchableOpacity>
+	);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.top}>
@@ -109,31 +131,7 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				data={usersSearch.users}
 				onEndReachedThreshold={0.5}
 				keyExtractor={item => item.id.toString()}
-				renderItem={({ item }) => (
-					<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() =>
-						console.log('Redirect to chatscreen')}>
-						<View>
-							{item.imageUrl ? (
-								<TouchableOpacity activeOpacity={.5} onPress={() =>
-									navigation.navigate('Profil')}>
-									<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
-								</TouchableOpacity>
-							) : (
-								<View style={styles.initialContainer}>
-									<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
-								</View>
-							)}
-							<Badge
-								status={item.status === 'online' ? 'success' : 'error'}
-								containerStyle={{ position: 'absolute', top: 0, right: 10 }}
-							/>
-						</View>
-						<View style={styles.profilName} >
-							<Text style={styles.fullName} >{item.firstName} {item.lastName}</Text>
-							<Text style={styles.statut}>{item.status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
-						</View>
-					</TouchableOpacity>
-				)}
+				renderItem={renderItem}
 			/>
 			{visible ? <Modal setVisible={setVisible} /> : ""}
 			<Footer />
@@ -174,33 +172,10 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		fontSize: 18,
 	},
-	status: {
-		position: 'absolute',
-		top: 2, left: 50,
-		textAlign: 'center',
-	},
-	profil__button: {
-		width: 30,
-		height: 30,
-		borderRadius: 30,
-		fontSize: 16,
-		backgroundColor: '#152033',
-		justifyContent: 'center',
-		alignContent: 'center',
-		alignItems: 'center'
-	},
-	textbtn__profil: {
-		color: '#ffffff',
-		fontSize: 18,
-		textAlign: 'center',
-	},
 	profilImage: {
 		width: 60,
 		height: 60,
 		borderRadius: 16,
-	},
-	profilName: {
-		marginLeft: 20,
 	},
 	initialContainer: {
 		width: 60,
@@ -209,7 +184,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 10,
 		backgroundColor: '#FF6B6B',
 		borderRadius: 16,
 	},
@@ -220,15 +194,35 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold',
 	},
-		fullName: {
-			color: "#ffffff",
-			marginBottom: 5,
-			fontSize: 16
-		},
-		statut: {
-			color: "#adb5bd",
-			fontSize: 10
-		},
-	})
+	profilName: {
+		marginLeft: 20,
+	},
+	fullName: {
+		color: "#ffffff",
+		marginBottom: 5,
+		fontSize: 16
+	},
+	statut: {
+		color: "#adb5bd",
+		fontSize: 10
+	},
+	searchBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 5,
+		marginBottom: 5,
+		marginLeft: 20,
+		marginRight: 20,
+	},
+	searchIcon: {
+		marginLeft: 10,
+	},
+	input: {
+		color: "#ffffff",
+		marginLeft: 10,
+		width: "80%",
+		fontSize: 16,
+	}
+});
 
 export default ChannelScreen;
