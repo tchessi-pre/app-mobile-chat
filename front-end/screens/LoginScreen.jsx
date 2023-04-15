@@ -1,10 +1,11 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from '../components/Loader';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
+import io from 'socket.io-client';
 
 const API_URL = BaseUrl;
 
@@ -13,11 +14,29 @@ const ConnexionScreen = ({ navigation }) => {
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [errortext, setErrortext] = useState('');
+	const [socket, setSocket] = useState(null);
 
 	const passwordInputRef = createRef();
 
+	useEffect(() => {
+		return () => {
+			if (socket) {
+				socket.disconnect();
+			}
+		};
+	}, [socket]);
+
+	const connectToSocket = (username) => {
+		const newSocket = io(API_URL);
+		newSocket.on('connect', () => {
+			console.log('Connected to the server');
+			newSocket.emit('join', username);
+		});
+
+		setSocket(newSocket);
+	};
+
 	const handleLogin = async () => {
-	
 		setErrortext('');
 		if (email == '') {
 			alert('Merci de remplir l\'email');
@@ -33,13 +52,12 @@ const ConnexionScreen = ({ navigation }) => {
 			password
 		})
 			.then((response) => {
-				//Hide Loader
 				setLoading(false);
 				console.log(response);
-				// If server response message same as Data Matched
 				if (response.status === 201) {
 					AsyncStorage.setItem('token', response.data.token);
 					console.log(response.data.token);
+					connectToSocket(email);
 					navigation.navigate('Contacts');
 				} else {
 					setErrortext(response.msg);
@@ -47,18 +65,16 @@ const ConnexionScreen = ({ navigation }) => {
 				}
 			})
 			.catch((error) => {
-				//Hide Loader
 				setLoading(false);
 				console.error(error);
 			});
-		
 	};
 
 	return (
 		<View style={styles.container}>
 			<Loader loading={loading} />
 			<View style={Styles.logoArea}>
-				<Text style={Styles.companyName} >TissApp</Text>
+				<Text style={Styles.companyName}>TissApp</Text>
 				<Image style={Styles.minilogo} source={require('../assets/NewLogo.png')} />
 			</View>
 			<TextInput
@@ -96,6 +112,7 @@ const ConnexionScreen = ({ navigation }) => {
 		</View>
 	);
 }
+
 
 const styles = StyleSheet.create({
 	container: {

@@ -123,20 +123,14 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 									<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
 								</View>
 							)}
-							<Text
-								style={styles.status}
-							>{status === 'online' ? <Badge
-								status="success"
-								containerStyle={{ position: 'absolute', top: -4, right: -4 }}
-								/> : <Badge
-									status="error"
-									size={30}
-									containerStyle={{ position: 'absolute', top: -4, right: -4}}
-								/>}</Text>
+							<Badge
+								status={item.status === 'online' ? 'success' : 'error'}
+								containerStyle={{ position: 'absolute', top: 0, right: 10 }}
+							/>
 						</View>
 						<View style={styles.profilName} >
-							<Text style={styles.fullName} >{item.firstName}  {item.lastName}</Text>
-							<Text style={styles.statut}>{status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
+							<Text style={styles.fullName} >{item.firstName} {item.lastName}</Text>
+							<Text style={styles.statut}>{item.status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
 						</View>
 					</TouchableOpacity>
 				)}

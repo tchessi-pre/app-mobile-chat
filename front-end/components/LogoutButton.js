@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, Alert } from 'react-native';
-import Styles from '../css/Styles'
+import Styles from '../css/Styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation} from '@react-navigation/native';
+import BaseUrl from '../services/BaseUrl';
+import io from 'socket.io-client';
+const API_URL = BaseUrl;
 
 const LogoutButton = () => {
 	const navigation = useNavigation();
 	const [token, setToken] = useState(null);
+	const [socket, setSocket] = useState(null);
+
+	useEffect(() => {
+		const newSocket = io(API_URL);
+		setSocket(newSocket);
+		return () => {
+			newSocket.disconnect();
+		};
+	}, []);
 
 	const handleLogout = async () => {
 		try {
@@ -29,6 +41,8 @@ const LogoutButton = () => {
 							{
 								text: 'Confirmer',
 								onPress: () => {
+									// Envoyer un événement de déconnexion au serveur de sockets
+									socket.emit('disconnectUser', { token: value });
 									navigation.navigate('Home');
 								},
 							},
@@ -43,9 +57,11 @@ const LogoutButton = () => {
 			console.log(error);
 		}
 	};
+
 	useEffect(() => {
 		// handleEdit();
 	}, [handleLogout]);
+
 	return (
 		<View>
 			<TouchableHighlight
@@ -56,8 +72,8 @@ const LogoutButton = () => {
 			</TouchableHighlight>
 		</View>
 	);
-}
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
 export default LogoutButton;

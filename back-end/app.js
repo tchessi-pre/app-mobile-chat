@@ -1,17 +1,37 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const app = express();
-
 const path = require('path');
-
 const auth = require('./middleware/auth');
-
 const userCtrl = require('./controllers/user');
 const notificationsCtrl = require('./controllers/notifications');
-
 const postsRoutes = require('./routes/posts');
 const userRoutes = require('./routes/user');
+const http = require('http');
+const socketIO = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
+
+io.on('connection', (socket) => {
+  console.log('Un utilisateur s\'est connecté.');
+
+  socket.on('join', (username) => {
+    socket.username = username;
+    console.log(`⚡: ${username} a rejoint le chat.`);
+    socket.broadcast.emit('userJoined', `${username} a rejoint le chat.`);
+  });
+
+  socket.on('sendMessage', (message) => {
+    console.log(`${socket.username}: ${message}`);
+    socket.broadcast.emit('receiveMessage', { username: socket.username, message });
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`🔥: ${socket.username} s'est déconnecté.`);
+    socket.broadcast.emit('userLeft', `${socket.username} a quitté le chat.`);
+  });
+});
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -48,4 +68,4 @@ app.delete(
   notificationsCtrl.deleteNotification
 );
 
-module.exports = app;
+module.exports = server;
