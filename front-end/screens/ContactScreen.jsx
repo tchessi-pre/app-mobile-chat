@@ -12,7 +12,7 @@ import SearchStyle from '../css/SearchStyle'
 
 const API_URL = BaseUrl;
 let timeoutId = null;
-const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
+const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
 	const [visible, setVisible] = useState(false);
@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default ChannelScreen;
+export default ContactScreen;

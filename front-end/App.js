@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import ChannelScreen from "./screens/ChannelScreen";
+import ContactScreen from "./screens/ContactScreen";
 import SettingsScreen from "./screens/ProfilScreen";
 import ChatScreen from "./screens/ChatScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -126,7 +126,7 @@ const StackNavigate = () => {
         />
         < Stack.Screen
           name="Contacts"
-          component={ChannelScreen}
+          component={ContactScreen}
           options={{
             tabBarLabel: 'Disc...',
             tabBarIcon: ({ color, size }) => (
