@@ -8,6 +8,7 @@ import ChatFooter from '../components/ChatFooter';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import BaseUrl from '../services/BaseUrl';
+import io from 'socket.io-client';
 
 const API_URL = BaseUrl;
 
@@ -19,6 +20,7 @@ const ChatScreen = () => {
 	const [newImageUrl, setNewImageUrl] = useState('');
 	const [currentDate, setCurrentDate] = useState('');
 	const [currentUser, setCurrentUser] = useState(null);
+	const socket = io(API_URL);
 
 	const fetchMessages = async () => {
 		try {
@@ -37,7 +39,35 @@ const ChatScreen = () => {
 				console.log('error');
 			}
 		} catch (error) {
+			console.log(error);
+		}
+	};
 
+	const sendMessage = async () => {
+		if (newMessage || image) {
+			try {
+				const token = await AsyncStorage.getItem('token');
+				const formData = new FormData();
+				formData.append('content', newMessage);
+				if (image) {
+					formData.append('imageUrl', image);
+				}
+				const response = await axios.post(`${API_URL}api/posts/`, formData, {
+					headers: {
+						'Authorization': `Bearer ${token}`,
+					},
+				});
+				if (response.status === 201) {
+					setNewMessage('');
+					setImage(null);
+					const newMessage = response.data.post;
+					socket.emit('createMessage', newMessage);
+				} else {
+					console.log('error');
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	};
 
@@ -53,7 +83,16 @@ const ChatScreen = () => {
 			+ ' ' + hours + ':' + min
 		);
 		fetchMessages();
-	}, []);
+		socket.on('connect', () => {
+			console.log('Connected to server');
+		});
+		socket.on('newMessage', (message) => {
+			setMessages((prevState) => [...prevState, message]);
+		});
+		return () => {
+			socket.disconnect();
+		};
+	}, [sendMessage]);
 
 	return (
 		<View style={styles.container}>
@@ -88,7 +127,6 @@ const ChatScreen = () => {
 				data={messages}
 				keyExtractor={item => `${item.id}-${item.createdAt}`}
 				renderItem={({ item }) => (
-
 					<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
 						<View style={[styles.messageContent]}>
 							<Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
@@ -105,7 +143,7 @@ const ChatScreen = () => {
 				)}
 			/>
 			<View style={styles.Bottomcontainer}>
-				<ChatFooter />
+				<ChatFooter onSend={sendMessage} setImage={setImage} setNewImageUrl={setNewImageUrl} newImageUrl={newImageUrl} />
 			</View>
 		</View>
 	);
@@ -146,19 +184,16 @@ const styles = StyleSheet.create({
 		top: 30,
 		height: 50,
 		paddingHorizontal: 10,
-		// marginLeft: 10,
-		// marginRight: 10,
 		backgroundColor: '#0F1828',
 	},
-
 	right_icons: {
 		flexDirection: 'row',
 		paddingTop: 8,
 	},
 	imageContent: {
 		width: 205,
-		height: 120,
-		borderRadius: 4,
+		height: "auto",
+		borderRadius: 1,
 		top: 10,
 		left: 10,
 	},
@@ -201,7 +236,6 @@ const styles = StyleSheet.create({
 		textTransform: 'uppercase',
 		color: 'white'
 	},
-	/// message chat
 	messageListContainer: {
 		flex: 1,
 		width: '95%',
@@ -219,7 +253,6 @@ const styles = StyleSheet.create({
 		borderBottomRightRadius: 16,
 		marginBottom: 5,
 	},
-
 	currentUserMessageContainer: {
 		backgroundColor: '#0F1828',
 		alignSelf: 'flex-end',
@@ -235,9 +268,9 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	messageAvatar: {
-		width: 50,
-		height: 50,
-		borderRadius: 16,
+		width: 30,
+		height: 30,
+		borderRadius: 99,
 		boxShadow: '0 0 5px black',
 		position: 'absolute',
 		top: 2,
@@ -267,13 +300,14 @@ const styles = StyleSheet.create({
 		margin: 2,
 		fontSize: 8,
 		color: 'white',
-
 	},
 	errorText: {
 		color: 'red',
 		alignSelf: 'center',
 		fontSize: 10,
 	},
-})
+});
 
 export default ChatScreen;
+
+
