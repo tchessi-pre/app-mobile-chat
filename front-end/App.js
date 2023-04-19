@@ -8,6 +8,7 @@ import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ContactScreen from "./screens/ContactScreen";
+import ChannelScreen from "./screens/ChannelScreen";
 import SettingsScreen from "./screens/ProfilScreen";
 import ChatScreen from "./screens/ChatScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -53,6 +54,7 @@ const Auth = () => {
           tabBarStyle: { display: "none" },
         }}
       />
+
     </Stack.Navigator>
   );
 };
@@ -125,10 +127,10 @@ const StackNavigate = () => {
           options={{ headerShown: false }}
         />
         < Stack.Screen
-          name="Contacts"
-          component={ContactScreen}
+          name="Channel"
+          component={ChannelScreen}
           options={{
-            tabBarLabel: 'Disc...',
+            tabBarLabel: 'Channel',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="home" color={color} size={30} />
             ),
@@ -138,6 +140,20 @@ const StackNavigate = () => {
 
           }}
         />
+        < Stack.Screen
+          name="Contacts"
+          component={ContactScreen}
+          options={{
+            tabBarLabel: 'Contacts',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="contacts" color={color} size={30} />
+            ),
+            headerTintColor: 'white',
+            headerStyle: { backgroundColor: '#0F1828' },
+            headerShown: true,
+          }}
+        />
+        
         <Stack.Screen
           name="Chat"
           component={ChatScreen}
@@ -149,7 +165,7 @@ const StackNavigate = () => {
             tabBarBadge: 3,
             headerTintColor: 'white',
             headerStyle: { backgroundColor: '#0F1828' },
-            headerShown: false,
+            headerShown: true,
           }}
         />
         <Stack.Screen

@@ -13,10 +13,11 @@ import SearchStyle from '../css/SearchStyle'
 
 const API_URL = BaseUrl;
 let timeoutId = null;
-const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
+const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
 	const [visible, setVisible] = useState(false);
+
 
 	const handleSearch = async () => {
 		try {
@@ -49,7 +50,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 
 	const renderItem = ({ item }) => (
 		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => console.log('Redirect to chatscreen')}>
-			<View>
+			{/* <View>
 				{item.imageUrl ? (
 					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil')}>
 						<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
@@ -61,29 +62,30 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				)}
 				<Badge
 					status={item.status === 'online' ? 'success' : 'error'}
-					containerStyle={{ position: 'absolute', top: 0, right:2 }}
+					containerStyle={{ position: 'absolute', top: 0, right: 2 }}
 				/>
 			</View>
 			<View style={styles.profilName}>
 				<Text style={styles.fullName}>{item.firstName} {item.lastName}</Text>
 				<Text style={styles.statut}>{item.status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
-			</View>
+			</View> */}
 		</TouchableOpacity>
 	);
 
 	return (
 		<View style={styles.container}>
-			{/* <View style={styles.top}>
-				<Text style={styles.textTop}>Utilisateurs</Text>
+			<View style={styles.top}>
+				<Text style={styles.textTop}>Disc.</Text>
 				<Pressable onPress={() => setVisible(true)}>
 					<Icon
 						name='add'
 						color='#F7F7FC'
 						size={25}
 						activeOpacity={0.7}
+						style={{ marginRight: 5 }}
 					/>
 				</Pressable>
-			</View> */}
+			</View>
 
 			<View style={styles.searchBar}>
 				<View
@@ -134,8 +136,9 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				keyExtractor={item => item.id.toString()}
 				renderItem={renderItem}
 			/>
-			{visible ? <Modal setVisible={setVisible} /> : ""}
 			{/* <FloatingButton /> */}
+			{visible ? <Modal setVisible={setVisible} /> : ""}
+			<Footer />
 		</View>
 	);
 }
@@ -172,6 +175,7 @@ const styles = StyleSheet.create({
 	textTop: {
 		color: '#ffffff',
 		fontSize: 18,
+		paddingLeft: 5
 	},
 	profilImage: {
 		width: 60,
@@ -223,7 +227,18 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 		width: "80%",
 		fontSize: 16,
-	}
+	}, 
+	floatingButton: {
+		position: 'absolute',
+		bottom: 20,
+		right: 20,
+		width: 60,
+		height: 60,
+		borderRadius: 30,
+		backgroundColor: '#007aff',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });
 
-export default ContactScreen;
+export default ChannelScreen;

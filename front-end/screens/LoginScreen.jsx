@@ -58,7 +58,7 @@ const ConnexionScreen = ({ navigation }) => {
 					AsyncStorage.setItem('token', response.data.token);
 					console.log(response.data.token);
 					connectToSocket(email);
-					navigation.navigate('Contacts');
+					navigation.navigate('Channel');
 				} else {
 					setErrortext(response.msg);
 					console.log('Please check your email id or password');

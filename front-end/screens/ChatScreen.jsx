@@ -96,7 +96,7 @@ const ChatScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.chat_head}>
+			{/* <View style={styles.chat_head}>
 				<View>
 					<Text style={styles.title}>Chat</Text>
 				</View>
@@ -118,7 +118,7 @@ const ChatScreen = () => {
 						activeOpacity={0.7}
 					/>
 				</View>
-			</View>
+			</View> */}
 			<FlatList
 				style={styles.messageListContainer}
 				inverted={true}
@@ -170,26 +170,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
 	},
-	title: {
-		color: '#ffffff',
-		fontSize: 20
-	},
-	chat_head: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		position: 'absolute',
-		width: "100%",
-		zIndex: 999,
-		top: 30,
-		height: 50,
-		paddingHorizontal: 10,
-		backgroundColor: '#0F1828',
-	},
-	right_icons: {
-		flexDirection: 'row',
-		paddingTop: 8,
-	},
+	
 	imageContent: {
 		width: 205,
 		height: "auto",
