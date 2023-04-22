@@ -5,6 +5,7 @@ import SimpleLayout from './layouts/simple';
 //
 import HomePage from './pages/HomePage';
 import ChatPage from './pages/ChatPage';
+import AccountPage from './pages/AccountPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
@@ -30,6 +31,7 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'chat', element: <ChatPage /> },
+        { path: 'account', element: <AccountPage /> },
       ],
     },
     {
