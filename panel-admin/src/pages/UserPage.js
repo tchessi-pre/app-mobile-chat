@@ -9,7 +9,6 @@ import {
   Stack,
   Paper,
   Avatar,
-  Button,
   Popover,
   Checkbox,
   TableRow,
@@ -26,6 +25,8 @@ import {
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
+import EditUserModal from '../components/modal/EditUserModal';
+import AddUserModal from '../components/modal/AddUserModal';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -75,19 +76,13 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('asc');
-
   const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState('name');
-
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -157,9 +152,7 @@ export default function UserPage() {
           <Typography variant="h4" gutterBottom>
             Utilisateurs
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            Ajouter
-          </Button>
+          <AddUserModal/>
         </Stack>
 
         <Card>
@@ -279,10 +272,7 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Modifier
-        </MenuItem>
+        <EditUserModal />
 
         <MenuItem sx={{ color: 'error.main' }}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
