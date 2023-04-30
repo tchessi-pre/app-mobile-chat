@@ -1,3 +1,4 @@
+// ContactScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, FlatList, TextInput, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
@@ -51,7 +52,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => console.log('Redirect to chatscreen')}>
 			<View>
 				{item.imageUrl ? (
-					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil')}>
+					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil', { userId: item.id })}>
 						<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
 					</TouchableOpacity>
 				) : (
@@ -61,7 +62,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				)}
 				<Badge
 					status={item.status === 'online' ? 'success' : 'error'}
-					containerStyle={{ position: 'absolute', top: 0, right:2 }}
+					containerStyle={{ position: 'absolute', top: 0, right: 2 }}
 				/>
 			</View>
 			<View style={styles.profilName}>
@@ -73,18 +74,6 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 
 	return (
 		<View style={styles.container}>
-			{/* <View style={styles.top}>
-				<Text style={styles.textTop}>Utilisateurs</Text>
-				<Pressable onPress={() => setVisible(true)}>
-					<Icon
-						name='add'
-						color='#F7F7FC'
-						size={25}
-						activeOpacity={0.7}
-					/>
-				</Pressable>
-			</View> */}
-
 			<View style={styles.searchBar}>
 				<View
 					style={
@@ -93,14 +82,12 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 							: SearchStyle.searchBar__unclicked
 					}
 				>
-					{/* search Icon */}
 					<Feather
 						name="search"
 						size={20}
 						color="#ADB5BD"
 						style={{ marginLeft: 1 }}
 					/>
-					{/* Input field */}
 					<TextInput
 						style={SearchStyle.input}
 						placeholder="Recherche"
@@ -108,14 +95,12 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 						onChangeText={onSearchChange}
 						value={search}
 					/>
-					{/* cross Icon, depending on whether the search bar is clicked or not */}
 					{clicked && (
 						<Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
 							setSearchPhrase("")
 						}} />
 					)}
 				</View>
-				{/* cancel button, depending on whether the search bar is clicked or not */}
 				{clicked && (
 					<View>
 						<Button
@@ -135,7 +120,6 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				renderItem={renderItem}
 			/>
 			{visible ? <Modal setVisible={setVisible} /> : ""}
-			{/* <FloatingButton /> */}
 		</View>
 	);
 }

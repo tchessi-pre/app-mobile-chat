@@ -96,29 +96,6 @@ const ChatScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			{/* <View style={styles.chat_head}>
-				<View>
-					<Text style={styles.title}>Chat</Text>
-				</View>
-				<View style={styles.right_icons}>
-					<Icon
-						name='bell'
-						type='evilicon'
-						color='#ffffff'
-						size={30}
-						onPress={() => console.log("Send")}
-						activeOpacity={0.7}
-					/>
-					<Icon
-						name='navicon'
-						type='evilicon'
-						color='#ffffff'
-						size={30}
-						onPress={() => console.log("Send")}
-						activeOpacity={0.7}
-					/>
-				</View>
-			</View> */}
 			<FlatList
 				style={styles.messageListContainer}
 				inverted={true}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image, TextInput, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
@@ -18,15 +18,13 @@ const ProfilScreen = ({ navigation }) => {
 
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
-	// Get firstName, lastName and email of one user
+	const [isEditing, setIsEditing] = useState(false);
 
 	const getUser = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
-			//Retrieve the userId with the token
 			const decodedToken = jwt_decode(token);
 			const userId = decodedToken.userId;
-			// console.log(userId);
 			let response = await axios.get(`${API_URL}api/users/${userId}`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
@@ -40,12 +38,17 @@ const ProfilScreen = ({ navigation }) => {
 		} catch (error) {
 		}
 	};
+
 	useEffect(() => {
 		getUser();
 	}, []);
 
-	// Edit user firstName and lastName
 	const handleEdit = async () => {
+		if (!isEditing) {
+			setIsEditing(true);
+			return;
+		}
+
 		if (firstName == '') {
 			alert('Merci de remplir le prénom');
 			return;
@@ -54,7 +57,6 @@ const ProfilScreen = ({ navigation }) => {
 			alert('Merci de remplir le nom');
 			return;
 		} else {
-			// requête axios here localhost3000/edit
 			try {
 				const token = await AsyncStorage.getItem('token');
 				let response = await axios.put(`${API_URL}api/auth/edit`, {
@@ -69,7 +71,6 @@ const ProfilScreen = ({ navigation }) => {
 					alert('Modification réussie !');
 					try {
 						useEffect(() => {
-							// handleEdit();
 						}, [getUser()]);
 					} catch (error) {
 						console.log(error);
@@ -84,6 +85,8 @@ const ProfilScreen = ({ navigation }) => {
 				console.log(JSON.stringify(error.response));
 			}
 		}
+
+		setIsEditing(false);
 	}
 
 	return (
@@ -102,8 +105,8 @@ const ProfilScreen = ({ navigation }) => {
 					placeholderTextColor="#F7F7FC"
 					keyboardType="name"
 					value={firstName}
-					onChange={text => setFirstName(text)}
 					onChangeText={text => setFirstName(text)}
+					editable={isEditing}
 				/>
 				<TextInput
 					style={Styles.input}
@@ -111,8 +114,8 @@ const ProfilScreen = ({ navigation }) => {
 					placeholderTextColor="#F7F7FC"
 					keyboardType="name"
 					value={lastName}
-					onChange={text => setLastName(text)}
 					onChangeText={text => setLastName(text)}
+					editable={isEditing}
 				/>
 			</View>
 			<View>
@@ -121,7 +124,7 @@ const ProfilScreen = ({ navigation }) => {
 					onPress={handleEdit}
 					activeOpacity={0.7}
 				>
-					<Text style={Styles.submitText}>Modifier</Text>
+					<Text style={Styles.submitText}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
 				</TouchableHighlight>
 				<LogoutButton />
 			</View>
@@ -166,3 +169,4 @@ const styles = StyleSheet.create({
 })
 
 export default ProfilScreen;
+
