@@ -9,23 +9,23 @@ const navConfig = [
   {
     title: 'Tableau de bord',
     path: '/dashboard/app',
-    icon: icon('ic_analytics'),
+    icon: icon('ic_dashboard'),
   },
-  {
-    title: 'Admin profil',
-    path: '/dashboard/account',
-    icon: icon('ic_user'),
-  },
-  {
+  { 
     title: 'Utilisateurs',
     path: '/dashboard/user',
-    icon: icon('ic_user'),
+    icon: icon('ic_users'),
   },
   {
     title: 'Chat',
     path: '/dashboard/chat',
-    icon: icon('ic_blog'),
-  }
+    icon: icon('ic_chat'),
+  },
+  {
+    title: 'Admin profil',
+    path: '/dashboard/account',
+    icon: icon('ic_profile'),
+  },
 ];
 
 export default navConfig;

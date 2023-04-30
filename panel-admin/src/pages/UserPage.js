@@ -204,7 +204,7 @@ export default function UserPage() {
                         <TableCell align="left">{isVerified ? 'Oui' : 'Non'}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'Hors ligne' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
