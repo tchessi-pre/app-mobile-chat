@@ -34,7 +34,7 @@ export default function HomePage() {
 						<Box
 							component="img"
 							src="/assets/illustrations/visual-data-animate.svg"
-							sx={{ height: 350, width: 450, mx: 'auto', my: { xs: 5, sm: 10 } }}
+							sx={{ height: 350, width: 450, mx: 'auto', my: { xs: 12, sm: 10 } }}
 						/>
 						<Button to="/login" size="large" variant="contained" component={RouterLink}>
 							Connexion-Admin
