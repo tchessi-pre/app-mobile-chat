@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Avatar, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import useAuth from "../hooks/useAuth";
 
 function AccountPage() {
-	const [user, setUser] = useState({
-		firstName: 'John',
-		lastName: 'Doe',
-		email: 'johndoe@example.com',
-		avatarUrl: 'https://picsum.photos/200',
-	});
+	const {
+		user,
+		setUser,
+		firstName,
+		lastName,
+		email,
+		avatarUrl,
+		handleUser,
+	} = useAuth();
+
+	useEffect(() => {
+		handleUser()
+	}, [handleUser]);
+
 	const [editing, setEditing] = useState(false);
 	const [editedUser, setEditedUser] = useState(user);
 
@@ -36,14 +45,14 @@ function AccountPage() {
 		<Container maxWidth="sm">
 			<Grid container spacing={3} alignItems="center">
 				<Grid item>
-					<Avatar src={user.avatarUrl} alt={`${user.firstName} ${user.lastName}`} sx={{ width: 80, height: 80 }} />
+					<Avatar src={avatarUrl} alt={`${firstName} ${lastName}`} sx={{ width: 80, height: 80 }} />
 				</Grid>
 				<Grid item>
 					<Typography variant="h4" gutterBottom>
 						{editing ? (
 							<TextField name="firstName" value={editedUser.firstName} onChange={handleInputChange} />
 						) : (
-							`${user.firstName} ${user.lastName}`
+							`${firstName} ${lastName}`
 						)}
 					</Typography>
 					<Typography variant="h4" gutterBottom>
@@ -54,7 +63,7 @@ function AccountPage() {
 						)}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						{user.email}
+						{email}
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>

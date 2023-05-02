@@ -2,16 +2,14 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
-import Box from '@mui/material/Box';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Iconify from '../iconify';
 
 export default function AddPostModal() {
 	const [open, setOpen] = React.useState(false);
-	const [showPassword, setShowPassword] = React.useState(false);
+	// const [showPassword, setShowPassword] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -21,9 +19,9 @@ export default function AddPostModal() {
 		setOpen(false);
 	};
 
-	const handlePasswordToggle = () => {
-		setShowPassword(!showPassword);
-	};
+	// const handlePasswordToggle = () => {
+	// 	setShowPassword(!showPassword);
+	// };
 
 	return (
 		<div>

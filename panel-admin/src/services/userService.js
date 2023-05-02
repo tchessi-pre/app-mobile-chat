@@ -22,11 +22,17 @@ const userService = {
 	},
 
 	// Récupérer les données de l'utilisateur via son token
-	async getMe(id) {
+	async getMe(userId) {
 		try {
-			const response = await instance.get(`/users/${id}`);
-			return response;
+
+			const response = await instance.get(`/users/${userId}`);
+			if (response && response.data) {
+				return { data: response.data };
+			}
+			console.log("Response or response data is null");
+			return null;
 		} catch (error) {
+			console.error("Error in getMe:", error);
 			return error.response.data;
 		}
 	},
