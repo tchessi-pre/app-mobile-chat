@@ -97,6 +97,28 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
+exports.editUserAdmin = async (req, res, next) => {
+  try {
+    const userObject = req.file
+      ? {
+        ...JSON.parse(req.body.user),
+        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
+      }
+      : { ...req.body };
+
+    const user = req.params.id
+      ? await User.findOne({ where: { id: req.params.id } })
+      : req.user;
+
+    user.update(userObject).then((user) => res.status(200).json({ user }));
+  } catch (error) {
+    res.status(400).json({ error });
+    console.log(error);
+    console.log(response.error);
+  }
+};
+
+
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin

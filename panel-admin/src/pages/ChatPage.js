@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Avatar, Table, TableBody, Button, TableCell, TableContainer, TableHead, TablePagination, TableRow, Container, Stack, Typography } from '@mui/material';
-import { BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
+import { BlogPostsSearch } from '../sections/@dashboard/blog';
 import AddPostModal from '../components/modal/AddPostModal';
+import DeleteModal from '../components/modal/DeleteModal';
 import useAuth from '../hooks/useAuth';
 
 const SORT_OPTIONS = [
@@ -29,11 +30,10 @@ export default function ChatPage() {
           <Typography variant="h4" gutterBottom>
             Chat
           </Typography>
-          <AddPostModal />
         </Stack>
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch />
-          <BlogPostsSort options={SORT_OPTIONS} />
+          <AddPostModal />
         </Stack>
         <MessageTable messages={messages} />
       </Container>
@@ -42,6 +42,18 @@ export default function ChatPage() {
 }
 
 function MessageTable({ messages }) {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <TableContainer>
       <Table>
@@ -55,23 +67,40 @@ function MessageTable({ messages }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {messages.map((message) => (
-            <TableRow key={message.id}>
-              <TableCell><Avatar src={message.imageUrl} alt={message.User.firstName} /></TableCell>
-              <TableCell>{message.User.firstName} {message.User.lastName}</TableCell>
-              <TableCell>
-                {message.content}
-                <img src={message.imageUrl} alt="message" style={{ width: '50px', height: '50px', marginLeft: '10px' }} />
-              </TableCell>
-
-              <TableCell>{message.createdAt}</TableCell>
-              <TableCell>
-                <Button>Suppimer</Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {messages
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((message) => (
+              <TableRow key={message.id}>
+                <TableCell><Avatar src={message.imageUrl} alt={message.User.firstName} /></TableCell>
+                <TableCell>{message.User.firstName} {message.User.lastName}</TableCell>
+                <TableCell>
+                  {message.content}
+                  {message.imageUrl && (
+                    <img
+                      src={message.imageUrl}
+                      alt="message"
+                      style={{ width: '50px', height: '50px', marginLeft: '10px' }}
+                    />
+                  )}
+                </TableCell>
+                <TableCell>{message.createdAt}</TableCell>
+                <TableCell>
+                  <DeleteModal />
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        count={messages.length}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        labelRowsPerPage="Lignes par page:"
+      />
     </TableContainer>
   );
 }

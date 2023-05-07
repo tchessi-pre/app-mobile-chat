@@ -91,6 +91,31 @@ const userService = {
 			return error.response.data;
 		}
 	},
+
+	// Envoie message
+	async sendPosts(formData) {
+		try {
+			const response = await instance.post('/posts', formData, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			});
+			console.log("fromsend", response)
+			return response;
+		} catch (error) {
+			return error.response.data;
+		}
+	},
+
+	// Supprimer un message
+	async deletePost(PostId) {
+		try {
+			const response = await instance.delete(`/posts/${PostId}`);
+			console.log("fromDelete", response);
+			return response;
+		} catch (error) {
+			return error.response.data;
+		}
+	}
+
 };
 
 export default userService;

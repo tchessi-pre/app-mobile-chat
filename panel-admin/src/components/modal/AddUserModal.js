@@ -13,8 +13,8 @@ import Iconify from '../iconify';
 
 
 export default function AddUserModal() {
-	const [open, setOpen] = React.useState(false);
-	const [showPassword, setShowPassword] = React.useState(false);
+	const [open, setOpen] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
