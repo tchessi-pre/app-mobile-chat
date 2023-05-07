@@ -1,17 +1,25 @@
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { faker } from '@faker-js/faker';
 // @mui
-import { Grid, Container, Typography } from '@mui/material';
+import { Avatar, Grid, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 // sections
 import {
-  AppNewsUpdate,
-  AppWebsiteVisits,
   AppWidgetSummary,
 } from '../sections/@dashboard/app';
-
+import useAuth from '../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
+  const { users, messages, handlePosts, handleAllUsers } = useAuth();
+
+  useEffect(() => {
+    handleAllUsers()
+    handlePosts()
+  }, []);
+
+  const onlineUsers = users.filter((user) => user.status === 'online');
+  const sortedMessages = messages.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const lastFourMessages = sortedMessages.slice(0, 5);
 
   return (
     <>
@@ -26,72 +34,59 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Nombre d'utilisateurs" total={714000} icon={'ant-design:user-switch-outlined'} />
+            <AppWidgetSummary title="Nombre d'utilisateurs" total={users.length} icon={'ant-design:user-switch-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Utilisateurs en ligne" total={1352831} color="info" icon={'ant-design:wifi-outlined'} />
+            <AppWidgetSummary title="Utilisateurs en ligne" total={onlineUsers.length} color="info" icon={'ant-design:wifi-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Nombre de Chat" total={1723315} color="warning" icon={'ant-design:wechat-filled'} />
+            <AppWidgetSummary title="Nombre de Chat" total={messages.length} color="warning" icon={'ant-design:wechat-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid>
-
-          <Grid item xs={12} md={12} lg={12}>
-            <AppWebsiteVisits
-              title="Visites de l'application"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ]}
-              chartData={[
-                {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: 'Team B',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
-              ]}
+            <AppWidgetSummary
+              title="4 derniers messages"
+              messages={lastFourMessages}
+              total={messages.length}
+              color="error"
+              icon={'ant-design:message-filled'}
             />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Avatar</TableCell>
+                    <TableCell>Messages</TableCell>
+                    <TableCell>Envoyé le</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {lastFourMessages.map((lastFourMessage) => (
+                    <TableRow key={lastFourMessage.id}>
+                      <TableCell>
+                        <Avatar src={lastFourMessage.User.imageUrl} alt={lastFourMessage.User.firstName} />
+                      </TableCell>
+                      <TableCell>{lastFourMessage.content}</TableCell>
+                      <TableCell>{lastFourMessage.createdAt}</TableCell>
+                      <TableCell>
+                        {lastFourMessage.User.status === 'online' ? (
+                          <span style={{ color: 'green' }}>En ligne</span>
+                        ) : (
+                          <span style={{ color: 'red' }}>Hors ligne</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
+          
         </Grid>
       </Container>
     </>

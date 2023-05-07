@@ -12,6 +12,8 @@ export default function useAuth() {
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [avatarUrl, setAvatarUrl] = useState('');
+	const [messages, setMessages] = useState([]);
+	const [imageContent, setImageContent] = useState([]);
 
 	const login = useCallback(async (data) => {
 		setLoading(true);
@@ -93,6 +95,30 @@ export default function useAuth() {
 			throw new Error(error.message);
 		}
 	}, []);
+	
+	// Récupération des messages postés
+	const handlePosts= useCallback(async () => {
+		setLoading(true);
+		setError(null);
 
-	return { id, setId, user, users, firstName, lastName, email, avatarUrl, setAvatarUrl, setUser, setUsers, login, logout, handleUser, handleAllUsers, loading, error };
+		try {
+			
+			const response = await userService.getPosts();
+			console.log("findMessages", response.data)
+			setLoading(false);
+			if (response.error) {
+				setError(response.error);
+				throw new Error(response.error);
+			} else {
+				setMessages(response.data.posts)
+				setImageContent(response.data.posts.imageUrl)
+				return response.data;
+			}
+		} catch (error) {
+			setLoading(false);
+			setError(error.message);
+			throw new Error(error.message);
+		}
+	}, []);
+	return { id, setId, user, users, firstName, lastName, email, avatarUrl, messages, setAvatarUrl, setUser, setUsers, setMessages, imageContent, setImageContent, login, logout, handleUser, handleAllUsers, handlePosts, loading, error };
 }

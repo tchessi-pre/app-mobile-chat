@@ -76,6 +76,15 @@ const userService = {
 			return error.response.data;
 		}
 	},
+	// Récupération des messages
+	async getPosts() {
+		try {
+			const response = await instance.get('/posts');
+			return response;
+		} catch (error) {
+			return error.response.data;
+		}
+	},
 };
 
 export default userService;
