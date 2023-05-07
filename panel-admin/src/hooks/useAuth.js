@@ -7,6 +7,7 @@ export default function useAuth() {
 	const [error, setError] = useState(null);
 	const [id, setId] = useState(null);
 	const [user, setUser] = useState('');
+	const [users, setUsers] = useState([]);
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
@@ -49,14 +50,12 @@ export default function useAuth() {
 			const userId = decodedToken.userId;
 
 			const response = await userService.findOneUser(userId);
-			console.log("FromUseAuth", response.data.user);
 			setLoading(false);
 
 			if (response.error) {
 				setError(response.error);
 				throw new Error(response.error);
 			} else {
-				console.log(response)
 				setUser(response.data.user);
 				setFirstName(response.data.user.firstName);
 				setLastName(response.data.user.lastName);
@@ -71,5 +70,29 @@ export default function useAuth() {
 		}
 	}, []);
 
-	return { id, setId, user, firstName, lastName, email, avatarUrl, setAvatarUrl,setUser, login, logout, handleUser, loading, error };
+	// Récupéraripon de tous les utilisateurs
+	const handleAllUsers = useCallback(async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			
+			const response = await userService.findUsers();
+			console.log("findUsers", response.data)
+			setLoading(false);
+			if (response.error) {
+				setError(response.error);
+				throw new Error(response.error);
+			} else {
+				setUsers(response.data.users)
+				return response.data;
+			}
+		} catch (error) {
+			setLoading(false);
+			setError(error.message);
+			throw new Error(error.message);
+		}
+	}, []);
+
+	return { id, setId, user, users, firstName, lastName, email, avatarUrl, setAvatarUrl, setUser, setUsers, login, logout, handleUser, handleAllUsers, loading, error };
 }

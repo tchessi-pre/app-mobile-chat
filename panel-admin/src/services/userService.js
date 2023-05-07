@@ -50,7 +50,7 @@ const userService = {
 	// Récupérer toutes les utilisateurs
 	async findUsers() {
 		try {
-			const response = await instance.get('/users');
+			const response = await instance.get('/users?search');
 			return response;
 		} catch (error) {
 			return error.response.data;
