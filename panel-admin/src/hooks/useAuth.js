@@ -14,7 +14,31 @@ export default function useAuth() {
 	const [avatarUrl, setAvatarUrl] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [imageContent, setImageContent] = useState([]);
+	const [createdUser, setCreatedUser] = useState(null);
 
+
+	const handleCreateUser = useCallback(async (data) => {
+		setLoading(true);
+		setError(null);
+		try {
+			const response = await userService.createUser(data);
+			setLoading(false);
+			if (response.error) {
+				setError(response.error);
+				return { error: response.error }; // Return error response
+			}
+
+			setCreatedUser(response.data);
+			return { data: response.data }; // Return data response
+		} catch (error) {
+			setLoading(false);
+			setError(error.message);
+			return { error: error.message }; // Return error response
+		}
+	}, []);
+
+
+	// Connexion d'un utilisateur
 	const login = useCallback(async (data) => {
 		setLoading(true);
 		setError(null);
@@ -120,5 +144,5 @@ export default function useAuth() {
 			throw new Error(error.message);
 		}
 	}, []);
-	return { id, setId, user, users, firstName, lastName, email, avatarUrl, messages, setAvatarUrl, setUser, setUsers, setMessages, imageContent, setImageContent, login, logout, handleUser, handleAllUsers, handlePosts, loading, error };
+	return { id, setId, user, users, firstName, lastName, email, avatarUrl, messages, createdUser, setAvatarUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser,login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts, loading, error };
 }

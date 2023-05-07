@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,12 +6,24 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+// Composant de notification
+import { useSnackbar } from 'notistack';
+import useAuth from '../../hooks/useAuth';
 import Iconify from '../iconify';
+
 
 export default function AddUserModal() {
 	const [open, setOpen] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('')
 
+	const { enqueueSnackbar } = useSnackbar();
+
+	const { handleCreateUser } = useAuth();
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -22,6 +34,31 @@ export default function AddUserModal() {
 
 	const handlePasswordToggle = () => {
 		setShowPassword(!showPassword);
+	};
+
+	const handleSubmit = async () => {
+		if (password !== confirmPassword) {
+			enqueueSnackbar("Les mots de passe ne correspondent pas", { variant: "error" });
+			return;
+		}
+
+		try {
+			const response = await handleCreateUser({
+				firstName,
+				lastName,
+				email,
+				password,
+			});
+
+			if (response.error) {
+				enqueueSnackbar(response.error, { variant: "error" });
+			} else {
+				enqueueSnackbar("Utilisateur créé avec succès", { variant: "success" });
+				handleClose();
+			}
+		} catch (error) {
+			enqueueSnackbar("Erreur lors de la création de l'utilisateur", { variant: "error" });
+		}
 	};
 
 	return (
@@ -42,6 +79,8 @@ export default function AddUserModal() {
 						type="text"
 						fullWidth
 						variant="standard"
+						value={firstName}
+						onChange={(e) => setFirstName(e.target.value)}
 					/>
 					<TextField
 						autoFocus
@@ -51,6 +90,8 @@ export default function AddUserModal() {
 						type="text"
 						fullWidth
 						variant="standard"
+						value={lastName}
+						onChange={(e) => setLastName(e.target.value)}
 					/>
 					<TextField
 						autoFocus
@@ -60,6 +101,8 @@ export default function AddUserModal() {
 						type="email"
 						fullWidth
 						variant="standard"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 					/>
 					<TextField
 						autoFocus
@@ -68,6 +111,8 @@ export default function AddUserModal() {
 						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						variant="standard"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 						InputProps={{
 							endAdornment: (
 								<Iconify
@@ -85,6 +130,8 @@ export default function AddUserModal() {
 						type={showPassword ? 'text' : 'password'}
 						fullWidth
 						variant="standard"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
 						InputProps={{
 							endAdornment: (
 								<Iconify
@@ -98,7 +145,7 @@ export default function AddUserModal() {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Annuler</Button>
-					<Button onClick={handleClose}>Enregistrer</Button>
+					<Button onClick={handleSubmit}>Enregistrer</Button>
 				</DialogActions>
 			</Dialog>
 		</div>

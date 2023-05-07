@@ -4,10 +4,16 @@ const userService = {
 	// Créer un utilisateur
 	async createUser(data) {
 		try {
-			const response = await instance.post('/api/auth/signup', data);
-			return response;
+			const response = await instance.post('/auth/signup', data);
+
+			if (response.status === 200 || response.status === 201) {
+				return { success: true, data: response.data };
+			}
+
+			return { success: false, error: response.data.message || "Erreur lors de la création de l'utilisateur." };
+
 		} catch (error) {
-			return error.response?.data;
+			return { success: false, error: error.response?.data.message || "Erreur lors de la création de l'utilisateur." };
 		}
 	},
 
