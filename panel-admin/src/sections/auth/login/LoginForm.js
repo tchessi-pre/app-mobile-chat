@@ -16,7 +16,6 @@ export default function LoginForm() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState(null);
 
-
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
@@ -24,18 +23,24 @@ export default function LoginForm() {
   const handleClick = async () => {
     try {
       const user = await login(formData);
-      if (user) {
+      if (user && user.admin === true) {
         navigate('/dashboard', { replace: true });
+      } else {
+        setErrorMessage('Seul l\'administrateur peut se connecter.');
       }
     } catch (error) {
-      setErrorMessage('Une erreur s\'est produite lors de la connexion.');
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Une erreur s\'est produite lors de la connexion.');
+      }
     }
   };
 
 
   return (
     <>
-      
+
       <Stack spacing={3}>
         <TextField
           name="email"
@@ -69,7 +74,7 @@ export default function LoginForm() {
       </Stack>
       {
         errorMessage && (
-          <Alert severity="error" sx={{ marginBottom: 2 }}  onClose={() => setErrorMessage(null)}>
+          <Alert severity="error" sx={{ marginBottom: 2 }} onClose={() => setErrorMessage(null)}>
             {errorMessage}
           </Alert>
         )
