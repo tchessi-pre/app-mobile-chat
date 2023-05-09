@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Avatar, Table, TableBody, Button, TableCell, TableContainer, TableHead, TablePagination, TableRow, Container, Stack, Typography } from '@mui/material';
+import { Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Container, Stack, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import { BlogPostsSearch } from '../sections/@dashboard/blog';
 import AddPostModal from '../components/modal/AddPostModal';
 import DeleteModal from '../components/modal/DeleteModal';
-import useAuth from '../hooks/useAuth';
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
-];
+import useAuth from '../hooks/useAuth';
 
 export default function ChatPage() {
   const { messages, handlePosts } = useAuth();
@@ -44,6 +40,15 @@ export default function ChatPage() {
 function MessageTable({ messages }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImageLoaded(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -71,7 +76,14 @@ function MessageTable({ messages }) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((message) => (
               <TableRow key={message.id}>
-                <TableCell><Avatar src={message.imageUrl} alt={message.User.firstName} /></TableCell>
+                <Avatar
+                  src={message.imageUrl || null}
+                  alt={`${message.User.firstName} ${message.User.lastName}`}
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                >
+                  {!imageLoaded && `${message.User.firstName.charAt(0)}${message.User.lastName.charAt(0)}`}
+                </Avatar>
                 <TableCell>{message.User.firstName} {message.User.lastName}</TableCell>
                 <TableCell>
                   {message.content}
@@ -104,3 +116,18 @@ function MessageTable({ messages }) {
     </TableContainer>
   );
 }
+
+MessageTable.propTypes = {
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      User: PropTypes.shape({
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+      }).isRequired,
+      content: PropTypes.string,
+      imageUrl: PropTypes.string,
+      createdAt: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
-import account from '../../../_mock/account';
 import LogoutModal from '../../../components/modal/LogoutModal';
 import useAuth from "../../../hooks/useAuth";
 
@@ -11,11 +10,20 @@ import useAuth from "../../../hooks/useAuth";
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImageLoaded(false);
+  };
   const {
     firstName,
     lastName,
     email,
-    avatarUrl,
+    imageUrl,
     handleUser,
   } = useAuth();
 
@@ -50,7 +58,14 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={avatarUrl} alt="Photo de profil" />
+        <Avatar
+          src={imageUrl || null}
+          alt="Photo de profil"
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+        >
+          {!imageLoaded && `${firstName.charAt(0)}${lastName.charAt(0)}`}
+        </Avatar>
       </IconButton>
 
       <Popover

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
+  Avatar,
   Table,
   TableBody,
   TableCell,
@@ -8,7 +9,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Avatar,
   Checkbox,
   Container,
   Stack,
@@ -25,16 +25,24 @@ import Scrollbar from '../components/scrollbar';
 import useAuth from '../hooks/useAuth';
 
 const UsersPage = () => {
-  const { users, handleAllUsers } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { users, handleAllUsers } = useAuth();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImageLoaded(false);
+  };
   const open = Boolean(anchorEl);
 
   useEffect(() => {
     handleAllUsers();
-  }, []);
+  }, [handleAllUsers]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,9 +101,17 @@ const UsersPage = () => {
                     <Checkbox />
                   </TableCell>
                   <TableCell>{user.id}</TableCell>
-                  <TableCell>
-                    <Avatar src={user.imageUrl} alt={`${user.firstName} ${user.lastName}`} />
-                  </TableCell>
+                    <TableCell>
+                      <Avatar
+                        src={user.imageUrl || null}
+                        alt={`${user.firstName} ${user.lastName}`}
+                        onLoad={handleImageLoad}
+                        onError={handleImageError}
+                      >
+                        {!imageLoaded && `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`}
+                      </Avatar>
+                    </TableCell>
+
                   <TableCell>{user.lastName}</TableCell>
                   <TableCell>{user.firstName}</TableCell>
                   <TableCell>{user.email}</TableCell>

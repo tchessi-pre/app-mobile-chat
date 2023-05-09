@@ -47,7 +47,7 @@ const userService = {
 	async findOneUser(id) {
 		try {
 			const response = await instance.get(`/users/${id}`);
-			return response;
+			return response.data;
 		} catch (error) {
 			return error.response.data;
 		}
@@ -64,12 +64,13 @@ const userService = {
 	},
 
 	// Modifier un utilisateur
-	async updateUser(id) {
+	async updateUser(updatedUser) {
 		try {
-			const response = await instance.put(`/auth/edit/${id}`);
-			return response;
+			const response = await instance.put('/auth/edit', updatedUser);
+			return response.data;
 		} catch (error) {
-			return error.response.data;
+			console.error('Error updating user:', error);
+			return { error: error.response.data };
 		}
 	},
 

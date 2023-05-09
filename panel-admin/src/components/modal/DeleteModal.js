@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 // Components
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,13 +12,13 @@ import Alert from '@mui/material/Alert';
 
 // Hooks
 import usePost from '../../hooks/usePost';
-import Iconify from '../iconify';
+
 
 const Transition = React.forwardRef((props, ref) => (
 	<Slide direction="up" ref={ref} {...props} />
 ));
 
-export default function DeleteModal({ PostId }) {
+export default function DeleteModal(PostId) {
 	const [open, setOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
 	const { deletePost } = usePost();

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import userService from '../services/userService';
 
-const useSendPost = () => {
+const usePost = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [post, setPost] = useState(null);
@@ -39,4 +39,4 @@ const useSendPost = () => {
 	return { sendPost, deletePost, loading, error, post };
 };
 
-export default useSendPost;
+export default usePost;

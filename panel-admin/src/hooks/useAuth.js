@@ -11,7 +11,7 @@ export default function useAuth() {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
-	const [avatarUrl, setAvatarUrl] = useState('');
+	const [imageUrl, setImageUrl] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const [imageContent, setImageContent] = useState([]);
 	const [createdUser, setCreatedUser] = useState(null);
@@ -73,7 +73,7 @@ export default function useAuth() {
 		try {
 			const token = localStorage.getItem('token');
 			const decodedToken = jwtDecode(token);
-			const userId = decodedToken.userId;
+			const { userId } = decodedToken;
 
 			const response = await userService.findOneUser(userId);
 			setLoading(false);
@@ -82,11 +82,13 @@ export default function useAuth() {
 				setError(response.error);
 				throw new Error(response.error);
 			} else {
-				setUser(response.data.user);
-				setFirstName(response.data.user.firstName);
-				setLastName(response.data.user.lastName);
-				setEmail(response.data.user.email);
-				setAvatarUrl(response.data.user.imageUrl || '');
+				const { user } = response;
+
+				setUser(user);
+				setFirstName(user.firstName);
+				setLastName(user.lastName);
+				setEmail(user.email);
+				setImageUrl(user.imageUrl || '');
 				return response.data;
 			}
 		} catch (error) {
@@ -104,7 +106,6 @@ export default function useAuth() {
 		try {
 			
 			const response = await userService.findUsers();
-			console.log("findUsers", response.data)
 			setLoading(false);
 			if (response.error) {
 				setError(response.error);
@@ -128,7 +129,6 @@ export default function useAuth() {
 		try {
 			
 			const response = await userService.getPosts();
-			console.log("findMessages", response.data)
 			setLoading(false);
 			if (response.error) {
 				setError(response.error);
@@ -144,5 +144,5 @@ export default function useAuth() {
 			throw new Error(error.message);
 		}
 	}, []);
-	return { id, setId, user, users, firstName, lastName, email, avatarUrl, messages, createdUser, setAvatarUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser,login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts, loading, error };
+	return { id, setId, user, users, firstName, lastName, email, imageUrl, messages, createdUser, setImageUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser,login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts, loading, error };
 }

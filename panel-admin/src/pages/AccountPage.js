@@ -3,13 +3,23 @@ import { Avatar, Button, Container, Grid, TextField, Typography } from '@mui/mat
 import useAuth from "../hooks/useAuth";
 
 function AccountPage() {
+	const [imageLoaded, setImageLoaded] = useState(false);
+
+	const handleImageLoad = () => {
+		setImageLoaded(true);
+	};
+
+	const handleImageError = () => {
+		setImageLoaded(false);
+	};
+	
 	const {
 		user,
 		setUser,
 		firstName,
 		lastName,
 		email,
-		avatarUrl,
+		imageUrl,
 		handleUser,
 	} = useAuth();
 
@@ -40,13 +50,22 @@ function AccountPage() {
 			setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
 		}
 	};
-
+	
 	return (
 		<Container maxWidth="sm">
 			<Grid container spacing={3} alignItems="center">
 				<Grid item>
-					<Avatar src={avatarUrl} alt={`${firstName} ${lastName}`} sx={{ width: 80, height: 80 }} />
+					<Avatar
+						src={imageUrl || null}
+						alt={`${firstName} ${lastName}`}
+						onLoad={handleImageLoad}
+						onError={handleImageError}
+						sx={{ width: 80, height: 80 }}
+					>
+						{!imageLoaded && `${firstName.charAt(0)}${lastName.charAt(0)}`}
+					</Avatar>
 				</Grid>
+
 				<Grid item>
 					<Typography variant="h4" gutterBottom>
 						{editing ? (
