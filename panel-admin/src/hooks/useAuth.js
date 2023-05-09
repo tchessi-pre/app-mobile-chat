@@ -105,15 +105,18 @@ export default function useAuth() {
 			const response = await userService.updateUser(updatedUser);
 			if (response.error) {
 				setError(response.error);
-			} else {
-				setError(null);
+				return { error: response.error };
 			}
+			setError(null);
+			return updatedUser;
 		} catch (e) {
 			setError(e);
+			return { error: e };
 		} finally {
 			setLoading(false);
 		}
 	};
+
 
 	// Récupéraripon de tous les utilisateurs
 	const handleAllUsers = useCallback(async () => {

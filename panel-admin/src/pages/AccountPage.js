@@ -15,9 +15,7 @@ function AccountPage() {
 		setImageLoaded(false);
 	};
 	
-	const handleUserUpdateSuccess = () => {
-		handleUser();
-	};
+	
 	const {
 		user,
 		firstName,
@@ -26,6 +24,10 @@ function AccountPage() {
 		imageUrl,
 		handleUser,
 	} = useAuth();
+
+	const handleUserUpdateSuccess = () => {
+		handleUser();
+	};
 
 	useEffect(() => {
 		handleUser()
@@ -62,14 +64,14 @@ function AccountPage() {
 				</Grid>
 
 				<Grid item>
-					<Typography variant="h4" gutterBottom>
+					<Typography variant="h3" gutterBottom>
 						{editing ? (
 							<TextField name="firstName" value={editedUser.firstName} onChange={handleInputChange} />
 						) : (
 							`${firstName} ${lastName}`
 						)}
 					</Typography>
-					<Typography variant="h4" gutterBottom>
+					<Typography variant="h3" gutterBottom>
 						{editing ? (
 							<TextField name="lastName" value={editedUser.lastName} onChange={handleInputChange} />
 						) : (
