@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Avatar, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import useAuth from "../hooks/useAuth";
+import EditUserModal from '../components/modal/EditUserModal';
+
 
 function AccountPage() {
 	const [imageLoaded, setImageLoaded] = useState(false);
-
+	
 	const handleImageLoad = () => {
 		setImageLoaded(true);
 	};
@@ -13,9 +15,11 @@ function AccountPage() {
 		setImageLoaded(false);
 	};
 	
+	const handleUserUpdateSuccess = () => {
+		handleUser();
+	};
 	const {
 		user,
-		setUser,
 		firstName,
 		lastName,
 		email,
@@ -30,15 +34,6 @@ function AccountPage() {
 	const [editing, setEditing] = useState(false);
 	const [editedUser, setEditedUser] = useState(user);
 
-	const handleEditClick = () => {
-		setEditing(true);
-		setEditedUser(user);
-	};
-
-	const handleSaveClick = () => {
-		setUser(editedUser);
-		setEditing(false);
-	};
 
 	const handleCancelClick = () => {
 		setEditing(false);
@@ -88,17 +83,15 @@ function AccountPage() {
 				<Grid item xs={12}>
 					{editing ? (
 						<>
-							<Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSaveClick}>
+							<Button variant="contained" color="primary" sx={{ mr: 1 }}>
 								Enregistrer
 							</Button>
 							<Button variant="contained" onClick={handleCancelClick}>
 								Annuler
 							</Button>
 						</>
-					) : (
-						<Button variant="contained" onClick={handleEditClick}>
-							Modifier
-						</Button>
+					) : (	
+							<EditUserModal selectedUser={user} onUserUpdateSuccess={handleUserUpdateSuccess} />
 					)}
 				</Grid>
 			</Grid>

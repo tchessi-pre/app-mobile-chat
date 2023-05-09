@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,10 +7,51 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Iconify from '../iconify';
+import { useSnackbar } from 'notistack';
+import useAuth from '../../hooks/useAuth';
 
-export default function EditUserModal() {
-	const [open, setOpen] = React.useState(false);
+export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
+	const [open, setOpen] = useState(false);
+	const [firstName, setFirstName] = useState(selectedUser.firstName);
+	const [lastName, setLastName] = useState(selectedUser.lastName);
+	const [email, setEmail] = useState(selectedUser.email);
+	const { handleUpdateUser } = useAuth();
+
+
+	const { enqueueSnackbar } = useSnackbar();
+	// On ajoute un effet pour mettre à jour les champs du formulaire lorsque l'utilisateur sélectionné change
+	useEffect(() => {
+		if (selectedUser) {
+			setFirstName(selectedUser.firstName);
+			setLastName(selectedUser.lastName);
+			setEmail(selectedUser.email);
+		}
+	}, [selectedUser]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const updatedUser = {
+			firstName,
+			lastName,
+			email,
+		};
+		const result = await handleUpdateUser(updatedUser);
+		handleClose();
+
+		if (result.error) {
+			enqueueSnackbar("Erreur lors de la mise à jour de l'utilisateur", {
+				variant: 'error',
+			});
+		} else {
+			enqueueSnackbar("L'utilisateur a été mis à jour avec succès", {
+				variant: 'success',
+			});
+			if (typeof onUserUpdateSuccess === 'function') {
+				onUserUpdateSuccess();
+			}
+		}
+	};
+
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -22,7 +64,6 @@ export default function EditUserModal() {
 	return (
 		<div>
 			<Button variant="text" onClick={handleClickOpen}>
-				<Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
 				Modifier
 			</Button>
 			<Dialog open={open} onClose={handleClose}>
@@ -38,6 +79,8 @@ export default function EditUserModal() {
 						type="text"
 						fullWidth
 						variant="standard"
+						value={firstName}
+						onChange={(e) => setFirstName(e.target.value)}
 					/>
 					<TextField
 						autoFocus
@@ -47,6 +90,8 @@ export default function EditUserModal() {
 						type="text"
 						fullWidth
 						variant="standard"
+						value={lastName}
+						onChange={(e) => setLastName(e.target.value)}
 					/>
 					<TextField
 						autoFocus
@@ -56,22 +101,24 @@ export default function EditUserModal() {
 						type="email"
 						fullWidth
 						variant="standard"
-					/>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Rôle"
-						type="text"
-						fullWidth
-						variant="standard"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
 					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={handleClose}>Enregistrer</Button>
+					<Button onClick={handleSubmit}>Enregistrer</Button>
 				</DialogActions>
 			</Dialog>
 		</div>
 	);
 }
+
+EditUserModal.propTypes = {
+	selectedUser: PropTypes.shape({
+		firstName: PropTypes.string.isRequired,
+		lastName: PropTypes.string.isRequired,
+		email: PropTypes.string.isRequired,
+	}).isRequired,
+	onUserUpdateSuccess: PropTypes.func.isRequired,
+};

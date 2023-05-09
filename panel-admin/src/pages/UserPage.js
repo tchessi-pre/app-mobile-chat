@@ -30,6 +30,7 @@ const UsersPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { users, handleAllUsers } = useAuth();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -61,6 +62,10 @@ const UsersPage = () => {
     setPage(0);
   };
 
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    handleClose()
+  };
   return (
     <Container>
       <Helmet>
@@ -147,9 +152,9 @@ const UsersPage = () => {
                       anchorEl={anchorEl}
                       keepMounted
                       open={open}
-                      onClose={handleClose}
+                      onClick={() => handleSelectUser(user)}
                     >
-                      <EditUserModal />
+                        <EditUserModal selectedUser={selectedUser} />
                       <MenuItem onClick={handleClose}>Supprimer</MenuItem>
                     </Menu>
                   </TableCell>
