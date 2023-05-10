@@ -13,24 +13,19 @@ import {
   Container,
   Stack,
   Typography,
-  IconButton,
-  Menu,
-  MenuItem,
   TablePagination,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditUserModal from '../components/modal/EditUserModal';
+import EditSelectedUser from '../components/modal/EditSelectedUser';
 import AddUserModal from '../components/modal/AddUserModal';
 import Scrollbar from '../components/scrollbar';
 import useAuth from '../hooks/useAuth';
 
 const UsersPage = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { users, handleAllUsers } = useAuth();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
+  
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -39,20 +34,12 @@ const UsersPage = () => {
   const handleImageError = () => {
     setImageLoaded(false);
   };
-  const open = Boolean(anchorEl);
 
   useEffect(() => {
     handleAllUsers();
   }, [handleAllUsers]);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
- // La fonction pour gérer le changement de page:
+  // La fonction pour gérer le changement de page:
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -62,10 +49,6 @@ const UsersPage = () => {
     setPage(0);
   };
 
-  const handleSelectUser = (user) => {
-    setSelectedUser(user);
-    handleClose()
-  };
   return (
     <Container>
       <Helmet>
@@ -101,11 +84,11 @@ const UsersPage = () => {
               {users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell padding="checkbox">
-                    <Checkbox />
-                  </TableCell>
-                  <TableCell>{user.id}</TableCell>
+                  <TableRow key={user.id}>
+                    <TableCell padding="checkbox">
+                      <Checkbox />
+                    </TableCell>
+                    <TableCell>{user.id}</TableCell>
                     <TableCell>
                       <Avatar
                         src={user.imageUrl || null}
@@ -117,49 +100,32 @@ const UsersPage = () => {
                       </Avatar>
                     </TableCell>
 
-                  <TableCell>{user.lastName}</TableCell>
-                  <TableCell>{user.firstName}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    {user.admin ? (
-                      <span style={{ color: 'green' }}>Admin</span>
-                    ) : (
-                      'Utilisateur'
-                    )}
-                  </TableCell>
+                    <TableCell>{user.lastName}</TableCell>
+                    <TableCell>{user.firstName}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      {user.admin ? (
+                        <span style={{ color: 'green' }}>Admin
+                        </span>
+                      ) : (
+                        'Utilisateur'
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {user.status === 'online' ? (
+                        <span style={{ color: 'green' }}>En ligne</span>
+                      ) : (
+                        <span style={{ color: 'red' }}>Hors ligne</span>
+                      )}
+                    </TableCell>
 
-                  <TableCell>
-                    {user.status === 'online' ? (
-                      <span style={{ color: 'green' }}>En ligne</span>
-                    ) : (
-                      <span style={{ color: 'red' }}>Hors ligne</span>
-                    )}
-                  </TableCell>
-
-                  <TableCell>{user.createdAt}</TableCell>
-                  <TableCell>{user.updatedAt}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      aria-label="plus d'options"
-                      aria-controls="actions-menu"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="actions-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={open}
-                      onClick={() => handleSelectUser(user)}
-                    >
-                        <EditUserModal selectedUser={selectedUser} />
-                      <MenuItem onClick={handleClose}>Supprimer</MenuItem>
-                    </Menu>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell>{user.createdAt}</TableCell>
+                    <TableCell>{user.updatedAt}</TableCell>
+                    <TableCell>
+                      <EditSelectedUser selectedUser={user} />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

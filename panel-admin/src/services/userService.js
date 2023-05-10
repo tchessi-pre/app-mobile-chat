@@ -74,6 +74,18 @@ const userService = {
 		}
 	},
 
+	// Mofication des utilisateur dans le tableau: 
+	async updateUserById(id, updatedUser) {
+		try {
+			const response = await instance.put(`/auth/edit-admin/${id}`, updatedUser);
+			return response.data;
+		} catch (error) {
+			console.error('Error updating user:', error);
+			return { error: error.response.data };
+		}
+	},
+
+
 	// Supprimer un utilisateur
 	async destroyUser(id) {
 		try {

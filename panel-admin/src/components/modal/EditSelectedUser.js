@@ -10,13 +10,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useSnackbar } from 'notistack';
 import useAuth from '../../hooks/useAuth';
 
-export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
+export default function EditSelectedUser({ selectedUser, onUserUpdateSuccess }) {
 	const [open, setOpen] = useState(false);
 	const [firstName, setFirstName] = useState(selectedUser.firstName);
 	const [lastName, setLastName] = useState(selectedUser.lastName);
 	const [email, setEmail] = useState(selectedUser.email);
-	const { handleUpdateUser } = useAuth();
 
+	const { handleAllUpdateUser } = useAuth();
 
 	const { enqueueSnackbar } = useSnackbar();
 	// On ajoute un effet pour mettre à jour les champs du formulaire lorsque l'utilisateur sélectionné change
@@ -36,7 +36,7 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 			lastName,
 			email,
 		};
-		const result = await handleUpdateUser(updatedUser);
+		const result = await handleAllUpdateUser(selectedUser.id, updatedUser);
 		handleClose();
 
 		if (result.error) {
@@ -52,7 +52,6 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 			}
 		}
 	};
-
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -107,7 +106,7 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
+					<Button onClick={handleClose}>Annuler</Button>
 					<Button onClick={handleSubmit}>Enregistrer</Button>
 				</DialogActions>
 			</Dialog>
@@ -115,11 +114,13 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 	);
 }
 
-EditUserModal.propTypes = {
+EditSelectedUser.propTypes = {
 	selectedUser: PropTypes.shape({
+		id: PropTypes.number.isRequired,
 		firstName: PropTypes.string.isRequired,
 		lastName: PropTypes.string.isRequired,
 		email: PropTypes.string.isRequired,
 	}).isRequired,
 	onUserUpdateSuccess: PropTypes.func.isRequired,
 };
+

@@ -106,15 +106,17 @@ exports.editUserAdmin = async (req, res, next) => {
       }
       : { ...req.body };
 
-    const user = req.params.id
-      ? await User.findOne({ where: { id: req.params.id } })
-      : req.user;
+    const userId = req.params.id;
+    const user = await User.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
     user.update(userObject).then((user) => res.status(200).json({ user }));
   } catch (error) {
     res.status(400).json({ error });
     console.log(error);
-    console.log(response.error);
   }
 };
 

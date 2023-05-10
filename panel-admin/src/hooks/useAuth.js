@@ -117,6 +117,26 @@ export default function useAuth() {
 		}
 	};
 
+	// Mise à jour des données de tous les utilisateurs
+	const handleAllUpdateUser = async (id, updatedUser) => {
+		setLoading(true);
+		try {
+			const response = await userService.updateUserById(id, updatedUser);
+			if (response.error) {
+				setError(response.error);
+				return { error: response.error };
+			}
+			setError(null);
+			return updatedUser;
+		} catch (e) {
+			setError(e);
+			return { error: e };
+		} finally {
+			setLoading(false);
+		}
+	};
+
+
 
 	// Récupéraripon de tous les utilisateurs
 	const handleAllUsers = useCallback(async () => {
@@ -164,6 +184,7 @@ export default function useAuth() {
 			throw new Error(error.message);
 		}
 	}, []);
-	return { id, setId, user, users, firstName, lastName, email, imageUrl, messages, createdUser, setEmail, setFirstName, setLastName, setImageUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser,login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts,
+	return {
+		id, setId, user, users, firstName, lastName, email, imageUrl, messages, createdUser, setEmail, setFirstName, setLastName, setImageUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser, login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts, handleAllUpdateUser,
 		handleUpdateUser, loading, error };
 }

@@ -58,7 +58,7 @@ app.use('/api/auth', userRoutes);
 
 app.get('/api/users/:id', auth, userCtrl.getOneUser);
 app.get('/api/users', auth, userCtrl.getAllUsers);
-app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
+app.delete('/api/users/:id?', auth, userCtrl.deleteUserAccount);
 
 app.get(
   '/api/notifications',
