@@ -42,15 +42,15 @@ export default function DeleteModal({ id, userName, onUserDeleteSuccess }) {
 
 	// Handle user deletion
 	const handleDelete = async () => {
-		const response = await handleDestroyUser(id);
+		const result = await handleDestroyUser(id);
 		handleClose();
 
-		if (response.error) {
+		if (result.error) {
 			enqueueSnackbar("Erreur lors de la suppression de l'utilisateur", {
 				variant: 'error',
 			});
+			
 		} else {
-			console.log("L'utilisateur a été supprimé avec succès"); 
 			enqueueSnackbar("L'utilisateur a été supprimé avec succès", {
 				variant: 'success',
 			});

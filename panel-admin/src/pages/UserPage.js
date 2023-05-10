@@ -123,7 +123,7 @@ const UsersPage = () => {
                     <TableCell>{user.createdAt}</TableCell>
                     <TableCell>{user.updatedAt}</TableCell>
                     <TableCell>
-                      <EditSelectedUser selectedUser={user} />
+                      <EditSelectedUser selectedUser={user} userName={`${user.firstName} ${user.lastName}`} />
                       <DeleteModal id={user.id} userName={`${user.firstName} ${user.lastName}`} />
                     </TableCell>
                   </TableRow>

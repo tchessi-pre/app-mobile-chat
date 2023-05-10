@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useSnackbar } from 'notistack';
 import useAuth from '../../hooks/useAuth';
 
-export default function EditSelectedUser({ selectedUser, onUserUpdateSuccess }) {
+export default function EditSelectedUser({ selectedUser, onUserUpdateSuccess, userName }) {
 	const [open, setOpen] = useState(false);
 	const [firstName, setFirstName] = useState(selectedUser.firstName);
 	const [lastName, setLastName] = useState(selectedUser.lastName);
@@ -70,7 +70,7 @@ export default function EditSelectedUser({ selectedUser, onUserUpdateSuccess }) 
 				<DialogTitle>Modifier</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Etes-vous sûr de vouloir modifier les informations de l'utilisateur?
+						Etes-vous sûr de vouloir modifier les informations de <strong>{userName}</strong>?
 					</DialogContentText>
 					<TextField
 						autoFocus

@@ -92,7 +92,8 @@ const userService = {
 			const response = await instance.delete(`/auth/users-delete/${id}`);
 			return response.data;
 		} catch (error) {
-			return error.response.data;
+			console.error('Error updating user:', error);
+			return { error: error.response.data };
 		}
 	},
 
