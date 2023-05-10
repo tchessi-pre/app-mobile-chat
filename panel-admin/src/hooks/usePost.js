@@ -22,11 +22,11 @@ const usePost = () => {
 		}
 	}, []);
 
-	const deletePost = useCallback(async (id) => {
+	const handleDeletePost = useCallback(async (postId) => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await userService.deletePost(id);
+			const response = await userService.deletePost(postId);
 			setLoading(false);
 			return { data: response.data };
 		} catch (error) {
@@ -36,7 +36,7 @@ const usePost = () => {
 		}
 	}, []);
 	
-	return { sendPost, deletePost, loading, error, post };
+	return { sendPost, handleDeletePost, loading, error, post };
 };
 
 export default usePost;

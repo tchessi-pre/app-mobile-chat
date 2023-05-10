@@ -4,7 +4,7 @@ import { Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TablePa
 import PropTypes from 'prop-types';
 import { BlogPostsSearch } from '../sections/@dashboard/blog';
 import AddPostModal from '../components/modal/AddPostModal';
-import DeleteModal from '../components/modal/DeleteModal';
+import DeleteMessageModal from '../components/modal/DeleteMessageModal';
 
 import useAuth from '../hooks/useAuth';
 
@@ -97,7 +97,7 @@ function MessageTable({ messages }) {
                 </TableCell>
                 <TableCell>{message.createdAt}</TableCell>
                 <TableCell>
-                  <DeleteModal />
+                  <DeleteMessageModal postId={message.id} userName={`${message.User.firstName} ${message.User.lastName}`} />
                 </TableCell>
               </TableRow>
             ))}
