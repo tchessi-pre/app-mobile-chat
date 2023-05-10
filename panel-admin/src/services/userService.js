@@ -89,12 +89,13 @@ const userService = {
 	// Supprimer un utilisateur
 	async destroyUser(id) {
 		try {
-			const response = await instance.delete(`/users/${id}`);
-			return response;
+			const response = await instance.delete(`/auth/users-delete/${id}`);
+			return response.data;
 		} catch (error) {
 			return error.response.data;
 		}
 	},
+
 	// Récupération des messages
 	async getPosts() {
 		try {

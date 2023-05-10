@@ -137,7 +137,6 @@ export default function useAuth() {
 	};
 
 
-
 	// Récupéraripon de tous les utilisateurs
 	const handleAllUsers = useCallback(async () => {
 		setLoading(true);
@@ -161,6 +160,22 @@ export default function useAuth() {
 		}
 	}, []);
 	
+	// supprimer un utilisateur
+	const handleDestroyUser = useCallback(async (id) => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await userService.destroyUser(id);
+			setLoading(false);
+			return response.data;
+		} catch (error) {
+			setError(error.response.data);
+			setLoading(false);
+			return error.response.data;
+		}
+	}, []);
+
 	// Récupération des messages postés
 	const handlePosts= useCallback(async () => {
 		setLoading(true);
@@ -186,5 +201,5 @@ export default function useAuth() {
 	}, []);
 	return {
 		id, setId, user, users, firstName, lastName, email, imageUrl, messages, createdUser, setEmail, setFirstName, setLastName, setImageUrl, setUser, setUsers, setMessages, imageContent, setImageContent, setCreatedUser, login, logout, handleUser, handleCreateUser, handleAllUsers, handlePosts, handleAllUpdateUser,
-		handleUpdateUser, loading, error };
+		handleUpdateUser, handleDestroyUser, loading, error };
 }

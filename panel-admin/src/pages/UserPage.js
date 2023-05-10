@@ -16,6 +16,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import EditSelectedUser from '../components/modal/EditSelectedUser';
+import DeleteModal from '../components/modal/DeleteModal';
 import AddUserModal from '../components/modal/AddUserModal';
 import Scrollbar from '../components/scrollbar';
 import useAuth from '../hooks/useAuth';
@@ -123,6 +124,7 @@ const UsersPage = () => {
                     <TableCell>{user.updatedAt}</TableCell>
                     <TableCell>
                       <EditSelectedUser selectedUser={user} />
+                      <DeleteModal id={user.id} userName={`${user.firstName} ${user.lastName}`} />
                     </TableCell>
                   </TableRow>
                 ))}
