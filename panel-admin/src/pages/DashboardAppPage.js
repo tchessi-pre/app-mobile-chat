@@ -13,13 +13,13 @@ export default function DashboardAppPage() {
   const { users, messages, handlePosts, handleAllUsers } = useAuth();
 
   useEffect(() => {
-    handleAllUsers()
-    handlePosts()
-  }, []);
+    handleAllUsers();
+    handlePosts();
+  }, [handleAllUsers, handlePosts]);
 
   const onlineUsers = users.filter((user) => user.status === 'online');
-  const sortedMessages = messages.sort((a, b) => new Date(b.date) - new Date(a.date));
-  const lastFourMessages = sortedMessages.slice(0, 5);
+  const sortedMessages = messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const lastFourMessages = sortedMessages.slice(0, 4);
 
   return (
     <>
@@ -48,12 +48,15 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="4 derniers messages"
-              messages={lastFourMessages}
-              total={messages.length}
+              total={lastFourMessages.length}
               color="error"
               icon={'ant-design:message-filled'}
             />
           </Grid>
+          <Typography variant="h4" sx={{ mb: 1, ml: 4, mt: 8  }}>
+            Messages récents:
+          </Typography>
+
           <Grid item xs={12} md={12} lg={12}>
             <TableContainer component={Paper}>
               <Table>
@@ -66,15 +69,15 @@ export default function DashboardAppPage() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {lastFourMessages.map((lastFourMessage) => (
-                    <TableRow key={lastFourMessage.id}>
+                  {lastFourMessages.map((message) => (
+                    <TableRow key={message.id}>
                       <TableCell>
-                        <Avatar src={lastFourMessage.User.imageUrl} alt={lastFourMessage.User.firstName} />
+                        <Avatar src={message.User.imageUrl} alt={message.User.firstName} />
                       </TableCell>
-                      <TableCell>{lastFourMessage.content}</TableCell>
-                      <TableCell>{lastFourMessage.createdAt}</TableCell>
+                      <TableCell>{message.content}</TableCell>
+                      <TableCell>{message.createdAt}</TableCell>
                       <TableCell>
-                        {lastFourMessage.User.status === 'online' ? (
+                        {message.User.status === 'online' ? (
                           <span style={{ color: 'green' }}>En ligne</span>
                         ) : (
                           <span style={{ color: 'red' }}>Hors ligne</span>
@@ -86,7 +89,6 @@ export default function DashboardAppPage() {
               </Table>
             </TableContainer>
           </Grid>
-          
         </Grid>
       </Container>
     </>

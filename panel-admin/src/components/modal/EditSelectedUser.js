@@ -44,11 +44,11 @@ export default function EditSelectedUser({ selectedUser, onUserUpdateSuccess, us
 				variant: 'error',
 			});
 		} else {
-			enqueueSnackbar("L'utilisateur a été mis à jour avec succès", {
+			enqueueSnackbar(`L'utilisateur ${firstName} ${lastName} a été mis à jour avec succès`, {
 				variant: 'success',
 			});
 			if (typeof onUserUpdateSuccess === 'function') {
-				onUserUpdateSuccess();
+				onUserUpdateSuccess(`${firstName} ${lastName}`);
 			}
 		}
 	};
@@ -122,5 +122,6 @@ EditSelectedUser.propTypes = {
 		email: PropTypes.string.isRequired,
 	}).isRequired,
 	onUserUpdateSuccess: PropTypes.func.isRequired,
+	userName: PropTypes.string.isRequired,
 };
 

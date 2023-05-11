@@ -59,6 +59,9 @@ const UsersPage = () => {
         <Typography variant="h4" gutterBottom>
           Utilisateurs
         </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          Nombre d'utilisateurs: {users.length}
+        </Typography>
         <AddUserModal />
       </Stack>
       <Scrollbar>
@@ -123,7 +126,13 @@ const UsersPage = () => {
                     <TableCell>{user.createdAt}</TableCell>
                     <TableCell>{user.updatedAt}</TableCell>
                     <TableCell>
-                      <EditSelectedUser selectedUser={user} userName={`${user.firstName} ${user.lastName}`} />
+                      <EditSelectedUser
+                        selectedUser={user}
+                        userName={`${user.firstName} ${user.lastName}`}
+                        onUserUpdateSuccess={() => {
+                          // Code à exécuter lorsqu'une mise à jour d'utilisateur est réussie
+                        }}
+                      />
                       <DeleteModal id={user.id} userName={`${user.firstName} ${user.lastName}`} />
                     </TableCell>
                   </TableRow>

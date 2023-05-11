@@ -29,7 +29,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'utilisateurs', element: <UserPage /> },
         { path: 'chat', element: <ChatPage /> },
         { path: 'account', element: <AccountPage /> },
       ],

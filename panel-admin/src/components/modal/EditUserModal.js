@@ -44,7 +44,7 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 				variant: 'error',
 			});
 		} else {
-			enqueueSnackbar("L'utilisateur a été mis à jour avec succès", {
+			enqueueSnackbar("Votre profil a été mis à jour avec succès", {
 				variant: 'success',
 			});
 			if (typeof onUserUpdateSuccess === 'function') {
@@ -117,6 +117,7 @@ export default function EditUserModal({ selectedUser, onUserUpdateSuccess }) {
 
 EditUserModal.propTypes = {
 	selectedUser: PropTypes.shape({
+		id: PropTypes.number.isRequired,
 		firstName: PropTypes.string.isRequired,
 		lastName: PropTypes.string.isRequired,
 		email: PropTypes.string.isRequired,

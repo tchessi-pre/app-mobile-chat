@@ -11,7 +11,8 @@ const usePost = () => {
 		setError(null);
 		try {
 			const response = await userService.sendPosts(postData);
-			console.log("fromUsePost",response);
+			console.log("🚀 ~ file: usePost.js:14 ~ sendPost ~ response:", response)
+			
 			setLoading(false);
 			setPost(response.data);
 			return { data: response.data };

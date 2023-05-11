@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Container, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { BlogPostsSearch } from '../sections/@dashboard/blog';
 import AddPostModal from '../components/modal/AddPostModal';
 import DeleteMessageModal from '../components/modal/DeleteMessageModal';
 
@@ -26,9 +25,9 @@ export default function ChatPage() {
           <Typography variant="h4" gutterBottom>
             Chat
           </Typography>
-        </Stack>
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch />
+          <Typography variant="subtitle1" color="textSecondary">
+            Nombre de messages: {messages.length}
+          </Typography>
           <AddPostModal />
         </Stack>
         <MessageTable messages={messages} />
@@ -76,14 +75,16 @@ function MessageTable({ messages }) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((message) => (
               <TableRow key={message.id}>
-                <Avatar
-                  src={message.imageUrl || null}
-                  alt={`${message.User.firstName} ${message.User.lastName}`}
-                  onLoad={handleImageLoad}
-                  onError={handleImageError}
-                >
-                  {!imageLoaded && `${message.User.firstName.charAt(0)}${message.User.lastName.charAt(0)}`}
-                </Avatar>
+                <TableCell>
+                  <Avatar
+                    src={message.imageUrl || null}
+                    alt={`${message.User.firstName} ${message.User.lastName}`}
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                  >
+                    {!imageLoaded && `${message.User.firstName.charAt(0)}${message.User.lastName.charAt(0)}`}
+                  </Avatar>
+                </TableCell>
                 <TableCell>{message.User.firstName} {message.User.lastName}</TableCell>
                 <TableCell>
                   {message.content}

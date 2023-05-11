@@ -14,7 +14,7 @@ export default function AddPostModal() {
 	const [open, setOpen] = useState(false);
 	const [content, setContent] = useState('');
 	const [imageUrl, setImageUrl] = useState(null);
-
+	const [fileName, setFileName] = useState('');
 
 	const { sendPost } = usePost();
 	const { enqueueSnackbar } = useSnackbar();
@@ -30,6 +30,7 @@ export default function AddPostModal() {
 	const handleImageChange = (e) => {
 		if (e.target.files && e.target.files[0]) {
 			setImageUrl(e.target.files[0]);
+			setFileName(e.target.files[0].name);
 		}
 	};
 
@@ -54,6 +55,7 @@ export default function AddPostModal() {
 				enqueueSnackbar('Message envoyé avec succès', { variant: 'success' });
 				setContent('');
 				setImageUrl(null);
+				setFileName('');
 				handleClose();
 			}
 		} catch (error) {
@@ -83,12 +85,13 @@ export default function AddPostModal() {
 						onChange={(e) => setContent(e.target.value)}
 					/>
 				</DialogContent>
-				<DialogActions>
+				<DialogActions >
 					<div style={{ marginRight: 'auto' }}>
 						<Button variant="text" component="label">
 							Télécharger
-							<input hidden accept="image/*" multiple type="file"  onChange={handleImageChange} />
+							<input hidden accept="image/*" multiple type="file" onChange={handleImageChange} />
 						</Button>
+						{fileName && <span>{fileName}</span>}
 					</div>
 					<div style={{ marginLeft: 'auto' }}>
 						<Button onClick={handleSubmit}>Envoyer</Button>

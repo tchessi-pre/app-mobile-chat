@@ -51,11 +51,11 @@ export default function DeleteModal({ id, userName, onUserDeleteSuccess }) {
 			});
 			
 		} else {
-			enqueueSnackbar("L'utilisateur a été supprimé avec succès", {
+			enqueueSnackbar(`L'utilisateur ${userName} a été supprimé avec succès`, {
 				variant: 'success',
 			});
 			if (typeof onUserDeleteSuccess === 'function') {
-				onUserDeleteSuccess();
+				onUserDeleteSuccess(userName);
 			}
 		}
 	};

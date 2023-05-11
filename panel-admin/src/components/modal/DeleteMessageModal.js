@@ -50,11 +50,11 @@ export default function DeleteMessageModal({ postId, userName, onPostDeleteSucce
 			});
 
 		} else {
-			enqueueSnackbar("Le message a été supprimé avec succès", {
+			enqueueSnackbar(`Le message de ${userName} a été supprimé avec succès`, {
 				variant: 'success',
 			});
 			if (typeof onPostDeleteSuccess === 'function') {
-				onPostDeleteSuccess();
+				onPostDeleteSuccess(userName);
 			}
 		}
 	};
