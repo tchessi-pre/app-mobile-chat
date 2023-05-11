@@ -11,6 +11,7 @@ import useAuth from '../hooks/useAuth';
 
 export default function DashboardAppPage() {
   const { users, user, messages, handlePosts, handleAllUsers, handleUser } = useAuth();
+  console.log("🚀 ~ file: DashboardAppPage.js:14 ~ DashboardAppPage ~ users:", users)
 
   useEffect(() => {
     handleAllUsers();

@@ -14,19 +14,26 @@ import {
   Stack,
   Typography,
   TablePagination,
+  Input,
+  InputAdornment,
 } from '@mui/material';
 import EditSelectedUser from '../components/modal/EditSelectedUser';
 import DeleteModal from '../components/modal/DeleteModal';
 import AddUserModal from '../components/modal/AddUserModal';
 import Scrollbar from '../components/scrollbar';
 import useAuth from '../hooks/useAuth';
+import Iconify from '../components/iconify';
 
 const UsersPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState('');
   const { users, handleAllUsers } = useAuth();
   const [imageLoaded, setImageLoaded] = useState(false);
-  
+
+  useEffect(() => {
+    handleAllUsers();
+  }, [handleAllUsers]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -36,19 +43,25 @@ const UsersPage = () => {
     setImageLoaded(false);
   };
 
-  useEffect(() => {
-    handleAllUsers();
-  }, [handleAllUsers]);
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-  // La fonction pour gérer le changement de page:
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  // La fonction pour gérer le changement du nombre de lignes par page :
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Container>
@@ -57,12 +70,22 @@ const UsersPage = () => {
       </Helmet>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" gutterBottom>
-          Utilisateurs
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
-          Nombre d'utilisateurs: {users.length}
+          Utilisateurs ({users.length})
         </Typography>
         <AddUserModal />
+      </Stack>
+      <Stack direction="row" alignItems="center" mb={2}>
+        <Input
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Recherche..."
+          startAdornment={
+            <InputAdornment position="start">
+              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+            </InputAdornment>
+          }
+          sx={{ width: 200 }}
+        />
       </Stack>
       <Scrollbar>
         <TableContainer component={Paper}>
@@ -85,8 +108,9 @@ const UsersPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {filteredUsers
+                .slice(page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage)
                 .map((user) => (
                   <TableRow key={user.id}>
                     <TableCell padding="checkbox">
@@ -103,14 +127,12 @@ const UsersPage = () => {
                         {!imageLoaded && `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`}
                       </Avatar>
                     </TableCell>
-
                     <TableCell>{user.lastName}</TableCell>
                     <TableCell>{user.firstName}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
                       {user.admin ? (
-                        <span style={{ color: 'green' }}>Admin
-                        </span>
+                        <span style={{ color: 'green' }}>Admin</span>
                       ) : (
                         'Utilisateur'
                       )}
@@ -122,7 +144,6 @@ const UsersPage = () => {
                         <span style={{ color: 'red' }}>Hors ligne</span>
                       )}
                     </TableCell>
-
                     <TableCell>{user.createdAt}</TableCell>
                     <TableCell>{user.updatedAt}</TableCell>
                     <TableCell>
@@ -142,7 +163,7 @@ const UsersPage = () => {
         </TableContainer>
         <TablePagination
           component="div"
-          count={users.length}
+          count={filteredUsers.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
