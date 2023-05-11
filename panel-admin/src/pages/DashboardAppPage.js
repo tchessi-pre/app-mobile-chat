@@ -10,17 +10,19 @@ import useAuth from '../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
-  const { users, messages, handlePosts, handleAllUsers } = useAuth();
+  const { users, user, messages, handlePosts, handleAllUsers, handleUser } = useAuth();
 
   useEffect(() => {
     handleAllUsers();
+    handleUser()
     handlePosts();
-  }, [handleAllUsers, handlePosts]);
+  }, [handleAllUsers, handlePosts, handleUser]);
 
   const onlineUsers = users.filter((user) => user.status === 'online');
+  const adminUsers = users.filter((user) => user.admin === true); // On filtrer les utilisateurs admin
   const sortedMessages = messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const lastFourMessages = sortedMessages.slice(0, 4);
-
+  const adminTitle = adminUsers.length === 1 ? 'Administrateur' : 'Administrateurs';
   return (
     <>
       <Helmet>
@@ -29,12 +31,12 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Salut, bienvenue à nouveau!
+          Salut {user.firstName},
         </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Nombre d'utilisateurs" total={users.length} icon={'ant-design:user-switch-outlined'} />
+            <AppWidgetSummary title="Nombre d'utilisateurs" total={users.length} icon={'ant-design:team-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -47,10 +49,10 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="4 derniers messages"
-              total={lastFourMessages.length}
+              title={adminTitle}
+              total={adminUsers.length}
               color="error"
-              icon={'ant-design:message-filled'}
+              icon={'ant-design:user-switch-outlined'}
             />
           </Grid>
           <Typography variant="h4" sx={{ mb: 1, ml: 4, mt: 8  }}>
