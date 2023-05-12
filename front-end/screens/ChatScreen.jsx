@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TextInput, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback,ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -71,6 +71,33 @@ const ChatScreen = () => {
 		}
 	};
 
+	const deleteMessage = async (messageId) => {
+		try {
+			const token = await AsyncStorage.getItem('token');
+			const response = await axios.delete(`${API_URL}api/posts/${messageId}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			if (response.status === 200) {
+				setMessages((prevState) =>
+					prevState.filter((message) => message.id !== messageId)
+				);
+			} else {
+				console.log('error');
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleLongPress = (messageId, userId) => {
+		if (userId === currentUser) {
+			deleteMessage(messageId);
+		}
+	};
+
+
 	useEffect(() => {
 		var date = new Date().getDate(); //Current Date
 		var month = new Date().getMonth() + 1; //Current Month
@@ -104,7 +131,11 @@ const ChatScreen = () => {
 				data={messages}
 				keyExtractor={item => `${item.id}-${item.createdAt}`}
 				renderItem={({ item }) => (
-					<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
+					<TouchableWithoutFeedback
+						onLongPress={() => handleLongPress(item.id, item.User?.id)}
+						activeOpacity={0.8}
+					>
+						<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
 						<View style={[styles.messageContent]}>
 							<Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
 							<View style={styles.messageTextContainer}>
@@ -117,6 +148,7 @@ const ChatScreen = () => {
 							</View>
 						</View>
 					</View>
+					</TouchableWithoutFeedback>
 				)}
 			/>
 			<View style={styles.Bottomcontainer}>

@@ -37,11 +37,15 @@ const ChannelScreen = () => {
 		handlePosts()
 	}, []);
 
+	const handleProfileNavigation = (userId) => {
+		navigation.navigate('Profil', { userId });
+	}
+
 	const renderItem = ({ item }) => (
 		<TouchableOpacity style={styles.containeContact} activeOpacity={0.7} onPress={() => navigation.navigate('Chat')}>
 			<View>
 				{item.User.imageUrl ? (
-					<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Profil')}>
+					<TouchableOpacity activeOpacity={0.5} onPress={() => handleProfileNavigation(item.User.id)}>
 						<Image style={styles.profilImage} source={{ uri: item.User.imageUrl }} />
 					</TouchableOpacity>
 				) : (

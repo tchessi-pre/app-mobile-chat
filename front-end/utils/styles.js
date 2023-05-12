@@ -71,7 +71,11 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	chatemptyText: { fontWeight: "bold", fontSize: 24, paddingBottom: 30 },
+	chatemptyText: { 
+		fontWeight: "bold", 
+		fontSize: 24, 
+		paddingBottom: 30 
+	},
 	messagingscreen: {
 		flex: 1,
 	},
@@ -117,6 +121,8 @@ export const styles = StyleSheet.create({
 		color: "#fff",
 	},
 	modalContainer: {
+		paddingLeft: 10,
+		paddingRight: 10,
 		width: "100%",
 		borderTopColor: "#F7F7FC",
 		elevation: 1,
