@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
@@ -51,11 +51,25 @@ const ProfilScreen = ({ navigation }) => {
 		}
 
 		if (firstName === '') {
-			alert('Merci de remplir le prénom');
+			showMessage({
+				message: 'Veuillez saisir votre prénom',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 30 },
+			});
 			return;
 		}
 		if (lastName === '') {
-			alert('Merci de remplir le nom');
+			showMessage({
+				message: 'Veuillez saisir votre nom',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 30 },
+			});
 			return;
 		}
 
@@ -75,14 +89,13 @@ const ProfilScreen = ({ navigation }) => {
 			);
 
 			if (response.status === 200) {
-				console.log('SUCCESS PUT REQUEST');
 				showMessage({
-					message: 'Modification réussie !',
+					message: 'Votre profil a été mis à jour!',
 					type: 'success',
 					duration: 3000,
 					position: 'top', 
 					floating: true, 
-					style: { marginTop: 30 }, 
+					style: { marginTop: 40 }, 
 				});
 				try {
 					useEffect(() => { }, [getUser()]);
@@ -116,8 +129,8 @@ const ProfilScreen = ({ navigation }) => {
 					placeholder="Nom"
 					placeholderTextColor="#F7F7FC"
 					keyboardType="name"
-					value={firstName}
-					onChangeText={text => setFirstName(text)}
+					value={lastName}
+					onChangeText={text => setLastName(text)}
 					editable={isEditing}
 				/>
 				<TextInput
@@ -125,8 +138,8 @@ const ProfilScreen = ({ navigation }) => {
 					placeholder="Prénom"
 					placeholderTextColor="#F7F7FC"
 					keyboardType="name"
-					value={lastName}
-					onChangeText={text => setLastName(text)}
+					value={firstName}
+					onChangeText={text => setFirstName(text)}
 					editable={isEditing}
 				/>
 			</View>

@@ -2,6 +2,7 @@ import React, { useState, createRef, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TextInput, TouchableHighlight } from 'react-native';
 import Styles from '../css/Styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showMessage } from 'react-native-flash-message';
 import Loader from '../components/Loader';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
@@ -38,22 +39,42 @@ const ConnexionScreen = ({ navigation }) => {
 
 	const handleLogin = async () => {
 		setErrortext('');
-		if (email == '') {
-			alert('Merci de remplir l\'email');
+
+		if (email === '') {
+			showMessage({
+				message: 'Veuillez saisir votre email',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
-		if (password == '') {
-			alert('Merci de remplir le mot de passe');
+
+		if (password === '') {
+			showMessage({
+				message: 'Veuillez saisir votre mot de passe',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
+
 		setLoading(true);
-		axios.post(`${API_URL}api/auth/login`, {
-			email,
-			password
-		})
+
+		axios
+			.post(`${API_URL}api/auth/login`, {
+				email,
+				password,
+			})
 			.then((response) => {
 				setLoading(false);
 				console.log(response);
+
 				if (response.status === 201) {
 					AsyncStorage.setItem('token', response.data.token);
 					console.log(response.data.token);
@@ -61,11 +82,20 @@ const ConnexionScreen = ({ navigation }) => {
 					navigation.navigate('Channel');
 				} else {
 					setErrortext(response.msg);
+					
 					console.log('Please check your email id or password');
 				}
 			})
 			.catch((error) => {
 				setLoading(false);
+				showMessage({
+					message: 'Email ou mot de passe incorrect',
+					type: 'danger',
+					duration: 3000,
+					position: 'top',
+					floating: true,
+					style: { marginTop: 40 },
+				});
 				console.error(error);
 			});
 	};

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Animated  } from 'react-native';
+import { StyleSheet, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Animated  } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import Styles from '../css/Styles'
 import Loader from '../components/Loader';
 import axios from 'axios';
@@ -40,23 +41,58 @@ const RegisterScreen = (props) => {
 	const handleSubmit = async () => {
 		setErrortext('');
 		if (firstName == '') {
-			alert('Merci de remplir le prénom');
+			showMessage({
+				message: 'Veuillez saisir votre prénom',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
 		if (lastName == '') {
-			alert('Merci de remplir le nom');
+			showMessage({
+				message: 'Veuillez saisir votre prénom',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
 		if (email == '') {
-			alert('Merci de remplir l\'email');
+			showMessage({
+				message: 'Veuillez saisir votre email',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
 		if (password == '') {
-			alert('Merci de remplir le mot de passe');
+			showMessage({
+				message: 'Veuillez saisir votre mot de passe',
+				type: 'warning',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
 		if (password !== confirmPassword) {
-			alert("les mots de passe ne correspondent pas");
+			showMessage({
+				message: 'les mots de passe ne correspondent pas',
+				type: 'danger',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 40 },
+			});
 			return;
 		}
 		//Show Loader
@@ -85,9 +121,14 @@ const RegisterScreen = (props) => {
 				// navigation.navigate("Login");
 				if (response.status === 201) {
 					setIsRegistraionSuccess(true);
-					console.log(
-						'Registration Successful. Please Login to proceed'
-					);
+					showMessage({
+						message: 'Félicitation! vous avez été inscrit avec succès',
+						type: 'success',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 40 },
+					});
 				} else {
 					setErrortext(response.msg);
 				}
@@ -99,7 +140,14 @@ const RegisterScreen = (props) => {
 			})
 			.catch(error => {
 				console.log(error);
-				alert("Registration Failed");
+				showMessage({
+					message: 'Désolé! Votre inscription a échoué',
+					type: 'danger',
+					duration: 3000,
+					position: 'top',
+					floating: true,
+					style: { marginTop: 40 },
+				});
 			});
 	};
 	if (isRegistraionSuccess) {
