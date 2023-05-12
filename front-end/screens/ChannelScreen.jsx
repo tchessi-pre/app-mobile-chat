@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, FlatList, TextInput, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
-import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
-import SearchBar from '../components/SearchBar';
-import { Feather, Entypo } from "@expo/vector-icons";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Pressable } from 'react-native';
+import { Icon } from "react-native-elements";
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
-// import FloatingButton from '../components/FloatingButton';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 import BaseUrl from '../services/BaseUrl';
-import SearchStyle from '../css/SearchStyle'
 
 const API_URL = BaseUrl;
-let timeoutId = null;
-const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
-	const [search, setSearch] = useState('');
-	const [usersSearch, setSearchUsers] = useState([]);
+const ChannelScreen = () => {
+	const [posts, setPosts] = useState([]);
 	const [visible, setVisible] = useState(false);
 
+	const navigation = useNavigation();
 
-	const handleSearch = async () => {
+	const handlePosts = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
-			const response = await axios.get(`${API_URL}api/users/`, {
-				params: { search: search },
+			const response = await axios.get(`${API_URL}api/posts`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
 				},
 			});
+
 			if (response.status === 200) {
-				setSearchUsers(response.data);
+				setPosts(response.data.posts);
 			}
 		} catch (error) {
 			console.log(error);
@@ -37,38 +34,26 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 	}
 
 	useEffect(() => {
-		handleSearch();
+		handlePosts()
 	}, []);
 
-	const onSearchChange = (text) => {
-		setSearch(text);
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(() => {
-			handleSearch(text);
-		}, 200);
-	};
-
 	const renderItem = ({ item }) => (
-		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => console.log('Redirect to chatscreen')}>
-			{/* <View>
-				{item.imageUrl ? (
-					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil')}>
-						<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
+		<TouchableOpacity style={styles.containeContact} activeOpacity={0.7} onPress={() => navigation.navigate('Chat')}>
+			<View>
+				{item.User.imageUrl ? (
+					<TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Profil')}>
+						<Image style={styles.profilImage} source={{ uri: item.User.imageUrl }} />
 					</TouchableOpacity>
 				) : (
 					<View style={styles.initialContainer}>
-						<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
+						<Text style={styles.initialText}>{item.User.firstName.charAt(0)}{item.User.lastName.charAt(0)}</Text>
 					</View>
 				)}
-				<Badge
-					status={item.status === 'online' ? 'success' : 'error'}
-					containerStyle={{ position: 'absolute', top: 0, right: 2 }}
-				/>
 			</View>
 			<View style={styles.profilName}>
-				<Text style={styles.fullName}>{item.firstName} {item.lastName}</Text>
-				<Text style={styles.statut}>{item.status === 'online' ? 'En ligne' : 'Hors ligne'}</Text>
-			</View> */}
+				<Text style={styles.fullName}>{item.User.firstName} {item.User.lastName}</Text>
+				<Text style={styles.message}>{item.content}</Text>
+			</View>
 		</TouchableOpacity>
 	);
 
@@ -87,56 +72,12 @@ const ChannelScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				</Pressable>
 			</View>
 
-			<View style={styles.searchBar}>
-				<View
-					style={
-						clicked
-							? SearchStyle.searchBar__clicked
-							: SearchStyle.searchBar__unclicked
-					}
-				>
-					{/* search Icon */}
-					<Feather
-						name="search"
-						size={20}
-						color="#ADB5BD"
-						style={{ marginLeft: 1 }}
-					/>
-					{/* Input field */}
-					<TextInput
-						style={SearchStyle.input}
-						placeholder="Recherche"
-						placeholderTextColor={"#ADB5BD"}
-						onChangeText={onSearchChange}
-						value={search}
-					/>
-					{/* cross Icon, depending on whether the search bar is clicked or not */}
-					{clicked && (
-						<Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
-							setSearchPhrase("")
-						}} />
-					)}
-				</View>
-				{/* cancel button, depending on whether the search bar is clicked or not */}
-				{clicked && (
-					<View>
-						<Button
-							title="Cancel"
-							onPress={() => {
-								Keyboard.dismiss();
-								setCLicked(false);
-							}}
-						></Button>
-					</View>
-				)}
-			</View>
 			<FlatList
-				data={usersSearch.users}
+				data={posts}
 				onEndReachedThreshold={0.5}
 				keyExtractor={item => item.id.toString()}
 				renderItem={renderItem}
 			/>
-			{/* <FloatingButton /> */}
 			{visible ? <Modal setVisible={setVisible} /> : ""}
 			<Footer />
 		</View>
@@ -204,12 +145,12 @@ const styles = StyleSheet.create({
 	},
 	fullName: {
 		color: "#ffffff",
-		marginBottom: 5,
-		fontSize: 16
+		marginBottom: 10,
+		fontSize: 15
 	},
-	statut: {
+	message: {
 		color: "#adb5bd",
-		fontSize: 10
+		fontSize: 14
 	},
 	searchBar: {
 		flexDirection: 'row',
