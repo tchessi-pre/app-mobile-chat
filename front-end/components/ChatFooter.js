@@ -5,6 +5,7 @@ import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from 'react-native-flash-message';
 import BaseUrl from '../services/BaseUrl';
 import { Icon } from 'react-native-elements';
 const API_URL = BaseUrl;
@@ -67,7 +68,15 @@ export default function ImageUploadMessage() {
 			return;
 		}
 		if (newMessage === '') {
-			setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
+			// setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
+			showMessage({
+				message: "Oups!! Vous ne pouvez pas envoyer un message vide.",
+				type: 'danger',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 30 },
+			});
 		} else {
 			try {
 				setIsSending(true);
@@ -90,7 +99,7 @@ export default function ImageUploadMessage() {
 				} else {
 					postMessage.append('content', newMessage);
 				}
-				// console.log(postData);
+
 
 				const response = await axios.post(`${API_URL}api/posts`, postMessage, {
 					headers: {
@@ -101,15 +110,38 @@ export default function ImageUploadMessage() {
 
 				if (response.status === 201) {
 					setNewMessage('');
-					setPostMessageSuccess("Message envoyé avec succès");
 					removePicture();
+					showMessage({
+						message: 'Message envoyé avec succès',
+						type: 'success',
+						duration: 3000,
+						position: 'top', // Position de la notification en haut de l'écran
+						floating: true, // Pour permettre la superposition de la notification
+						style: { marginTop: 30 }, // Ajustement de la marge supérieure pour descendre la notification
+					});
 				} else {
 					console.log("error posting message");
 					setPostMessageError("Erreur lors de l'envoi du message");
+					showMessage({
+						message: "Erreur lors de l'envoi du message",
+						type: 'danger',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 30 },
+					});
 				}
 			} catch (error) {
 				console.log(error);
 				setPostMessageError("Erreur network lors de l'envoi du message");
+				showMessage({
+					message: "Erreur network lors de l'envoi du message",
+					type: 'danger',
+					duration: 3000,
+					position: 'top',
+					floating: true,
+					style: { marginTop: 30 },
+				});
 			} finally {
 				setIsSending(false);
 				if (messageQueue.length > 0) {

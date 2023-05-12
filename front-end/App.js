@@ -13,6 +13,7 @@ import ChannelScreen from "./screens/ChannelScreen";
 import SettingsScreen from "./screens/ProfilScreen";
 import ChatScreen from "./screens/ChatScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FlashMessage from "react-native-flash-message";
 
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
@@ -190,6 +191,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <StackNavigate />
+      <FlashMessage position="top" />
     </NavigationContainer >
   );
 }

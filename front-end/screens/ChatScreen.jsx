@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TextInput, Image, FlatList, TouchableOpacity, T
 import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/native';
 import ChatFooter from '../components/ChatFooter';
 import axios from 'axios';
@@ -20,7 +21,22 @@ const ChatScreen = () => {
 	const [newImageUrl, setNewImageUrl] = useState('');
 	const [currentDate, setCurrentDate] = useState('');
 	const [currentUser, setCurrentUser] = useState(null);
+
+
+	
 	const socket = io(API_URL);
+
+	const showNotification = () => {
+		showMessage({
+			message: 'Message supprimé',
+			type: 'success',
+			duration: 3000,
+			position: 'top', // Position de la notification en bas de l'écran
+			floating: true, // Pour permettre la superposition de la notification
+			style: { marginTop: 30, textAling:'center' }, // Ajustement de la marge inférieure pour descendre la notification
+		});
+	};
+	
 
 	const fetchMessages = async () => {
 		try {
@@ -72,24 +88,26 @@ const ChatScreen = () => {
 	};
 
 	const deleteMessage = async (messageId) => {
-		try {
-			const token = await AsyncStorage.getItem('token');
-			const response = await axios.delete(`${API_URL}api/posts/${messageId}`, {
-				headers: {
-					'Authorization': `Bearer ${token}`,
-				},
-			});
-			if (response.status === 200) {
-				setMessages((prevState) =>
-					prevState.filter((message) => message.id !== messageId)
-				);
-			} else {
-				console.log('error');
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.delete(`${API_URL}api/posts/${messageId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (response.status === 200) {
+      setMessages((prevState) =>
+        prevState.filter((message) => message.id !== messageId)
+      );
+			showNotification()
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 	const handleLongPress = (messageId, userId) => {
 		if (userId === currentUser) {

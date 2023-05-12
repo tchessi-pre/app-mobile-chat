@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
 import LogoutButton from '../components/LogoutButton'
+import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 
@@ -49,45 +50,56 @@ const ProfilScreen = ({ navigation }) => {
 			return;
 		}
 
-		if (firstName == '') {
+		if (firstName === '') {
 			alert('Merci de remplir le prénom');
 			return;
 		}
-		if (lastName == '') {
+		if (lastName === '') {
 			alert('Merci de remplir le nom');
 			return;
-		} else {
-			try {
-				const token = await AsyncStorage.getItem('token');
-				let response = await axios.put(`${API_URL}api/auth/edit`, {
-					firstName: firstName, lastName: lastName
-				}, {
+		}
+
+		try {
+			const token = await AsyncStorage.getItem('token');
+			const response = await axios.put(
+				`${API_URL}api/auth/edit`,
+				{
+					firstName: firstName,
+					lastName: lastName,
+				},
+				{
 					headers: {
-						'Authorization': `Bearer ${token}`,
+						Authorization: `Bearer ${token}`,
 					},
+				}
+			);
+
+			if (response.status === 200) {
+				console.log('SUCCESS PUT REQUEST');
+				showMessage({
+					message: 'Modification réussie !',
+					type: 'success',
+					duration: 3000,
+					position: 'top', 
+					floating: true, 
+					style: { marginTop: 30 }, 
 				});
-				if (response.status === 200) {
-					console.log('SUCCESS PUT REQUEST');
-					alert('Modification réussie !');
-					try {
-						useEffect(() => {
-						}, [getUser()]);
-					} catch (error) {
-						console.log(error);
-					}
+				try {
+					useEffect(() => { }, [getUser()]);
+				} catch (error) {
+					console.log(error);
 				}
-				else {
-					console.log('error PUT REQUEST');
-				}
-			} catch (error) {
-				console.log('Catch PUT REQUEST');
-				console.log(error.AsyncStorage);
-				console.log(JSON.stringify(error.response));
+			} else {
+				console.log('error PUT REQUEST');
 			}
+		} catch (error) {
+			console.log('Catch PUT REQUEST');
+			console.log(error.AsyncStorage);
+			console.log(JSON.stringify(error.response));
 		}
 
 		setIsEditing(false);
-	}
+	};
 
 	return (
 		<View style={styles.container}>
