@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import * as Camera from 'expo-camera';
+// import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
@@ -21,8 +23,10 @@ export default function UploadImage() {
 
 	// Demande les permissions pour accéder à la caméra et à la galerie
 	const getPermissionsAsync = async () => {
-		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
-		if (status !== 'granted') {
+		const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+		const { status: mediaLibStatus } = await MediaLibrary.requestPermissionsAsync();
+
+		if (cameraStatus !== 'granted' || mediaLibStatus !== 'granted') {
 			alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
 		}
 	};

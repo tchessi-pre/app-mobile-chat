@@ -73,8 +73,6 @@ const ConnexionScreen = ({ navigation }) => {
 			})
 			.then((response) => {
 				setLoading(false);
-				console.log(response);
-
 				if (response.status === 201) {
 					AsyncStorage.setItem('token', response.data.token);
 					console.log(response.data.token);
@@ -83,7 +81,6 @@ const ConnexionScreen = ({ navigation }) => {
 				} else {
 					setErrortext(response.msg);
 					
-					console.log('Please check your email id or password');
 				}
 			})
 			.catch((error) => {
@@ -96,7 +93,6 @@ const ConnexionScreen = ({ navigation }) => {
 					floating: true,
 					style: { marginTop: 40 },
 				});
-				console.error(error);
 			});
 	};
 

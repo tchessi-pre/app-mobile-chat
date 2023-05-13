@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Modal, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import * as Camera from 'expo-camera';
+// import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,11 +29,14 @@ export default function ImageUploadMessage() {
 
 	// Demande les permissions pour accéder à la caméra et à la galerie
 	const getPermissionsAsync = async () => {
-		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
-		if (status !== 'granted') {
+		const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
+		const { status: mediaLibStatus } = await MediaLibrary.requestPermissionsAsync();
+
+		if (cameraStatus !== 'granted' || mediaLibStatus !== 'granted') {
 			alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
 		}
 	};
+
 	// console.log(props);
 	const addPicture = async () => {
 		let image = await ImagePicker.launchImageLibraryAsync({
@@ -133,7 +138,7 @@ export default function ImageUploadMessage() {
 				}
 			} catch (error) {
 				console.log(error);
-				setPostMessageError("Erreur network lors de l'envoi du message");
+				setPostMessageError("Erreur network lors de l\'envoi du message");
 				showMessage({
 					message: "Erreur network lors de l'envoi du message",
 					type: 'danger',
@@ -195,7 +200,7 @@ export default function ImageUploadMessage() {
 						type='evilicon'
 						color='#FF6B6B'
 						size={45}
-						activeOpacity={0.7}
+						activeOpacity={0.8}
 					/>
 				</TouchableOpacity>
 				{isSending && <Text style={modalStyles.sendWaitsText}>...</Text>}
@@ -289,6 +294,7 @@ const PostStyle = StyleSheet.create({
 	sendButton: {
 		textAlign: 'center',
 		borderRadius: 8,
+		paddingBottom: 5,
 	},
 	errorText: {
 		color: 'red',
