@@ -1,10 +1,24 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import jwt_decode from "jwt-decode";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5, Ionicons, Entypo } from '@expo/vector-icons';
 
 const Footer = () => {
+	const [userId, setUserId] = useState(null);
 	const navigation = useNavigation();
+
+	useEffect(() => {
+		const getUserId = async () => {
+			const token = await AsyncStorage.getItem('token');
+			const decodedToken = jwt_decode(token);
+			setUserId(decodedToken.userId);
+		};
+
+		getUserId();
+	}, []);
+
 	return (
 		<View>
 			<View style={styles.footer}>
@@ -31,7 +45,7 @@ const Footer = () => {
 					name="ellipsis-h"
 					color='#F7F7FC'
 					size={25}
-					onPress={() => navigation.navigate('Profil')}
+					onPress={() => userId && navigation.navigate('Profil', { userId })}
 					activeOpacity={0.7}
 					underlayColor="#ffff" 
 				/>

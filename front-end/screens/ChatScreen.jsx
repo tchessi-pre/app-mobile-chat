@@ -24,6 +24,8 @@ const ChatScreen = () => {
 	//  Variable d'état pour contrôler l'affichage du Modal et l'image à afficher
 	const [modalVisible, setModalVisible] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
+	const [longPressedMessageId, setLongPressedMessageId] = useState(null);
+
 
 	// La fonction pour ouvrir le Modal et définir l'image sélectionnée
 	const openImageModal = (imageUrl) => {
@@ -78,13 +80,29 @@ const ChatScreen = () => {
 			try {
 				const token = await AsyncStorage.getItem('token');
 				const formData = new FormData();
-				formData.append('content', newMessage);
+				if (newMessage) {
+					formData.append('content', newMessage);
+				}
 				if (image) {
-					formData.append('imageUrl', image);
+					let imgUriParts = image.split('.');
+					let fileType = imgUriParts[imgUriParts.length - 1];
+
+					formData.append('imageUrl', {
+						uri: image,
+						name: `photo.${fileType}`,
+						type: `image/${fileType}`,
+					});
+				}
+				if (image) {
+					postData.imageUrl = `${Date.now()}_${image.split('/').pop()}`;
+					postMessage.append('post', JSON.stringify(postData));
+				} else {
+					postMessage.append('content', newMessage);
 				}
 				const response = await axios.post(`${API_URL}api/posts/`, formData, {
 					headers: {
 						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'multipart/form-data'
 					},
 				});
 				if (response.status === 201) {
@@ -113,6 +131,7 @@ const ChatScreen = () => {
       setMessages((prevState) =>
         prevState.filter((message) => message.id !== messageId)
       );
+			setLongPressedMessageId(null)
 			showNotification()
     } else {
       console.log('error');
@@ -125,9 +144,11 @@ const ChatScreen = () => {
 
 	const handleLongPress = (messageId, userId) => {
 		if (userId === currentUser) {
+			setLongPressedMessageId(messageId);
 			deleteMessage(messageId);
 		}
 	};
+
 
 
 	useEffect(() => {
@@ -167,7 +188,11 @@ const ChatScreen = () => {
 						onLongPress={() => handleLongPress(item.id, item.User?.id)}
 						activeOpacity={0.8}
 					>
-						<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
+						<View style={[
+							styles.messageContainer,
+							item.User?.id === currentUser ? styles.currentUserMessageContainer : null,
+							item.id === longPressedMessageId ? styles.longPressedMessage : null
+						]}>
 						<View style={[styles.messageContent]}>
 							<Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
 							<View style={styles.messageTextContainer}>
@@ -385,6 +410,18 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},
+	longPressedMessage: {
+		backgroundColor: 'gray', 
+		transform: [{ scale: 0.9 }]
+	},
+	longPressedMessageText: {
+		fontSize: 14, 
+	},
+	longPressedMessageImage: {
+		width: "100%", 
+		height: 100,
+	},
+
 });
 
 export default ChatScreen;
