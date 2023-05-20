@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5, Ionicons, Entypo } from '@expo/vector-icons';
 
-const Footer = () => {
+const Footer = ({current}) => {
 	const [userId, setUserId] = useState(null);
 	const navigation = useNavigation();
 
@@ -19,6 +19,12 @@ const Footer = () => {
 		getUserId();
 	}, []);
 
+	const navigateToProfile = () => {
+		if (userId) {
+			navigation.navigate('Profil', { userId });
+		}
+	};
+
 	return (
 		<View>
 			<View style={styles.footer}>
@@ -29,7 +35,7 @@ const Footer = () => {
 					size={30}
 					onPress={() => navigation.navigate('Contacts')}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 				<Ionicons
 					style={styles.chatIcon}
@@ -38,16 +44,16 @@ const Footer = () => {
 					size={30}
 					onPress={() => navigation.navigate('Chat')}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 				<FontAwesome5
 					style={styles.dots}
 					name="ellipsis-h"
 					color='#F7F7FC'
 					size={25}
-					onPress={() => userId && navigation.navigate('Profil', { userId })}
+					onPress={navigateToProfile}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 			</View>
 		</View>
@@ -74,7 +80,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-
-})
+});
 
 export default Footer;

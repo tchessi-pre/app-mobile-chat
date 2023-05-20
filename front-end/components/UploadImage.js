@@ -4,21 +4,23 @@ import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as Camera from 'expo-camera';
-// import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from "jwt-decode";
 
+
 const API_URL = BaseUrl;
 
-export default function UploadImage({ imageUrl } ) {
+export default function UploadImage({ imageUrl, currentId }) {
+
 	const [image, setImage] = useState(null);
 	const [userImage, setUserImage] = useState(null);
-
 	const [modalVisible, setModalVisible] = useState(false);
 	const [profilImage, setProfilImage] = useState('');
 	const [userId, setUserId] = useState(null);
+	const [profileUserId, setProfileUserId] = useState(null);
+	
 
 	// Check textError
 	const [editImageUserError, setEditImageUserError] = useState('');
@@ -60,7 +62,7 @@ export default function UploadImage({ imageUrl } ) {
 
 	// Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
 	const savePicture = async (userIdToEdit) => {
-		if (userId === userIdToEdit) {
+		if (currentId === userIdToEdit) {
 			try {
 				const formData = new FormData();
 				formData.append('image', {
@@ -118,7 +120,8 @@ export default function UploadImage({ imageUrl } ) {
 			if (response.status === 200) {
 				console.log(response.data);
 				setProfilImage(response.data.user.imageUrl);
-				// console.log(response.data.user.imageUrl);
+				setProfileUserId(response.data.user.id);
+				console.log(response.data.user.id);
 				// console.log('GET REQUEST réussie');
 			}
 		} catch (error) {
@@ -128,27 +131,24 @@ export default function UploadImage({ imageUrl } ) {
 
 	useEffect(() => {
 		getUser();
-	}, [getUser()]);
+	}, []);
 
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				<TouchableOpacity onPress={() => setModalVisible(true)}>
-					{item.User.imageUrl ? (
-						<Image style={{ width: 100, height: 100, borderRadius: 100 }} source={{ uri: imageUrl }} />
-					) : (
-							<View style={styles.initialContainer}>
-								<Text style={styles.initialText}>{item.User.firstName.charAt(0)}{item.User.lastName.charAt(0)}</Text>
-							</View>
-					)}
+				<TouchableOpacity onPress={currentId === profileUserId ? () => setModalVisible(true) : null}>
+					<Image style={{ width: 100, height: 100, borderRadius: 100 }} source={{ uri: imageUrl }} />
 				</TouchableOpacity>
 			</View>
+			
 			<View style={imageUploaderStyles.uploadBtnContainer}>
-				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
-
-					<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
-				</TouchableOpacity>
+				{currentId === profileUserId && (
+					<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn}>
+						<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
+					</TouchableOpacity>
+				)}
 			</View>
+
 			{/* MODAL */}
 			<Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
 				<View style={modalStyles.ModalContainer}>
@@ -166,7 +166,7 @@ export default function UploadImage({ imageUrl } ) {
 							<TouchableOpacity onPress={takePicture} style={modalStyles.btnCamera} >
 								<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="#FF6B6B" />
 							</TouchableOpacity>
-							<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
+							<TouchableOpacity onPress={() => savePicture(currentId)} style={modalStyles.modalBtnSave}>
 								<Text style={modalStyles.modalBtnTextSave}>Enregistrer</Text>
 							</TouchableOpacity>
 						</View>
@@ -307,5 +307,35 @@ const modalStyles = StyleSheet.create({
 		color: 'green',
 		fontSize: 14,
 		fontWeight: 'bold',
+	},
+	profilImage: {
+		width: 60,
+		height: 60,
+		borderRadius: 16,
+	},
+	initialContainer: {
+		width: 60,
+		height: 60,
+		backgroundColor: ' #ccc',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#FF6B6B',
+		borderRadius: 16,
+	},
+	initialText: {
+		textTransform: 'uppercase',
+		color: '#ffffff',
+		textAlign: 'center',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	profilName: {
+		marginLeft: 20,
+	},
+	fullName: {
+		color: "#ffffff",
+		marginBottom: 10,
+		fontSize: 15
 	},
 })

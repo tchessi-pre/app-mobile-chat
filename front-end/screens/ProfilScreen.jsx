@@ -5,7 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
 import LogoutButton from '../components/LogoutButton'
+//  pour afficher les notification
 import { showMessage } from 'react-native-flash-message';
+
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 
@@ -17,6 +19,7 @@ const ProfilScreen = ({ route }) => {
 	const [userlastName, setUserlastName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [userProfileImageUrl, setUserProfileImageUrl] = useState(null);
+	const [currentUserId, setCurrentUserId] = useState(null);
 	const [currentUser, setCurrentUser] = useState('');
 
 
@@ -39,7 +42,7 @@ const ProfilScreen = ({ route }) => {
 				setUserlastName(response.data.user.lastName);
 				setUserEmail(response.data.user.email);
 				setUserProfileImageUrl(response.data.user.imageUrl);
-				
+				setCurrentUserId(response.data.user.id)
 			}
 		} catch (error) {
 		}
@@ -127,7 +130,7 @@ const ProfilScreen = ({ route }) => {
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
 
-				<UploadImage imageUrl={userProfileImageUrl} />
+				<UploadImage imageUrl={userProfileImageUrl} currentId={currentUserId} />
 
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>
