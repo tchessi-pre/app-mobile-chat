@@ -38,6 +38,8 @@ const ProfilScreen = ({ route }) => {
 				},
 			});
 			if (response.status === 200) {
+				setFirstName(response.data.user.firstName)
+				setLastName(response.data.user.lastName)
 				setUserfirstName(response.data.user.firstName);
 				setUserlastName(response.data.user.lastName);
 				setUserEmail(response.data.user.email);
@@ -105,9 +107,9 @@ const ProfilScreen = ({ route }) => {
 					message: 'Votre profil a été mis à jour!',
 					type: 'success',
 					duration: 3000,
-					position: 'top', 
-					floating: true, 
-					style: { marginTop: 40 }, 
+					position: 'top',
+					floating: true,
+					style: { marginTop: 40 },
 				});
 				try {
 					useEffect(() => { }, [getUser()]);
@@ -136,39 +138,39 @@ const ProfilScreen = ({ route }) => {
 				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
 			{currentUser === userId && (
-			<View style={styles.textInputContainer}>
-				<TextInput
-					style={Styles.input}
-					placeholder="Nom"
-					placeholderTextColor="#F7F7FC"
-					keyboardType="name"
-					value={lastName}
-					onChangeText={text => setLastName(text)}
-					editable={isEditing}
-				/>
-				<TextInput
-					style={Styles.input}
-					placeholder="Prénom"
-					placeholderTextColor="#F7F7FC"
-					keyboardType="name"
-					value={firstName}
-					onChangeText={text => setFirstName(text)}
-					editable={isEditing}
-				/>
-			</View>
+				<View style={styles.textInputContainer}>
+					<TextInput
+						style={Styles.input}
+						placeholder="Nom"
+						placeholderTextColor="#F7F7FC"
+						keyboardType="name"
+						value={lastName}
+						onChangeText={text => setLastName(text)}
+						editable={isEditing}
+					/>
+					<TextInput
+						style={Styles.input}
+						placeholder="Prénom"
+						placeholderTextColor="#F7F7FC"
+						keyboardType="name"
+						value={firstName}
+						onChangeText={text => setFirstName(text)}
+						editable={isEditing}
+					/>
+				</View>
 			)}
 			{currentUser === userId && (
-        <View>
-          <TouchableHighlight
-            style={styles.submit}
-            onPress={handleEdit}
-            activeOpacity={0.7}
-          >
-            <Text style={Styles.submitText}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
-          </TouchableHighlight>
-          <LogoutButton />
-        </View>
-      )}
+				<View>
+					<TouchableHighlight
+						style={styles.submit}
+						onPress={handleEdit}
+						activeOpacity={0.7}
+					>
+						<Text style={Styles.submitText}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
+					</TouchableHighlight>
+					<LogoutButton />
+				</View>
+			)}
 		</View>
 	);
 }

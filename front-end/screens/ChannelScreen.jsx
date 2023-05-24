@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Pressable, BackHandler } from 'react-native';
 import { Icon } from "react-native-elements";
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import BaseUrl from '../services/BaseUrl';
 
@@ -36,7 +36,7 @@ const ChannelScreen = () => {
 	useEffect(() => {
 		handlePosts()
 	}, []);
-
+  // On annule le retour en arrière vers la page d'accueil et de connexion
 	const handleProfileNavigation = (userId) => {
 		navigation.navigate('Profil', { userId });
 	}
@@ -59,6 +59,18 @@ const ChannelScreen = () => {
 				<Text style={styles.message}>{item.content}</Text>
 			</View>
 		</TouchableOpacity>
+	);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			const onBackPress = () => {
+				return true; // Bloquer le retour en arrière
+			};
+
+			BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+			return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+		}, [])
 	);
 
 	return (
@@ -87,7 +99,6 @@ const ChannelScreen = () => {
 		</View>
 	);
 }
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,

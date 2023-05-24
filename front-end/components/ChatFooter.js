@@ -139,7 +139,7 @@ export default function ImageUploadMessage() {
 					setNewMessage('');
 					removePicture();
 					showMessage({
-						message: 'Message envoyé avec succès',
+						message: 'Message envoyé',
 						type: 'success',
 						duration: 3000,
 						position: 'top', // Position de la notification en haut de l'écran

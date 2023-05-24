@@ -61,7 +61,7 @@ const Auth = () => {
   );
 };
 
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
 
 const forFade = ({ current, next }) => {
   const opacity = Animated.add(

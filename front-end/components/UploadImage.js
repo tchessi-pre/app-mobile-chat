@@ -8,7 +8,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from "jwt-decode";
-
+import { showMessage } from 'react-native-flash-message';
 
 const API_URL = BaseUrl;
 
@@ -47,6 +47,8 @@ export default function UploadImage({ imageUrl, currentId }) {
 			setImage(image.assets[0].uri);
 		}
 	};
+
+
 	const takePicture = async () => {
 		await getPermissionsAsync();
 		let image = await ImagePicker.launchCameraAsync({
@@ -61,6 +63,7 @@ export default function UploadImage({ imageUrl, currentId }) {
 
 
 	// Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
+
 	const savePicture = async (userIdToEdit) => {
 		if (currentId === userIdToEdit) {
 			try {
@@ -81,25 +84,61 @@ export default function UploadImage({ imageUrl, currentId }) {
 				});
 				console.log(response.data);
 				if (response.status === 200) {
-					setEditImageUserSuccess('Votre image a bien été modifiée');
+					// setEditImageUserSuccess('Votre image a bien été modifiée');
+					showMessage({
+						message: 'Succès',
+						description: 'Votre image a bien été modifiée',
+						type: 'success',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 30 },
+					});
 					setTimeout(() => {
 						setEditImageUserSuccess('');
 					}, 3000);
 				} else {
-					setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+					// setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+					showMessage({
+						message: 'Erreur',
+						description: 'Une erreur est survenue, impossible de modifier votre image',
+						type: 'danger',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 30 },
+					});
 					setTimeout(() => {
 						setEditImageUserError('');
 					}, 3000);
 				}
 			} catch (error) {
 				console.log(error);
-				setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+				// setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+				showMessage({
+					message: 'Erreur',
+					description: 'Une erreur est survenue, impossible de modifier votre image',
+					type: 'danger',
+					duration: 3000,
+					position: 'top',
+					floating: true,
+					style: { marginTop: 30 },
+				});
 				setTimeout(() => {
 					setEditImageUserError('');
 				}, 3000);
 			}
 		} else {
-			console.log("Vous n'avez pas la permission de modifier ce profil");
+			showMessage({
+				message: 'Erreur',
+				description: 'Vous n\'avez pas la permission de modifier ce profil',
+				type: 'danger',
+				duration: 3000,
+				position: 'top',
+				floating: true,
+				style: { marginTop: 30 },
+			});
+			// console.log("Vous n'avez pas la permission de modifier ce profil");
 		}
 	};
 

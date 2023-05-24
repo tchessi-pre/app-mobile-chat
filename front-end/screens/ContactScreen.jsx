@@ -47,7 +47,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 	};
 
 	const renderItem = ({ item }) => (
-		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => console.log('Redirect to chatscreen')}>
+		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => navigation.navigate('Profil', { userId: item.id })}>
 			<View>
 				{item.imageUrl ? (
 					<TouchableOpacity activeOpacity={.5} onPress={() => navigation.navigate('Profil', { userId: item.id })}>

@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 16,
 		borderTopLeftRadius: 16,
 		borderBottomRightRadius: 16,
-		marginBottom: 5,
+		borderBottomLeftRadius: 0,
 	},
 	currentUserMessageContainer: {
 		backgroundColor: '#0F1828',
