@@ -1,6 +1,3 @@
-
-const baseURL = "http://192.168.1.138:3100/";
+const baseURL = process.env.URL || "http://10.10.9.189:3100/";
 
 export default baseURL;
-
-

@@ -12,6 +12,18 @@ import SearchStyle from '../css/SearchStyle'
 
 const API_URL = BaseUrl;
 let timeoutId = null;
+
+// Background color aléatoir
+const getRandomColor = () => {
+	const letters = '0123456789ABCDEF';
+	let color = '#';
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+};
+
+
 const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, setCLicked }) => {
 	const [search, setSearch] = useState('');
 	const [usersSearch, setSearchUsers] = useState([]);
@@ -46,6 +58,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 		}, 200);
 	};
 
+	
 	const renderItem = ({ item }) => (
 		<TouchableOpacity style={styles.containeContact} activeOpacity={.7} onPress={() => navigation.navigate('Profil', { userId: item.id })}>
 			<View>
@@ -54,9 +67,9 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 						<Image style={styles.profilImage} source={{ uri: item.imageUrl }} />
 					</TouchableOpacity>
 				) : (
-					<View style={styles.initialContainer}>
-						<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
-					</View>
+						<View style={[styles.initialContainer, { backgroundColor: getRandomColor() }]}>
+							<Text style={styles.initialText}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Text>
+						</View>
 				)}
 				<Badge
 					status={item.status === 'online' ? 'success' : 'error'}
@@ -168,7 +181,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#FF6B6B',
+		backgroundColor: getRandomColor(),
 		borderRadius: 16,
 	},
 	initialText: {

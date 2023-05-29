@@ -26,6 +26,7 @@ const ProfilScreen = ({ route }) => {
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [isEditing, setIsEditing] = useState(false);
+  
 
 	const getUser = async () => {
 		try {
@@ -131,9 +132,13 @@ const ProfilScreen = ({ route }) => {
 	return (
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
-
-				<UploadImage imageUrl={userProfileImageUrl} currentId={currentUserId} />
-
+				{userProfileImageUrl ? (
+					<UploadImage imageUrl={userProfileImageUrl} currentId={currentUserId} />
+				) : (
+					<View style={styles.initialContainer}>
+						<Text style={styles.initialText}>{userfirstName.charAt(0)}{userlastName.charAt(0)}</Text>
+					</View>
+				)}
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
@@ -208,7 +213,23 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 140,
 		fontWeight: '200',
-	}
+	},
+	initialContainer: {
+		width: 100,
+		height: 100,
+		borderRadius: 75,
+		backgroundColor: '#FF6B6B',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	initialText: {
+		textTransform: 'uppercase',
+		color: '#ffffff',
+		textAlign: 'center',
+		fontSize: 30,
+		fontWeight: 'bold',
+	},
 })
 
 export default ProfilScreen;
