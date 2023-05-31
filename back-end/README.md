@@ -1,40 +1,64 @@
 # APP-MOBILE-CHAT
 
-Création d'un chat mobile avec React Native NodeJS, Express et Mysql
+Bienvenue dans le projet App-Mobile-Chat! Il s'agit d'une application de chat mobile développée en utilisant React Native, NodeJS, Express et MySQL.
 
-## Utilisation du projet
+## Comment commencer?
 
-## Commencer par cloner le projet
+## Cloner le projet
+
+Premièrement, vous devez cloner le dépôt pour obtenir le code source sur votre machine locale.
 
 https://github.com/Tchessi/app-mobile-chat.git
 
 
-## Back-end
+## Configuration du back-end
 
 ```
+Accédez au dossier back-end :
 cd back-end
+Installez les dépendances nécessaires :
 npm install
+Installez nodemon :
 npm i nodemon
+Lancez le serveur :
 nodemon server ou node server
-Pour des tests spécifiques (avec postman par exemple), le backend répond à l'adresse: http://localhost:3000
+
+#Pour des tests spécifiques (avec postman par exemple), le backend répond à l'adresse: http://localhost:3000:
 
 ```
 ## Base de données
-
 ```
-cd back-end
+#Assurez-vous d'avoir MySQL installé sur votre machine et lancez-le.
+```
+bash
 npm i mysql -g 
+```
 
 # Vérifier que le nom d'utilisateur et le mot de passe dans le fichier de configuration config.json correspondent à vos informations d'identification MySQL locales
 
+Créez la base de données :
+```
 npx sequelize-cli db:create
+```
+
+Appliquez les migrations :
+
+```
 npx sequelize-cli db:migrate
+```
+```
+# Example: Génerer les models et les migrations
+```
+Pour l'utilisateur :
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string,imageUrl:string,deleted:boolean,isOnline:boolean,admin:boolean
+
+Pour générer uniquement les migrations :
+npx sequelize-cli migration:generate --name migration_name_here --model User --generate-migration
+```
 
 # Pour installer sequilize CLI
-
+```
 npm install --save-dev sequelize-cli
-
-
 ```
 
 ## Technologies utilisées
@@ -61,34 +85,9 @@ https://trello.com/invite/tchessisamirismailsalim/ATTI9472e90e9d0b4861b4b1a72e24
 
 ## FIGMA 
 
-https://www.figma.com/file/pCwlYbexxiYcB8oRVCCwf5/Untitled?node-id=0%3A1&t=QOBwCJjSdCwnd9wU-0
+https://www.figma.com/file/L9vcJYA2TyRMPZKXOhoWYB/V-2?type=design&node-id=0-1&t=OPLfuirAQ1u9q5ZN-0
 
 
 # CONFIGURATION DATABASE
 Crée un fichier config/config.json et mettre en place la configuration de la base de données
 
-{
-  "development": {
-    "username": "root",
-    "password": "",
-    "database": "TissApp",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": "",
-    "database": "TissApp",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": "",
-    "database": "TissApp",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
-  }
