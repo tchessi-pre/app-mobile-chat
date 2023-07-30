@@ -10,13 +10,13 @@ export default StyleSheet.create({
 		textAlign: 'center',
 	},
 	logo: {
-		width: 320,
+		width: 300,
 		height: 300,
 		
 	},
 	minilogo: {
 		width: 350,
-		height: 250,
+		height: 200,
 	},
 	logoplus: {
 		width: 100,
@@ -27,8 +27,8 @@ export default StyleSheet.create({
 	},
 	minilogoIn: {
 		width: 300,
-		height: 200,
-	
+		height: 100,
+	marginTop: 20,
 	},
 	connectText: {
 		textAlign: 'center',
@@ -92,6 +92,5 @@ export default StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-
 	},
 })

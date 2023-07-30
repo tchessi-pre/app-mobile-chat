@@ -118,30 +118,41 @@ const RegisterScreen = (props) => {
 			.then(response => {
 				setLoading(false);
 				console.log(response.data);
-				// navigation.navigate("Login");
 				if (response.status === 201) {
 					setIsRegistraionSuccess(true);
 					showMessage({
-						message: 'Félicitation! vous avez été inscrit avec succès',
+						message: 'Félicitation! Vous avez été inscrit avec succès',
 						type: 'success',
 						duration: 3000,
 						position: 'top',
 						floating: true,
 						style: { marginTop: 40 },
 					});
-				} else {
-					setErrortext(response.msg);
+				} else if (response.status === 409) {
+					showMessage({
+						message: 'L\'email existe déjà. Veuillez utiliser un autre email.',
+						type: 'danger',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 40 },
+					});
+				} else if(response.status === 401) {
+					showMessage({
+						message: `Une erreur s'est produite lors de l'inscription: ${response.data.message}`,
+						type: 'danger',
+						duration: 3000,
+						position: 'top',
+						floating: true,
+						style: { marginTop: 40 },
+					});
 				}
 			})
 			.catch((error) => {
-				//Hide Loader
 				setLoading(false);
 				console.error(error);
-			})
-			.catch(error => {
-				console.log(error);
 				showMessage({
-					message: 'Désolé! Votre inscription a échoué',
+					message: 'Une erreur s\'est produite lors de l\'inscription. Veuillez réessayer.',
 					type: 'danger',
 					duration: 3000,
 					position: 'top',
@@ -265,6 +276,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 12,
 		backgroundColor: '#FF6B6B',
 		borderRadius: 30,
+		marginTop: 20
 	},
 	errorTextStyle: {
 		color: 'red',

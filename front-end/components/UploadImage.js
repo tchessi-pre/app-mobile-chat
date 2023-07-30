@@ -12,7 +12,7 @@ import { showMessage } from 'react-native-flash-message';
 
 const API_URL = BaseUrl;
 
-export default function UploadImage({ imageUrl, currentId }) {
+export default function UploadImage({ imageUrl, currentId, }) {
 
 	const [image, setImage] = useState(null);
 	const [userImage, setUserImage] = useState(null);
@@ -124,6 +124,7 @@ export default function UploadImage({ imageUrl, currentId }) {
 					floating: true,
 					style: { marginTop: 30 },
 				});
+				
 				setTimeout(() => {
 					setEditImageUserError('');
 				}, 3000);

@@ -76,6 +76,7 @@ const ProfilScreen = ({ route }) => {
 			});
 			return;
 		}
+
 		if (lastName === '') {
 			showMessage({
 				message: 'Veuillez saisir votre nom',
@@ -105,7 +106,7 @@ const ProfilScreen = ({ route }) => {
 
 			if (response.status === 200) {
 				showMessage({
-					message: 'Votre profil a été mis à jour!',
+					message: 'Votre profil a été mis à jour !',
 					type: 'success',
 					duration: 3000,
 					position: 'top',
@@ -128,6 +129,7 @@ const ProfilScreen = ({ route }) => {
 
 		setIsEditing(false);
 	};
+
 
 	return (
 		<View style={styles.container}>
