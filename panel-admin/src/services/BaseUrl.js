@@ -1,3 +1,3 @@
-const baseURL = process.env.REACT_APP_API_URL || "http://10.10.1.10:3100";
+const baseURL = process.env.REACT_APP_API_URL || "http://tchessi-pre.students-laplateforme.io/back-end";
 
 export default baseURL;

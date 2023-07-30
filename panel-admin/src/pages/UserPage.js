@@ -33,6 +33,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     handleAllUsers();
+    
   }, [handleAllUsers]);
 
   const handleImageLoad = () => {
